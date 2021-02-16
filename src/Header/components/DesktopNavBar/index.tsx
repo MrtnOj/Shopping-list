@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Link as RouterLink } from 'react-router-dom';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-const NavBar = (props: any) => {
+const NavBar = () => {
     const classes = useStyles();
     
     return (
@@ -28,10 +29,10 @@ const NavBar = (props: any) => {
             <Typography variant="h1" className={classes.title} color="inherit">
                 Shopping
             </Typography>
-            <Button color="inherit" href="#" className={classes.links}>
+            <Button color="inherit" component={RouterLink} to="/" className={classes.links}>
                 Add items
             </Button>
-            <Button color="inherit" href="#" className={classes.links}>
+            <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
                 Create a list
             </Button>
             <Button color="secondary" variant="contained">Log in</Button>

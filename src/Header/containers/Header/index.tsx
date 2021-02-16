@@ -4,13 +4,12 @@ import MobileNavBar from '../../components/MobileNavBar';
 import DesktopNavBar from '../../components/DesktopNavBar';
 
 
-
 const Header = () => {
-
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false
     })
+
     const { mobileView } = state
     const { drawerOpen } = state
 
@@ -24,9 +23,11 @@ const Header = () => {
         window.addEventListener("resize", () => setResponsiveness())
     }, [])
 
+
     const handleDrawerOpen = () =>
       setState((prevState) => ({ ...prevState, drawerOpen: true }));
 
+      
     const handleDrawerClose = () =>
       setState((prevState) => ({ ...prevState, drawerOpen: false }));
     
