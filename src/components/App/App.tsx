@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router';
-import Layout from './Layout/Layout';
-import AddItems from './AddItems/containers/AddItems';
-import CreateList from './CreateList/containers/CreateList';
+import Layout from '../Layout';
+import AddItems from '../AddItems';
+import CreateList from '../CreateList/CreateList';
 import './App.css';
 
 function App() {

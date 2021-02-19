@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
-import Header from '../Header/containers/Header';
+import Header from '../Header';
 
-const layout = (props: any) => {
+const Layout = (props: any) => {
     return (
         <Fragment>
             <Header />
@@ -12,4 +12,4 @@ const layout = (props: any) => {
     )
 }
 
-export default layout;
+export default Layout;

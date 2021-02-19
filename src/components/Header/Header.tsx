@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import MobileNavBar from '../../components/MobileNavBar';
-import DesktopNavBar from '../../components/DesktopNavBar';
+import MobileNavBar from './components/MobileNavBar';
+import DesktopNavBar from './components/DesktopNavBar';
 
 
 const Header = () => {
