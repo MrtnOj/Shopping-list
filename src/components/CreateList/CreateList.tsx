@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ItemSuggest from './components/ItemSuggest';
-
+// import useSuggestions from './components/ItemSuggest/hooks/suggestions';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
@@ -8,13 +8,15 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         articleTitle: {
-            marginTop: '100px'
+            margin: '100px 10px 20px 10px'
         }
     })
 )
 
 const CreateList = () => {
     const classes = useStyles()
+    // const { suggestions, inputChanged } = useSuggestions()
+
 
     return (
         <Container component='article' maxWidth='lg'>
