@@ -1,29 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import useSuggestions from './hooks/suggestions';
 import ItemSuggest from './components/ItemSuggest';
-// import useSuggestions from './components/ItemSuggest/hooks/suggestions';
+import BuildingList from './components/BuildingList';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         articleTitle: {
             margin: '100px 10px 20px 10px'
-        }
+        },
+        listBuildContainer: {
+            display: 'flex',
+            justifyContent: 'space-between'
+        },
+        searchInput: {
+            display: 'block',
+            maxWidth: 450,
+            margin: '0 auto'
+        },
     })
 )
 
 const CreateList = () => {
     const classes = useStyles()
-    // const { suggestions, inputChanged } = useSuggestions()
+    const { inputChanged, itemClicked, suggestions, searchSuggestions, list, inputValue } = useSuggestions()
+    const searchInputRef = useRef()
 
 
     return (
         <Container component='article' maxWidth='lg'>
             <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
-                Create a new list
+                Create List
             </Typography>
-            <ItemSuggest />
+            <TextField id="item-search" value={inputValue} inputRef={searchInputRef} className={classes.searchInput} label="Item search" variant="outlined" fullWidth={true} onChange={inputChanged}/>
+            <Box component='section' className={classes.listBuildContainer}>
+                <ItemSuggest searchSuggestions={searchSuggestions} refForSearch={searchInputRef} itemClicked={itemClicked}/>
+                <BuildingList list={list} />
+            </Box>
         </Container>
     )
 }
