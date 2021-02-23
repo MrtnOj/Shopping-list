@@ -19,7 +19,16 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 )
 
-const BuildingList = (props: any) => {
+interface Props {
+    list: {
+            id: number,
+            name: string,
+            category: string,
+            lasts: number
+    }[]
+}
+
+const BuildingList = (props: Props) => {
     const classes = useStyles()
 
     return (

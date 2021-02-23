@@ -8,7 +8,16 @@ import suggestionsList from '../components/ItemSuggest/tempList'
 //     }
 // }
 
-const builtList: any = [
+interface ListItems {
+    searchSuggestions: {
+            id: number,
+            name: string,
+            category?: string,
+            lasts?: number
+    }[];
+}
+
+const builtList: typeof suggestionsList = [
 ] 
 
 const useSuggestions = () => {
@@ -17,7 +26,7 @@ const useSuggestions = () => {
     const [list, setList] = useState(builtList)
     const [inputValue, setInputValue] = useState('')
 
-    const inputChanged = (event: any) => {
+    const inputChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setInputValue(event.target.value)
         let searchInputSuggestions = [...suggestions]
         if (event.target.value && event.target.value.length > 0) {
@@ -33,7 +42,7 @@ const useSuggestions = () => {
     }
 
     // adds item to shopping list and removes from current suggestions and clears search
-    const itemClicked = (event: any, itemKey: any, ref: any) => {
+    const itemClicked = (event: React.MouseEvent<HTMLLIElement>, itemKey: number): void => {
         let newList = [...list]
         let newSuggestions = [...suggestions]
         newList.push(suggestions.find(suggestion => suggestion.id === itemKey)!)

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import useSuggestions from './hooks/suggestions';
 import ItemSuggest from './components/ItemSuggest';
 import BuildingList from './components/BuildingList';
@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const CreateList = () => {
     const classes = useStyles()
     const { inputChanged, itemClicked, suggestions, searchSuggestions, list, inputValue } = useSuggestions()
-    const searchInputRef = useRef()
 
 
     return (
@@ -36,9 +35,9 @@ const CreateList = () => {
             <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
                 Create List
             </Typography>
-            <TextField id="item-search" value={inputValue} inputRef={searchInputRef} className={classes.searchInput} label="Item search" variant="outlined" fullWidth={true} onChange={inputChanged}/>
+            <TextField id="item-search" value={inputValue} className={classes.searchInput} label="Item search" variant="outlined" fullWidth={true} onChange={inputChanged}/>
             <Box component='section' className={classes.listBuildContainer}>
-                <ItemSuggest searchSuggestions={searchSuggestions} refForSearch={searchInputRef} itemClicked={itemClicked}/>
+                <ItemSuggest searchSuggestions={searchSuggestions} itemClicked={itemClicked}/>
                 <BuildingList list={list} />
             </Box>
         </Container>
