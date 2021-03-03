@@ -1,42 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import useAddItems from './hooks/useAddItems'
+
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
-
-const categories = [
-    {
-        value: 'dairy',
-        label: 'Dairy'
-    },
-    {
-        value: 'meat',
-        label: 'Meat'
-    },
-    {
-        value: 'carbs',
-        label: 'Carbs'
-    },
-    {
-        value: 'vegetable',
-        label: 'Vegetable'
-    },
-    {
-        value: 'fruit',
-        label: 'Fruit'
-    },
-    {
-        value: 'sandwich material',
-        label: 'Sandwich material'
-    },
-    {
-        value: 'spice',
-        label: 'Spice'
-    }
-]
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -58,11 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddItems = () => {
     const classes = useStyles();
-    const [category, setCategory] = useState('')
-
-    const categorySelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCategory(event.target.value)
-    }
+    const { categories, category, addItem, categorySelect } = useAddItems();
 
     return(
         <Container component='article' maxWidth='lg'>
@@ -85,12 +51,12 @@ const AddItems = () => {
                     variant='outlined'
                     fullWidth={true}
                     value={category}
-                    onChange={categorySelectChange}
+                    onChange={categorySelect}
                     className={classes.inputs}
                 >
                     {categories.map(option => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.label}
+                        <MenuItem key={option.name} value={option.name}>
+                            {option.name}
                         </MenuItem>
                     ))}
                 </TextField>
