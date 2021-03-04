@@ -5,42 +5,13 @@ import axios from 'axios'
 interface Category {
     id: number;
     name: string;
-    createdAt: Date | null;
-    updatedAt: Date | null; 
+    createdAt?: Date;
+    updatedAt?: Date; 
 }
 
-const categories = [
-    {
-        value: 'dairy',
-        label: 'Dairy'
-    },
-    {
-        value: 'meat',
-        label: 'Meat'
-    },
-    {
-        value: 'carbs',
-        label: 'Carbs'
-    },
-    {
-        value: 'vegetable',
-        label: 'Vegetable'
-    },
-    {
-        value: 'fruit',
-        label: 'Fruit'
-    },
-    {
-        value: 'sandwich material',
-        label: 'Sandwich material'
-    },
-    {
-        value: 'spice',
-        label: 'Spice'
-    }
-]
-
 const useAddItems = () => {
+    const [itemLasts, setItemLasts] = useState('')
+    const [itemName, setItemName] = useState('')
     const [category, setCategory] = useState('')
     const [categories, setCategories] = useState<Category[]>([])
 
@@ -48,24 +19,30 @@ const useAddItems = () => {
         getCategories();
     }, [])
 
-    const categorySelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        // axios.get('http://localhost:3000/categories')
+    const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setItemName(event.target.value)
+    }
+
+    const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setCategory(event.target.value)
+    }
+
+    const handleItemLastsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setItemLasts(event.target.value)
     }
 
     const getCategories = () => {
         axios.get('http://localhost:8080/categories')
             .then(response => {
-                // const categs = response.data
-                console.log(response.data)
                 setCategories(response.data)
             })
     }
 
-    const addItem = (name: string, categoryId?: number, lasts?: number) => {
+    const addItemToDB = (name: string, categoryName?: string, lasts?: number) => {
+        const categoryId: number | undefined = categories.find(category => category.name === categoryName)?.id
         axios.post('http://localhost:8080/items', {
             name: name,
-            category_id: categoryId,
+            categoryId: categoryId,
             lasts: lasts
         })
         .then(response => {
@@ -76,11 +53,19 @@ const useAddItems = () => {
         })
     }
 
+    const submitItem = async () => {
+        await addItemToDB(itemName, category, +itemLasts)
+    }
+
     return {
-        addItem: addItem,
-        categorySelect: categorySelect,
+        submitItem,
+        handleCategoryChange: handleCategoryChange,
+        handleNameChange: handleNameChange,
+        handleItemLastsChange: handleItemLastsChange,
+        itemName: itemName,
+        category: category,
         categories: categories,
-        category: category
+        itemLasts: itemLasts
     }
 }
 

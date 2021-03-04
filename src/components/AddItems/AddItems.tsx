@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddItems = () => {
     const classes = useStyles();
-    const { categories, category, addItem, categorySelect } = useAddItems();
+    const { itemName, categories, category, itemLasts, handleNameChange, submitItem, handleCategoryChange, handleItemLastsChange } = useAddItems();
 
     return(
         <Container component='article' maxWidth='lg'>
@@ -42,6 +42,7 @@ const AddItems = () => {
                     label='Item name'
                     variant='outlined'
                     fullWidth={true}
+                    onChange={handleNameChange}
                     className={classes.inputs}
                 />
                 <TextField 
@@ -51,11 +52,11 @@ const AddItems = () => {
                     variant='outlined'
                     fullWidth={true}
                     value={category}
-                    onChange={categorySelect}
+                    onChange={handleCategoryChange}
                     className={classes.inputs}
                 >
                     {categories.map(option => (
-                        <MenuItem key={option.name} value={option.name}>
+                        <MenuItem key={option.id} value={option.name}>
                             {option.name}
                         </MenuItem>
                     ))}
@@ -64,9 +65,11 @@ const AddItems = () => {
                     id='item-name'
                     label='Lasts (days)'
                     variant='outlined'
+                    value={itemLasts}
+                    onChange={handleItemLastsChange}
                     className={classes.inputs}
                 />
-                <Button type="submit" className={classes.addButton} variant='contained' color='secondary'>
+                <Button type="button" className={classes.addButton} variant='contained' color='secondary' onClick={submitItem}>
                     Add
                 </Button>
             </form>
