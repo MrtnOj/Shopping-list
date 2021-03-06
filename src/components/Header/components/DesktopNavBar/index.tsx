@@ -35,7 +35,7 @@ const NavBar = () => {
             <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
                 Create a list
             </Button>
-            <Button color="secondary" variant="contained">Log in</Button>
+            <Button color="secondary" variant="contained" component={RouterLink} to="/login">Log in</Button>
         </Toolbar>
     )
 }

@@ -67,7 +67,7 @@ const MobileNavBar = (props: any) => {
             <Typography variant="h1" className={classes.title} color="inherit">
                 Shopping
             </Typography>
-            <Button color="secondary" variant="contained">Log in</Button>
+            <Button color="secondary" variant="contained" component={RouterLink} to='/login'>Log in</Button>
         </Toolbar>
     )
 }

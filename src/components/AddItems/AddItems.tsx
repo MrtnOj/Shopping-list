@@ -28,10 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddItems = () => {
     const classes = useStyles();
-    const { itemName, categories, category, itemLasts, handleNameChange, submitItem, handleCategoryChange, handleItemLastsChange } = useAddItems();
+    const { 
+        itemName, 
+        categories, 
+        category, 
+        itemLasts, 
+        handleNameChange, 
+        submitItem, 
+        handleCategoryChange, 
+        handleItemLastsChange 
+    } = useAddItems();
 
     return(
-        <Container component='article' maxWidth='lg'>
+        <Container component='article' maxWidth='md'>
             <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
                 Add an item
             </Typography>
@@ -42,6 +51,7 @@ const AddItems = () => {
                     label='Item name'
                     variant='outlined'
                     fullWidth={true}
+                    value={itemName}
                     onChange={handleNameChange}
                     className={classes.inputs}
                 />
