@@ -1,11 +1,13 @@
 import React from 'react'
-
+import useLogin from './hooks/useLogin'
 import Container from '@material-ui/core/Container'
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
-import { Link as RouterLink } from 'react-router-dom';
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '../UI/Alert'
+import { Link as RouterLink } from 'react-router-dom'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -37,18 +39,29 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LogIn = () => {
     const classes = useStyles()
-    
+    const { 
+        errorMessage,
+        alertOpen,
+        handleAlertClose,
+        handleUsernameChange,
+        handlePasswordChange,
+        submitForm,
+        
+    } = useLogin()
+
+
     return (
         <Container component='article' maxWidth='sm'>
             <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
                 Log In
             </Typography>
-            <form className={classes.logInForm}>
+            <form className={classes.logInForm} onSubmit={submitForm}>
                 <TextField
                     required
                     id='username'
                     label='Username'
                     variant='outlined'
+                    onChange={handleUsernameChange}
                     fullWidth={true}
                     className={classes.inputs}
                 />
@@ -58,11 +71,12 @@ const LogIn = () => {
                     label='Password'
                     type='password'
                     variant='outlined'
+                    onChange={handlePasswordChange}
                     fullWidth={true}
                     className={classes.inputs}
                 />
                 <Button 
-                    type="button" 
+                    type="submit" 
                     className={classes.addButton} 
                     variant='contained' 
                     size='large' 
@@ -70,27 +84,32 @@ const LogIn = () => {
                 >
                     Log In
                 </Button>
-                <Box component="section" className={classes.registerContainer}>
-                    <Typography 
-                        variant='h5' 
-                        component='h2' 
-                        className={classes.registerText} 
-                        color='primary' 
-                        align='center'
-                    >
-                        New to the app?
-                    </Typography>
-                    <Button 
-                        type="button" 
-                        color='secondary' 
-                        size='large' 
-                        component={RouterLink} 
-                        to='/register'
-                    >
-                        Sign Up Here
-                    </Button>
-                </Box>
             </form>
+            <Box component="section" className={classes.registerContainer}>
+                <Typography 
+                    variant='h5' 
+                    component='h2' 
+                    className={classes.registerText} 
+                    color='primary' 
+                    align='center'
+                >
+                    New to the app?
+                </Typography>
+                <Button 
+                    type="button" 
+                    color='secondary' 
+                    size='large' 
+                    component={RouterLink} 
+                    to='/register'
+                >
+                    Sign Up Here
+                </Button>
+            </Box>
+            <Snackbar open={alertOpen} autoHideDuration={9000} onClose={handleAlertClose}>
+                <Alert onClose={handleAlertClose} severity="error">
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Container>
     )
 }

@@ -1,11 +1,13 @@
 import React from 'react'
 import useRegister from './hooks/useRegister'
 import Container from '@material-ui/core/Container'
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
-import { Link as RouterLink } from 'react-router-dom';
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '../UI/Alert'
+import { Link as RouterLink } from 'react-router-dom'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -38,9 +40,10 @@ const useStyles = makeStyles((theme: Theme) =>
 const Register = () => {
     const classes = useStyles()
     const {
-        username,
-        email,
-        password,
+        resultMessage,
+        alertOpen,
+        isError,
+        handleAlertClose,
         handleUsernameChange,
         handleEmailChange,
         handlePasswordChange,
@@ -101,27 +104,32 @@ const Register = () => {
                 >
                     Register
                 </Button>
-                <Box component="section" className={classes.logInContainer}>
-                    <Typography 
-                        variant='h5' 
-                        component='h2' 
-                        className={classes.logInText} 
-                        color='primary' 
-                        align='center'
-                    >
-                        Already a user?
-                    </Typography>
-                    <Button 
-                        type="button" 
-                        color='secondary' 
-                        size='large' 
-                        component={RouterLink} 
-                        to='/login'
-                    >
-                        Log In
-                    </Button>
-                </Box>
             </form>
+            <Box component="section" className={classes.logInContainer}>
+                <Typography 
+                    variant='h5' 
+                    component='h2' 
+                    className={classes.logInText} 
+                    color='primary' 
+                    align='center'
+                >
+                    Already a user?
+                </Typography>
+                <Button 
+                    type="button" 
+                    color='secondary' 
+                    size='large' 
+                    component={RouterLink} 
+                    to='/login'
+                >
+                    Log In
+                </Button>
+            </Box>
+            <Snackbar open={alertOpen} autoHideDuration={9000} onClose={handleAlertClose}>
+                <Alert onClose={handleAlertClose} severity={isError? 'error': 'success'}>
+                    {resultMessage}
+                </Alert>
+            </Snackbar>
         </Container>
     )
 }

@@ -5,13 +5,16 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import './index.css';
 import App from './components/App/App';
+import AuthContextProvider from './context/auth-context'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <App />
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,

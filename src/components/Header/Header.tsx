@@ -2,13 +2,15 @@ import React, {useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import MobileNavBar from './components/MobileNavBar';
 import DesktopNavBar from './components/DesktopNavBar';
-
+import { AuthContext } from '../../context/auth-context'
 
 const Header = () => {
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false
     })
+
+    // const {state, dispatch} = useContext(AuthContextProvider)
 
     const { mobileView } = state
     const { drawerOpen } = state
@@ -19,17 +21,17 @@ const Header = () => {
                 ? setState((prevState) => ({...prevState, mobileView: true }))
                 : setState((prevState) => ({...prevState, mobileView: false }))
         };
-        setResponsiveness();
+        setResponsiveness()
         window.addEventListener("resize", () => setResponsiveness())
     }, [])
 
 
     const handleDrawerOpen = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: true }));
+      setState((prevState) => ({ ...prevState, drawerOpen: true }))
 
       
     const handleDrawerClose = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: false }));
+      setState((prevState) => ({ ...prevState, drawerOpen: false }))
     
     return (
         <AppBar color='primary' position='fixed'>
