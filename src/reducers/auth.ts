@@ -8,13 +8,13 @@ export interface userInfo  {
 }
 
 type Actions = 
-    | { type: 'LOGIN';
+    | { type: 'LOGIN_START';
         username: string;
         password: string;
         }
     | { type: 'LOGOUT';
         }
-    | { type: 'REGISTER';
+    | { type: 'REGISTER_START';
         username: string;
         email: string;
         password: string;
