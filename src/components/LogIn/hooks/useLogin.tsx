@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useReducer, useEffect, useState } from 'react'
+import authReducer, { initialState } from '../../../reducers/auth'
+
 
 import axios from 'axios'
 
@@ -7,6 +9,8 @@ const useLogin = () => {
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const [alertOpen, setAlertOpen] = useState(false)
+
+    const [userState, dispatch] = useReducer(authReducer, initialState)
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setUsername(event.target.value)
@@ -30,6 +34,13 @@ const useLogin = () => {
         })
         .then(response => {
             console.log(response.data)
+            dispatch({ 
+                isAuth: true, //why do i need to put it in two places??
+                type: 'LOGIN_SUCCESS',
+                userId: response.data.userId,
+                token: response.data.token,
+                username: response.data.username 
+            })
         })
         .catch(err => {
             setErrorMessage(err.response.data.error)
