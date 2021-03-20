@@ -9,13 +9,7 @@ export interface userInfo  {
 }
 
 type Action = 
-    | { type: 'LOGIN_START';
-        username: string;
-        password: string;
-        isAuth: boolean;
-        userId: number | null;
-        token: string | null;
-        }
+    { type: 'LOGIN_START' }
     | {
         type: 'LOGIN_SUCCESS';
         username: string;
@@ -23,7 +17,7 @@ type Action =
         userId: number | null;
         token: string | null;
     }
-    // | { type: 'LOGOUT'}
+    | { type: 'LOGOUT' }
     // | { type: 'REGISTER_START';
     //     username: string;
     //     email: string;
@@ -53,11 +47,11 @@ export type Reducer<userInfo, Action> =
 
 const authReducer = (state: userInfo, action: Action): userInfo => {
     switch (action.type) {
-        case ActionTypes.LOGIN_START:
+        case 'LOGIN_START':
             return { ...state, isLoading: true }
-        case ActionTypes.LOGIN_SUCCESS:
+        case 'LOGIN_SUCCESS':
             return { ...state, isAuth: true, userId: action.userId, token: action.token, username: action.username }
-        case ActionTypes.LOGOUT:
+        case 'LOGOUT':
             return initialState
         default:
             return initialState

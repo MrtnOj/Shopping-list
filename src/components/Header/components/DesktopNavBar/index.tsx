@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-const NavBar = () => {
+const NavBar = (props: { logOut: () => void }) => {
     const classes = useStyles();
-    
+
     return (
         <Toolbar>
             <Typography variant="h1" className={classes.title} color="inherit">
@@ -35,7 +35,16 @@ const NavBar = () => {
             <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
                 Create a list
             </Button>
-            <Button color="secondary" variant="contained" component={RouterLink} to="/login">Log in</Button>
+            {!localStorage.token
+                ?
+                <Button color="secondary" variant="contained" component={RouterLink} to="/login">
+                    Log In
+                </Button>
+                :
+                <Button color="secondary" variant="contained" onClick={props.logOut}>
+                    Log Out
+                </Button> 
+            }
         </Toolbar>
     )
 }

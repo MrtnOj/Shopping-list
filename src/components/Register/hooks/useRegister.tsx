@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import axios from 'axios'
-import { PinDropSharp } from '@material-ui/icons'
 
 const useRegister = () => {
     const [username, setUsername] = useState('')
@@ -11,6 +10,7 @@ const useRegister = () => {
     const [resultMessage, setResultMessage] = useState('')
     const [alertOpen, setAlertOpen] = useState(false)
     const [isError, setIsError] = useState(false)
+    const [successRedirect, setSuccessRedirect] = useState(false)
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setUsername(event.target.value)
@@ -48,6 +48,8 @@ const useRegister = () => {
                 setAlertOpen(true)
                 setResultMessage(response.data.message)
                 
+                // setSuccessRedirect(true)
+                
             })
             .catch(err => {
                 setIsError(true)
@@ -69,6 +71,7 @@ const useRegister = () => {
         resultMessage: resultMessage,
         alertOpen: alertOpen,
         isError: isError,
+        successRedirect: successRedirect,
         handleAlertClose: handleAlertClose,
         handleUsernameChange: handleUsernameChange,
         handleEmailChange: handleEmailChange,

@@ -10,13 +10,13 @@ export const AuthContext = React.createContext<{state: userInfo; dispatch: React
     }
 )
 
-const AuthContextProvider: React.FC = ({children}) => {
+const AuthContextProvider = (props: any) => {
 
     const [authState, dispatch] = useReducer(authReducer, initialState)   
 
     return (
-        <AuthContext.Provider value={{state: authState, dispatch}}>
-            {children}
+        <AuthContext.Provider value={{state: authState, dispatch: dispatch}}>
+            {props.children}
         </AuthContext.Provider>
     )
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import useRegister from './hooks/useRegister'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
@@ -43,6 +44,7 @@ const Register = () => {
         resultMessage,
         alertOpen,
         isError,
+        successRedirect,
         handleAlertClose,
         handleUsernameChange,
         handleEmailChange,
@@ -130,6 +132,7 @@ const Register = () => {
                     {resultMessage}
                 </Alert>
             </Snackbar>
+            {successRedirect ? <Redirect to="/login" /> : null}
         </Container>
     )
 }

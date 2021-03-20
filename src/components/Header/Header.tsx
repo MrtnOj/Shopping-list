@@ -2,12 +2,14 @@ import React, {useState, useEffect, useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import MobileNavBar from './components/MobileNavBar';
 import DesktopNavBar from './components/DesktopNavBar';
+import { Redirect } from 'react-router-dom'
 import { AuthContext } from '../../context/auth-context'
 
 const Header = () => {
     const [localState, setLocalState] = useState({
         mobileView: false,
-        drawerOpen: false
+        drawerOpen: false,
+        redirectToLogin: false
     })
 
     const {state, dispatch} = useContext(AuthContext)
@@ -25,6 +27,11 @@ const Header = () => {
         window.addEventListener("resize", () => setResponsiveness())
     }, [])
 
+    const logOut = () => {
+        localStorage.removeItem('token')
+        setLocalState({...localState, redirectToLogin: true})
+    }
+
 
     const handleDrawerOpen = () =>
       setLocalState((prevState) => ({ ...prevState, drawerOpen: true }))
@@ -32,6 +39,11 @@ const Header = () => {
       
     const handleDrawerClose = () =>
       setLocalState((prevState) => ({ ...prevState, drawerOpen: false }))
+
+    let loginRedirect = null
+    if ( localState.redirectToLogin ) {
+        loginRedirect = <Redirect to="/login" />
+    }
     
     return (
         <React.Fragment>
@@ -41,9 +53,11 @@ const Header = () => {
                         openDrawer={handleDrawerOpen} 
                         closeDrawer={handleDrawerClose}
                         drawerOpen={drawerOpen}
+                        logOut={logOut}
                         /> 
-                    : <DesktopNavBar />}
+                    : <DesktopNavBar logOut={logOut} />}
             </AppBar>
+            {loginRedirect}
             <h1 style={{position: 'relative', top: '100px'}}>{state.username}</h1>
         </React.Fragment>
     )

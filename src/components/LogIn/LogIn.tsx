@@ -1,4 +1,5 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import useLogin from './hooks/useLogin'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
@@ -42,6 +43,7 @@ const LogIn = () => {
     const { 
         errorMessage,
         alertOpen,
+        loginRedirect,
         handleAlertClose,
         handleUsernameChange,
         handlePasswordChange,
@@ -110,6 +112,7 @@ const LogIn = () => {
                     {errorMessage}
                 </Alert>
             </Snackbar>
+            {/* {loginRedirect ? <Redirect to="/createlist" /> : null} */}
         </Container>
     )
 }
