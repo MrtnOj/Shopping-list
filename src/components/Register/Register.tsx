@@ -51,7 +51,7 @@ const Register = () => {
         handlePasswordChange,
         handleRepeatPasswordChange,
         submitForm
-        } = useRegister()
+    } = useRegister()
     
     return (
         <Container component='article' maxWidth='sm'>

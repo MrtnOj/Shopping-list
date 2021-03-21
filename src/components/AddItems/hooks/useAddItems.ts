@@ -53,8 +53,8 @@ const useAddItems = () => {
         })
     }
 
-    const submitItem = async () => {
-        await addItemToDB(itemName, category, +itemLasts)
+    const submitItem = () => {
+        addItemToDB(itemName, category, +itemLasts)
     }
 
     return {

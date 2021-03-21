@@ -1,12 +1,6 @@
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import suggestionsList from '../components/ItemSuggest/tempList'
-
-// const suggestionReducer = (state: object, action: any) => {
-//     switch (action.type) {
-//         case '':
-//             return { }
-//     }
-// }
 
 interface ListItems {
     searchSuggestions: {
@@ -53,14 +47,27 @@ const useSuggestions = () => {
         clearSearchOnClick()
     }
 
+    const saveList = (): void => {
+        axios.post('http://localhost:8080/list', {
+            list: list,
+            userId: localStorage.getItem('userId')
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
     return {
         searchSuggestions: searchSuggestions,
         suggestions: suggestions,
         list: list,
         inputValue: inputValue,
         inputChanged: inputChanged,
-        clearSearchOnClick: clearSearchOnClick,
         itemClicked: itemClicked,
+        saveList: saveList
     }
 }
 
