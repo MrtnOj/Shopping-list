@@ -23,8 +23,8 @@ interface Props {
     searchSuggestions: {
             id: number,
             name: string,
-            category: string,
-            lasts: number
+            category?: string,
+            lasts?: number
     }[];
     itemClicked: (event: React.MouseEvent<HTMLLIElement>, itemKey: number) => void
 }

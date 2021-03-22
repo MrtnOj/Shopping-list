@@ -23,8 +23,8 @@ interface Props {
     list: {
             id: number,
             name: string,
-            category: string,
-            lasts: number
+            category?: string,
+            lasts?: number
     }[]
 }
 

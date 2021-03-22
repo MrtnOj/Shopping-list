@@ -5,6 +5,8 @@ import AddItems from '../AddItems'
 import CreateList from '../CreateList'
 import LogIn from '../LogIn'
 import Register from '../Register'
+import MyLists from '../MyLists'
+import ListView from '../ListView'
 import './App.css'
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
       <Route path="/createlist" component={CreateList} />
       <Route path="/login" component={LogIn}/>
       <Route path="/register" component={Register}/>
+      <Route path="/mylists/:listId" component={ListView} />
+      <Route path="/mylists" component={MyLists}/>
       <Route path="/" component={AddItems} />
       <Redirect to="/" />
     </Switch>

@@ -40,6 +40,7 @@ const useAddItems = () => {
 
     const addItemToDB = (name: string, categoryName?: string, lasts?: number) => {
         const categoryId: number | undefined = categories.find(category => category.name === categoryName)?.id
+        console.log(categoryId)
         axios.post('http://localhost:8080/items', {
             name: name,
             categoryId: categoryId,

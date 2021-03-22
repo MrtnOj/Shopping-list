@@ -29,11 +29,14 @@ const NavBar = (props: { logOut: () => void }) => {
             <Typography variant="h1" className={classes.title} color="inherit">
                 Shopping
             </Typography>
+            <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
+                Create a list
+            </Button>
             <Button color="inherit" component={RouterLink} to="/" className={classes.links}>
                 Add items
             </Button>
-            <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
-                Create a list
+            <Button color="inherit" component={RouterLink} to="/mylists" className={classes.links}>
+                My lists
             </Button>
             {!localStorage.token
                 ?

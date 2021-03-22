@@ -1,24 +1,32 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import suggestionsList from '../components/ItemSuggest/tempList'
 
 interface ListItems {
-    searchSuggestions: {
             id: number,
             name: string,
             category?: string,
             lasts?: number
-    }[];
 }
 
-const builtList: typeof suggestionsList = [
-] 
+type List = ListItems[]
 
 const useSuggestions = () => {
-    const [suggestions, setSuggestions] = useState(suggestionsList)
-    const [searchSuggestions, setSearchSuggestions] = useState(suggestions)
-    const [list, setList] = useState(builtList)
+    const [suggestions, setSuggestions] = useState<List>([])
+    const [searchSuggestions, setSearchSuggestions] = useState<List>([])
+    const [list, setList] = useState<List>([])
     const [inputValue, setInputValue] = useState('')
+
+    useEffect(() => {
+        getItems()
+    }, [])
+
+    const getItems = () => {
+        axios.get('http://localhost:8080/items')
+        .then(response => {
+            setSuggestions(response.data)
+            setSearchSuggestions(response.data)
+        })
+    }
 
     const inputChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setInputValue(event.target.value)
