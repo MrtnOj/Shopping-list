@@ -72,7 +72,16 @@ const MobileNavBar = (props: any) => {
             <Typography variant="h1" className={classes.title} color="inherit">
                 Shopping
             </Typography>
-            <Button color="secondary" variant="contained" component={RouterLink} to='/login'>Log in</Button>
+            {!localStorage.getItem('token')
+                ?
+                <Button color="secondary" variant="contained" component={RouterLink} to="/login">
+                    Log In
+                </Button>
+                :
+                <Button color="secondary" variant="contained" onClick={props.logOut}>
+                    Log Out
+                </Button> 
+            }
         </Toolbar>
     )
 }

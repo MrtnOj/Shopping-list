@@ -38,7 +38,7 @@ const NavBar = (props: { logOut: () => void }) => {
             <Button color="inherit" component={RouterLink} to="/mylists" className={classes.links}>
                 My lists
             </Button>
-            {!localStorage.token
+            {!localStorage.getItem('token')
                 ?
                 <Button color="secondary" variant="contained" component={RouterLink} to="/login">
                     Log In

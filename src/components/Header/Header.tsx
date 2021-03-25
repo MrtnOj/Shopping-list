@@ -58,7 +58,6 @@ const Header = () => {
                     : <DesktopNavBar logOut={logOut} />}
             </AppBar>
             {loginRedirect}
-            <h1 style={{position: 'relative', top: '100px'}}>{state.username}</h1>
         </React.Fragment>
     )
 }

@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: '100px 10px 60px 10px'
         },
         listTiles: {
+            boxSizing: 'border-box',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-evenly',
