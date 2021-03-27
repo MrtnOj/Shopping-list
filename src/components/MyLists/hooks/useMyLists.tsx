@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 import axios from 'axios'
-import userEvent from '@testing-library/user-event'
 
 interface ListTile {
     id: number;

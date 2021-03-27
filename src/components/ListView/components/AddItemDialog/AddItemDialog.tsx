@@ -12,9 +12,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        popover: {
-            width: '300px'
-        }
+        
     })
 )
 
@@ -23,7 +21,7 @@ const AddItemDialog = (props: any) => {
     const classes = useStyles()
     return (
         <React.Fragment>
-            <Dialog open={props.itemSearchOpen} onClose={props.handleItemSearchClose} aria-labelledby='add-item-search'>
+            <Dialog open={props.itemSearchOpen} fullWidth={true} onClose={props.handleItemSearchClose} aria-labelledby='add-item-search'>
                 <DialogContent>
                     <Autocomplete 
                         value={props.autocompleteValue}
@@ -44,18 +42,15 @@ const AddItemDialog = (props: any) => {
                         <Button onClick={props.handleItemSearchClose} color="primary">
                             Cancel
                         </Button>
-                        <Button type="submit" color="primary">
+                        <Button type="submit" color="primary" onClick={props.addItem}>
                             Add
                         </Button>
                     </DialogActions>
             </Dialog>
             <Dialog open={props.dialogOpen} onClose={props.dialogClose} aria-labelledby="add-item-dialog-name">
-                <form>
+                <form onSubmit={props.addItem}>
                     <DialogTitle id="add-item-dialog-name">Add a new item</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
-                            dsfdsagdfgdf
-                        </DialogContentText>
                         <TextField
                             autoFocus
                             margin="dense"

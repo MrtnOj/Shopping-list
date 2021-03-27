@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ListView = (props: any) => {
     const classes = useStyles()
-    const addItemButton = useRef(null)
     const { 
         listData,
         items,
@@ -63,6 +62,7 @@ const ListView = (props: any) => {
         pickedList,
         finishModalOpen,
         itemSearchOpen,
+        addItemTolist,
         handleFinishModalClose,
         handleAddItemModalClose,
         handleItemSearchClose,
@@ -127,10 +127,11 @@ const ListView = (props: any) => {
                 </Paper>
             </Container>
             <ListCompleteDialog open={finishModalOpen} handleClose={handleFinishModalClose} />
-            <Fab color='secondary' aria-label='add-item-to-list' className={classes.addButton} onClick={openItemSearch}>
+            <Fab color='secondary' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
                 <AddIcon />
             </Fab>
             <AddItemDialog 
+                addItem={addItemTolist}
                 openItemSearch={openItemSearch}
                 itemSearchOpen={itemSearchOpen}
                 handleItemSearchClose={handleItemSearchClose}

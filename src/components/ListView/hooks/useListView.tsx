@@ -38,7 +38,6 @@ const useListView = () => {
     const getList = useCallback((listId: number) => {
         axios.get('http://localhost:8080/list/listdetails/' + listId)
             .then(response => {
-                console.log(response.data)
                 setListData(response.data)
                 setListItems(response.data.items)
             })
@@ -80,6 +79,7 @@ const useListView = () => {
             // timeout to avoid instant validation of the dialog's form.
             setTimeout(() => {
               setItemAddModalOpen(true);
+
               setItemAddDialogValue({
                 name: newValue,
                 category: '',
@@ -94,11 +94,11 @@ const useListView = () => {
         } else {
             setAutocompleteValue(newValue);
         }
+        console.log(newValue)
     }
 
     const filterOptions = (options: Item[], params: any) => {
-        const filtered = filter(options, params) as Item[];
-
+        const filtered = filter(options, params);
         if (params.inputValue !== '') {
           filtered.push({
             inputValue: params.inputValue,
@@ -124,6 +124,24 @@ const useListView = () => {
             category: ''
         })
         setItemAddModalOpen(false)
+    }
+
+    const addItemToList = (event: any) => {
+        event.preventDefault()
+        axios.post('http://localhost:8080/list/add/' + listData.id, {
+            itemId: autocompleteValue?.id,
+            name: itemAddDialogValue.name,
+            category: itemAddDialogValue.category
+        })
+        .then(response => {
+            console.log(response)
+            setItemSearchOpen(false)
+            setItemAddModalOpen(false)
+            getList(listData.id as number)
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     const dialogNameChange = (event: React.ChangeEvent<any>) => {
@@ -162,6 +180,7 @@ const useListView = () => {
         finishModalOpen: finishModalOpen,
         itemSearchOpen: itemSearchOpen,
         autocompleteValue: autocompleteValue,
+        addItemTolist: addItemToList,
         handleFinishModalOpen: handleFinishModalOpen,
         handleFinishModalClose: handleFinishModalClose,
         handleItemSearchClose: handleItemSearchClose,
