@@ -7,7 +7,7 @@ export interface Item {
     id?: number;
     name: string;
     categoryId?: number;
-    category?: string | Category;
+    category?: string | Category | null;
     last_bought?: Date;
     lasts?: number;
     inputValue?: string
@@ -34,7 +34,7 @@ const useListView = () => {
     const [listData, setListData] = useState<ListData>({})
     const [items, setItems] = useState<Item[]>([])
     const [categories, setCategories] = useState([])
-    const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({name: '', category: ''})
+    const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ name: '', category: '' })
     const [listItems, setListItems] = useState<Item[]>([])
     const [pickedList, setPickedList] = useState<Item[]>([])
     const [finishModalOpen, setFinishModalOpen] = useState<boolean>(false)
@@ -105,7 +105,6 @@ const useListView = () => {
                 category: '',
             })
         } else {
-            setItemAutocompleteValue(newValue)
             setItemAddDialogValue({
                 name: newValue.name,
                 category: ''
@@ -114,14 +113,21 @@ const useListView = () => {
         console.log(newValue)
     }
 
-    const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category) => {
-        console.log(newValue)
-        if (newValue && newValue.inputValue) {
+    const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category | string) => {
+
+        if (typeof newValue === 'string') {
+            setTimeout(() => {
+              setItemAddModalOpen(true);
+              setItemAddDialogValue({
+                ...(itemAddDialogValue as Item),
+                category: newValue,
+              })
+            })
+        } else if (newValue && newValue.inputValue) {
             setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue.inputValue})
         } else {
-            setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue.name})
+            setItemAddDialogValue({...(itemAddDialogValue as Item), category: (newValue ? newValue.name : '')})
         }
-        
     }
 
     const filterOptions = (options: Item[] | Category[], params: any) => {
@@ -158,6 +164,7 @@ const useListView = () => {
 
     const addItemToList = (event: any) => {
         event.preventDefault()
+        console.log(itemAddDialogValue.category)
         axios.post('http://localhost:8080/list/add/' + listData.id, {
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,

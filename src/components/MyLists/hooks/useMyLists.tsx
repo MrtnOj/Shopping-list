@@ -22,15 +22,27 @@ const useMyLists = () => {
         axios.get('http://localhost:8080/list/' + localStorage.getItem('userId'))
             .then(response => {
                 setMyLists(response.data)
-                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)
             })
     }
 
+    const deleteList = (listId: number) => {
+        axios.delete('http://localhost:8080/list/delete/' + listId)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        getLists()
+
+    }
+
     return {
         myLists: myLists,
+        deleteList: deleteList
     }
 }
 

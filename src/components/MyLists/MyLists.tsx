@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const MyLists = (props: any) => {
     const classes = useStyles()
-    const { myLists } = useMyLists()
+    const { myLists, deleteList } = useMyLists()
 
     const listTiles = myLists.map(list => {
         return (
@@ -68,7 +68,12 @@ const MyLists = (props: any) => {
                 <Typography variant='h6' color='inherit' align='center' component='h3' className={classes.date}>
                     {list.createdAt?.split('T')[0]}
                 </Typography>
-                <IconButton color='inherit' aria-label='delete-list' className={classes.deleteButton}>
+                <IconButton 
+                    color='inherit'
+                    aria-label='delete-list'
+                    className={classes.deleteButton}
+                    onClick={() => deleteList(list.id)}
+                >
                     <DeleteIcon />
                 </IconButton>
                 <Button 
