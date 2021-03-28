@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import useListView from './hooks/useListView'
 import ListCompleteDialog from './components/ListCompleteDialog'
 import Container from '@material-ui/core/Container'
@@ -55,9 +55,10 @@ const ListView = (props: any) => {
     const { 
         listData,
         items,
+        categories,
         itemAddDialogValue,
         itemAddModalOpen,
-        autocompleteValue,
+        itemAutocompleteValue,
         listItems,
         pickedList,
         finishModalOpen,
@@ -65,7 +66,6 @@ const ListView = (props: any) => {
         addItemTolist,
         handleFinishModalClose,
         handleAddItemModalClose,
-        handleItemSearchClose,
         openItemSearch,
         dialogNameChange,
         dialogCategoryChange,
@@ -73,7 +73,7 @@ const ListView = (props: any) => {
         getOptionLabel,
         itemCheckClicked,
         getList,
-        autoCompleteValueChange,
+        itemAutoCompleteValueChange,
         filterOptions
     } = useListView()
 
@@ -134,11 +134,13 @@ const ListView = (props: any) => {
                 addItem={addItemTolist}
                 openItemSearch={openItemSearch}
                 itemSearchOpen={itemSearchOpen}
-                handleItemSearchClose={handleItemSearchClose}
-                autocompleteValue={autocompleteValue}
-                autoCompleteValueChange={autoCompleteValueChange}
+                handleItemSearchClose={handleAddItemModalClose}
+                itemAutocompleteValue={itemAutocompleteValue}
+                categoryAutocompleteValue={itemAddDialogValue.category}
+                autoCompleteValueChange={itemAutoCompleteValueChange}
                 filterOptions={filterOptions}
-                options={items}
+                itemOptions={items}
+                categoryOptions={categories}
                 getOptionLabel={getOptionLabel}
                 dialogOpen={itemAddModalOpen}
                 dialogClose={handleAddItemModalClose}

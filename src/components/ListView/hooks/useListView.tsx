@@ -7,10 +7,16 @@ export interface Item {
     id?: number;
     name: string;
     categoryId?: number;
-    category?: string;
+    category?: string | Category;
     last_bought?: Date;
     lasts?: number;
     inputValue?: string
+}
+
+export interface Category {
+    id?: number;
+    name: string
+    inputValue?: string;
 }
 
 export type ListData = {
@@ -23,17 +29,18 @@ export type ListData = {
 
 const useListView = () => {
 
-    const filter = createFilterOptions<Item>()
+    const filter = createFilterOptions<Item | Category>()
 
     const [listData, setListData] = useState<ListData>({})
     const [items, setItems] = useState<Item[]>([])
+    const [categories, setCategories] = useState([])
     const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({name: '', category: ''})
     const [listItems, setListItems] = useState<Item[]>([])
     const [pickedList, setPickedList] = useState<Item[]>([])
     const [finishModalOpen, setFinishModalOpen] = useState<boolean>(false)
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemSearchOpen, setItemSearchOpen] = useState<boolean>(false)
-    const [autocompleteValue, setAutocompleteValue] = useState<Item | null>(null)
+    const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
 
     const getList = useCallback((listId: number) => {
         axios.get('http://localhost:8080/list/listdetails/' + listId)
@@ -50,6 +57,13 @@ const useListView = () => {
         axios.get('http://localhost:8080/items')
         .then(response => {
             setItems(response.data)
+        })
+    }
+
+    const getCategories = () => {
+        axios.get('http://localhost:8080/categories')
+        .then(response => {
+            setCategories(response.data)
         })
     }
 
@@ -74,12 +88,11 @@ const useListView = () => {
         setListItems(newListItems)
     }
 
-    const autocompleteValueChange = (event: React.ChangeEvent<any>, newValue: Item | string) => {
+    const itemAutocompleteValueChange = (event: React.ChangeEvent<any>, newValue: Item | string) => {
         if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.
             setTimeout(() => {
               setItemAddModalOpen(true);
-
               setItemAddDialogValue({
                 name: newValue,
                 category: '',
@@ -92,12 +105,26 @@ const useListView = () => {
                 category: '',
             })
         } else {
-            setAutocompleteValue(newValue);
+            setItemAutocompleteValue(newValue)
+            setItemAddDialogValue({
+                name: newValue.name,
+                category: ''
+            })
         }
         console.log(newValue)
     }
 
-    const filterOptions = (options: Item[], params: any) => {
+    const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category) => {
+        console.log(newValue)
+        if (newValue && newValue.inputValue) {
+            setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue.inputValue})
+        } else {
+            setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue.name})
+        }
+        
+    }
+
+    const filterOptions = (options: Item[] | Category[], params: any) => {
         const filtered = filter(options, params);
         if (params.inputValue !== '') {
           filtered.push({
@@ -108,7 +135,7 @@ const useListView = () => {
         return filtered
     }
 
-    const getOptionLabel = (option: Item) => {
+    const getOptionLabel = (option: Item | Category | string) => {
         if (typeof option === 'string') {
             return option;
           }
@@ -124,20 +151,22 @@ const useListView = () => {
             category: ''
         })
         setItemAddModalOpen(false)
+        setItemSearchOpen(false)
+        setItemAutocompleteValue(null)
+
     }
 
     const addItemToList = (event: any) => {
         event.preventDefault()
         axios.post('http://localhost:8080/list/add/' + listData.id, {
-            itemId: autocompleteValue?.id,
+            itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
             category: itemAddDialogValue.category
         })
         .then(response => {
-            console.log(response)
-            setItemSearchOpen(false)
-            setItemAddModalOpen(false)
-            getList(listData.id as number)
+            const newListItems = [...listItems, {name: itemAddDialogValue.name, id: response.data.itemId }]
+            setListItems(newListItems)
+            handleAddItemModalClose()
         })
         .catch(err => {
             console.log(err)
@@ -146,10 +175,6 @@ const useListView = () => {
 
     const dialogNameChange = (event: React.ChangeEvent<any>) => {
         setItemAddDialogValue({...(itemAddDialogValue as Item), name: event.target.value})
-    }
-
-    const dialogCategoryChange = (event: React.ChangeEvent<any>) => {
-        setItemAddDialogValue({...(itemAddDialogValue as Item), category: event.target.value})
     }
 
     const handleFinishModalOpen = () => {
@@ -162,31 +187,27 @@ const useListView = () => {
 
     const openItemSearch = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         getItems()
+        getCategories()
         setItemSearchOpen(true)
-    }
-
-    const handleItemSearchClose = () => {
-        setItemSearchOpen(false)
-    }
-    
+    }   
 
     return {
         listData: listData,
         items: items,
+        categories: categories,
         itemAddDialogValue: itemAddDialogValue,
         itemAddModalOpen: itemAddModalOpen,
         listItems: listItems,
         pickedList: pickedList,
         finishModalOpen: finishModalOpen,
         itemSearchOpen: itemSearchOpen,
-        autocompleteValue: autocompleteValue,
+        itemAutocompleteValue: itemAutocompleteValue,
         addItemTolist: addItemToList,
         handleFinishModalOpen: handleFinishModalOpen,
         handleFinishModalClose: handleFinishModalClose,
-        handleItemSearchClose: handleItemSearchClose,
-        openItemSearch: openItemSearch,
-        autoCompleteValueChange: autocompleteValueChange,
         handleAddItemModalClose: handleAddItemModalClose,
+        openItemSearch: openItemSearch,
+        itemAutoCompleteValueChange: itemAutocompleteValueChange,
         dialogNameChange: dialogNameChange,
         dialogCategoryChange: dialogCategoryChange,
         getOptionLabel: getOptionLabel,

@@ -4,8 +4,8 @@ import axios from 'axios'
 
 interface ListTile {
     id: number;
-    createdAt?: Date;
-    updatedAt?: Date; 
+    createdAt?: string;
+    updatedAt?: string; 
 }
 
 type MyLists = ListTile[]
@@ -22,6 +22,7 @@ const useMyLists = () => {
         axios.get('http://localhost:8080/list/' + localStorage.getItem('userId'))
             .then(response => {
                 setMyLists(response.data)
+                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)

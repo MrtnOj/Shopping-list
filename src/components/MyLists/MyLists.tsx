@@ -1,24 +1,51 @@
 import React from 'react'
 import useMyLists from './hooks/useMyLists'
 import Container from '@material-ui/core/Container'
-import Typography from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
 import Paper from '@material-ui/core/Paper'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         articleTitle: {
-            margin: '100px 10px 60px 10px'
+            margin: '100px 10px 40px 10px'
         },
         listTiles: {
             boxSizing: 'border-box',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-            marginTop: theme.spacing(4),
+            display: 'grid',
+            gridColumnGap: '1rem',
+            gridRowGap: '10%',
+            gridTemplateColumns:
+                '4fr 4fr 4fr 4fr',
+            gridTemplateRows:
+                '50% 40%',
+            gridTemplateAreas: `
+                "id id date date"
+                "useListButton viewListButton . deleteButton"
+                `,
+            justifyContent: 'space-around',
+            marginTop: theme.spacing(2),
             padding: theme.spacing(2),
             width: '100%',
-            height: '80px'
+            height: '15vh'
+        },
+        deleteButton: {
+            gridArea: 'deleteButton'
+        },
+        useListButton: {
+            gridArea: 'useListButton'
+        },
+        viewListButton: {
+            gridArea: 'viewListButton'
+        },
+        id: {
+            gridArea: 'id'
+        },
+        date: {
+            gridArea: 'date'
         }
     })
 )
@@ -34,14 +61,27 @@ const MyLists = (props: any) => {
                 elevation={3} 
                 component='section' 
                 key={list.id}
-                onClick={() => props.history.push({ pathname: '/mylists/' + list.id})}
             >
-                <Typography variant='h4' color='secondary' align='center' component='h2'>
-                    List ID: {list.id}
+                <Typography variant='h5' color='secondary' align='center' component='h2' className={classes.id}>
+                    ID: {list.id}
                 </Typography>
-                <Typography variant='h6' color='secondary' align='center' component='h3'>
-                    Created: {list.createdAt}
+                <Typography variant='h6' color='inherit' align='center' component='h3' className={classes.date}>
+                    {list.createdAt?.split('T')[0]}
                 </Typography>
+                <IconButton color='inherit' aria-label='delete-list' className={classes.deleteButton}>
+                    <DeleteIcon />
+                </IconButton>
+                <Button 
+                    color='primary'
+                    variant='contained'
+                    className={classes.useListButton}
+                    onClick={() => props.history.push({ pathname: '/mylists/' + list.id})}
+                >
+                    Shop
+                </Button>
+                <Button color='inherit' variant='contained' className={classes.viewListButton}>
+                    View
+                </Button>
             </Paper>
         )
     })
