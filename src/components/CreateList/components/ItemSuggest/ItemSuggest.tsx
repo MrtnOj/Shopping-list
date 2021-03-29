@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme: Theme) =>
         suggestionList: {
             maxHeight: 300,
             overflow: 'auto'
+        },
+        suggestionListItem: {
+            cursor: 'pointer'
         }
     })
 )
@@ -36,7 +39,7 @@ const ItemSuggest = (props: Props) => {
         <Box component="section" className={classes.container}>
             <List className={classes.suggestionList}>
                 {props.searchSuggestions.map((suggestion) => (
-                    <ListItem key={suggestion.id} onClick={(event) => props.itemClicked(event, suggestion.id)}>
+                    <ListItem key={suggestion.id} onClick={(event) => props.itemClicked(event, suggestion.id)} className={classes.suggestionListItem}>
                         <ListItemText primary={suggestion.name} />
                     </ListItem>
                 ))}

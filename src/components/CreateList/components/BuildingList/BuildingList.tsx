@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: '30px 0',
             width: '48%'
         },
-        suggestionList: {
+        builtList: {
             maxHeight: 300,
             overflow: 'auto'
         }
@@ -33,7 +33,7 @@ const BuildingList = (props: Props) => {
 
     return (
         <Box component="section" className={classes.container}>
-            <List className={classes.suggestionList}>
+            <List className={classes.builtList}>
                 {props.list.map((listItem: any) => (
                     <ListItem key={listItem.id}>
                         <ListItemText primary={listItem.name} />

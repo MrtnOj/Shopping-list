@@ -32,12 +32,11 @@ const useMyLists = () => {
         axios.delete('http://localhost:8080/list/delete/' + listId)
         .then(response => {
             console.log(response)
+            getLists()
         })
         .catch(err => {
             console.log(err)
         })
-        getLists()
-
     }
 
     return {

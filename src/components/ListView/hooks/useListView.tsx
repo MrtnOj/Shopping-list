@@ -110,7 +110,6 @@ const useListView = () => {
                 category: ''
             })
         }
-        console.log(newValue)
     }
 
     const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category | string) => {
@@ -164,7 +163,6 @@ const useListView = () => {
 
     const addItemToList = (event: any) => {
         event.preventDefault()
-        console.log(itemAddDialogValue.category)
         axios.post('http://localhost:8080/list/add/' + listData.id, {
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
