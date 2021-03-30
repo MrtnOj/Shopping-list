@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -36,7 +36,9 @@ const AddItems = () => {
         handleNameChange, 
         submitItem, 
         handleCategoryChange, 
-        handleItemLastsChange 
+        handleItemLastsChange,
+        filterOptions,
+        getOptionLabel,
     } = useAddItems();
 
     return(
@@ -44,7 +46,7 @@ const AddItems = () => {
             <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
                 Add an item
             </Typography>
-            <form className={classes.addItemForm}>
+            <form className={classes.addItemForm} onSubmit={submitItem}>
                 <TextField 
                     required
                     id='item-name'
@@ -55,22 +57,20 @@ const AddItems = () => {
                     onChange={handleNameChange}
                     className={classes.inputs}
                 />
-                <TextField 
-                    id='workout-type'
-                    select
-                    label='Category'
-                    variant='outlined'
-                    fullWidth={true}
+                <Autocomplete 
                     value={category}
                     onChange={handleCategoryChange}
-                    className={classes.inputs}
-                >
-                    {categories.map(option => (
-                        <MenuItem key={option.id} value={option.name}>
-                            {option.name}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                    filterOptions={filterOptions}
+                    id='category-autocomplete'
+                    options={categories}
+                    getOptionLabel={getOptionLabel}
+                    selectOnFocus
+                    clearOnBlur
+                    handleHomeEndKeys
+                    renderOption={option => option.name}
+                    freeSolo
+                    renderInput={params => (<TextField {...params} label='category' variant='outlined' className={classes.inputs}/>)}
+                />
                 <TextField 
                     id='item-name'
                     label='Lasts (days)'
@@ -79,7 +79,7 @@ const AddItems = () => {
                     onChange={handleItemLastsChange}
                     className={classes.inputs}
                 />
-                <Button type="button" className={classes.addButton} variant='contained' color='secondary' onClick={submitItem}>
+                <Button type="submit" className={classes.addButton} variant='contained' color='secondary'>
                     Add
                 </Button>
             </form>

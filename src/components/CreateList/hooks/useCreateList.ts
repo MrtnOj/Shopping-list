@@ -21,7 +21,7 @@ const useSuggestions = () => {
     }, [])
 
     const getItems = () => {
-        axios.get('http://localhost:8080/items')
+        axios.get('http://localhost:8080/items/' + localStorage.getItem('userId'))
         .then(response => {
             setSuggestions(response.data)
             setSearchSuggestions(response.data)

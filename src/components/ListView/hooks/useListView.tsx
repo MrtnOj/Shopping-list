@@ -54,16 +54,24 @@ const useListView = () => {
     }, [])
 
     const getItems = () => {
-        axios.get('http://localhost:8080/items')
+        axios.get('http://localhost:8080/items/' + localStorage.getItem('userId'))
         .then(response => {
             setItems(response.data)
+            console.log(response.data)
+        })
+        .catch(err => {
+            console.log(err)
         })
     }
 
     const getCategories = () => {
-        axios.get('http://localhost:8080/categories')
+        axios.get('http://localhost:8080/categories/' + localStorage.getItem('userId'))
         .then(response => {
             setCategories(response.data)
+            console.log(response.data)
+        })
+        .catch(err => {
+            console.log(err)
         })
     }
 
