@@ -1,7 +1,8 @@
-import React from 'react'
-import useSuggestions from './hooks/useCreateList'
+import React, { useEffect } from 'react'
+import useCreateList from './hooks/useCreateList'
 import ItemSuggest from './components/ItemSuggest'
 import BuildingList from './components/BuildingList'
+import AddItemForm from '../AddItemForm/AddItemForm'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
@@ -29,14 +30,21 @@ const useStyles = makeStyles((theme: Theme) =>
 const CreateList = () => {
     const classes = useStyles()
     const { 
-        inputChanged,
-        itemClicked,
         saveList,
-        suggestions,
-        searchSuggestions,
         list,
-        inputValue
-    } = useSuggestions()
+        items,
+        categories,
+        itemAddDialogValue,
+        itemAutocompleteValue,
+        itemAddModalOpen,
+        handleAddItemModalClose,
+        itemAutocompleteValueChange,
+        dialogNameChange,
+        dialogCategoryChange,
+        getOptionLabel,
+        filterOptions,
+        addItem
+    } = useCreateList()
 
 
     return (
@@ -49,19 +57,22 @@ const CreateList = () => {
             >
                 Create List
             </Typography>
-            <TextField 
-                id="item-search" 
-                value={inputValue} 
-                className={classes.searchInput} 
-                label="Item search" 
-                variant="outlined" 
-                fullWidth={true} 
-                onChange={inputChanged}
+            <AddItemForm
+                itemAutocompleteValue={itemAutocompleteValue}
+                categoryAutocompleteValue={itemAutocompleteValue?.category}
+                itemAutoCompleteValueChange={itemAutocompleteValueChange}
+                filterOptions={filterOptions}
+                itemOptions={items}
+                categoryOptions={categories}
+                getOptionLabel={getOptionLabel}
+                dialogOpen={itemAddModalOpen}
+                dialogClose={handleAddItemModalClose}
+                addItem={addItem}
+                dialogValues={itemAddDialogValue}
+                dialogNameChange={dialogNameChange}
+                dialogCategoryChange={dialogCategoryChange}
+
             />
-            <Box component='section' className={classes.listBuildContainer}>
-                <ItemSuggest searchSuggestions={searchSuggestions} itemClicked={itemClicked}/>
-                <BuildingList list={list} />
-            </Box>
             <Button 
                 type='button' 
                 color='secondary' 
