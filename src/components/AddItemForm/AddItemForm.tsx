@@ -51,6 +51,7 @@ const AddItemForm = (props: any) => {
                             <Autocomplete 
                                 value={props.categoryAutocompleteValue}
                                 onChange={props.dialogCategoryChange}
+                                onInputChange={props.onInputChange}
                                 filterOptions={props.filterOptions}
                                 id='category-autocomplete'
                                 options={props.categoryOptions}

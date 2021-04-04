@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react'
 import useCreateList from './hooks/useCreateList'
-import ItemSuggest from './components/ItemSuggest'
-import BuildingList from './components/BuildingList'
 import AddItemForm from '../AddItemForm/AddItemForm'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: 450,
             margin: '0 auto'
         },
+        list: {
+
+        }
     })
 )
 
@@ -43,12 +49,25 @@ const CreateList = () => {
         dialogCategoryChange,
         getOptionLabel,
         filterOptions,
+        removeListItem,
         addItem
     } = useCreateList()
 
+    const pickedList = list.map(item => {
+        return (
+            <ListItem key={item.id} className={classes.list} divider={true}>
+                <ListItemText primary={item.name} />
+                <ListItemSecondaryAction>
+                    <IconButton edge='end' size='small' color='inherit' onClick={() => removeListItem((item.id))}>
+                        <DeleteIcon />
+                    </IconButton>
+                </ListItemSecondaryAction>
+            </ListItem>
+        )
+    })
 
     return (
-        <Container component='article' maxWidth='lg'>
+        <Container component='article' maxWidth='sm'>
             <Typography 
                 variant='h1' 
                 className={classes.articleTitle} 
@@ -73,6 +92,9 @@ const CreateList = () => {
                 dialogCategoryChange={dialogCategoryChange}
 
             />
+            <List>
+                {pickedList}
+            </List>
             <Button 
                 type='button' 
                 color='secondary' 

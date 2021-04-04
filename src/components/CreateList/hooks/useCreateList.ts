@@ -25,7 +25,7 @@ interface ListItems {
     lasts?: number
 }
 
-type List = ListItems[]
+type List = Item[]
 
 const useCreateList = () => {
 
@@ -33,7 +33,7 @@ const useCreateList = () => {
 
     const [items, setItems] = useState<Item[]>([])
     const [categories, setCategories] = useState([])
-    const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ name: '', category: '' })
+    const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ id: undefined, name: '', category: '' })
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
     const [list, setList] = useState<List>([])
@@ -73,19 +73,22 @@ const useCreateList = () => {
         } else if (newValue && newValue.inputValue) {
             setItemAddModalOpen(true)
             setItemAddDialogValue({
+                id: newValue.id,
                 name: newValue.inputValue,
                 category: '',
             })
         } else {
             setItemAddDialogValue({
+                id: newValue.id,
                 name: newValue.name,
                 category: ''
             })
+            const newList = [...list, {name: newValue.name, id: newValue.id }]
+            setList(newList)
         }
     }
 
     const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category | string) => {
-
         if (typeof newValue === 'string') {
             setTimeout(() => {
               setItemAddModalOpen(true);
@@ -102,7 +105,7 @@ const useCreateList = () => {
     }
 
     const dialogNameChange = (event: React.ChangeEvent<any>) => {
-        setItemAddDialogValue({...(itemAddDialogValue as Item), name: event.target.value})
+        setItemAddDialogValue({...(itemAddDialogValue as Item), name: event.target.value, id: event.target.value.id })
     }
 
     const filterOptions = (options: Item[] | Category[], params: any) => {
@@ -110,7 +113,8 @@ const useCreateList = () => {
         if (params.inputValue !== '') {
           filtered.push({
             inputValue: params.inputValue,
-            name: `Add "${params.inputValue}"`
+            name: `Add "${params.inputValue}"`,
+            id: params.id
           })
         }
         return filtered
@@ -126,6 +130,24 @@ const useCreateList = () => {
           return option.name;
     }
 
+    const addItem = (event: any) => {
+        event.preventDefault()
+        axios.post('http://localhost:8080/items/' + localStorage.getItem('userId'), {
+            itemId: itemAutocompleteValue?.id,
+            name: itemAddDialogValue.name,
+            categoryName: itemAddDialogValue.category
+        })
+        .then(response => {
+            console.log(response.data)
+            const newListItems = [...list, {name: itemAddDialogValue.name, id: response.data.id }]
+            setList(newListItems)
+            handleAddItemModalClose()
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
     const handleAddItemModalClose = () => {
         setItemAddDialogValue({
             name: '',
@@ -136,10 +158,11 @@ const useCreateList = () => {
 
     }
 
-    const addItem = (event: any) => {
-        event.preventDefault()
-        console.log(itemAddDialogValue)
-        handleAddItemModalClose()
+    const removeListItem = (itemId: number | undefined) => {
+        const newList = list.filter(item => {
+            return item.id !== itemId
+        })
+        setList(newList)
     }
 
     const saveList = (): void => {
@@ -157,9 +180,6 @@ const useCreateList = () => {
 
     return {
         list: list,
-        itemClicked: itemClicked,
-        saveList: saveList,
-
         items: items,
         categories: categories,
         itemAddDialogValue: itemAddDialogValue,
@@ -173,7 +193,9 @@ const useCreateList = () => {
         filterOptions: filterOptions,
         getItems: getItems,
         getCategories: getCategories,
-        addItem: addItem
+        removeListItem: removeListItem,
+        addItem: addItem,
+        saveList: saveList
     }
 }
 
