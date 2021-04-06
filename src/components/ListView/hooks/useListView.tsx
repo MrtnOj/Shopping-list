@@ -46,7 +46,8 @@ const useListView = () => {
         axios.get('http://localhost:8080/list/listdetails/' + listId)
             .then(response => {
                 setListData(response.data)
-                setListItems(response.data.items)
+                setListItems(response.data.user_items)
+                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)

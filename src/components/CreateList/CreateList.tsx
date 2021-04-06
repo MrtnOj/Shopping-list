@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Box from '@material-ui/core/Box'
+import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -29,6 +30,17 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         list: {
 
+        },
+        listPaper: {
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            alignContent: 'center',
+            justifyContent: 'space-evenly',
+            marginTop: theme.spacing(3),
+            marginBottom: theme.spacing(3),
+            padding: theme.spacing(3),
+            width: '100%'
         }
     })
 )
@@ -92,9 +104,11 @@ const CreateList = () => {
                 dialogCategoryChange={dialogCategoryChange}
 
             />
-            <List>
-                {pickedList}
-            </List>
+            <Paper  className={classes.listPaper} elevation={3} component='div'>
+                <List>
+                    {pickedList}
+                </List>
+            </Paper>
             <Button 
                 type='button' 
                 color='secondary' 
