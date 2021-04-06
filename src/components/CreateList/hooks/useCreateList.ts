@@ -31,12 +31,13 @@ const useCreateList = () => {
 
     const filter = createFilterOptions<Item | Category>()
 
+    const [list, setList] = useState<List>([])
     const [items, setItems] = useState<Item[]>([])
     const [categories, setCategories] = useState([])
     const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ id: undefined, name: '', category: '' })
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
-    const [list, setList] = useState<List>([])
+    const [toggleSuggestions, setToggleSuggestions] = useState<boolean>(false)
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
@@ -158,6 +159,14 @@ const useCreateList = () => {
 
     }
 
+    const handleSuggestionsToggle = () => {
+        if (toggleSuggestions === true) {
+            setToggleSuggestions(false)
+        } else {
+            setToggleSuggestions(true)
+        }
+    }
+
     const removeListItem = (itemId: number | undefined) => {
         const newList = list.filter(item => {
             return item.id !== itemId
@@ -185,7 +194,9 @@ const useCreateList = () => {
         itemAddDialogValue: itemAddDialogValue,
         itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,
+        toggleSuggestions: toggleSuggestions,
         handleAddItemModalClose: handleAddItemModalClose,
+        handleSuggestionsToggle: handleSuggestionsToggle,
         itemAutocompleteValueChange: itemAutocompleteValueChange,
         dialogNameChange: dialogNameChange,
         dialogCategoryChange: dialogCategoryChange,

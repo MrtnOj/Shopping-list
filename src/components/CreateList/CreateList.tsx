@@ -12,21 +12,18 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton'
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/Delete'
+import HelpIcon from '@material-ui/icons/Help'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         articleTitle: {
             margin: '100px 10px 20px 10px'
         },
-        listBuildContainer: {
+        container: {
             display: 'flex',
-            justifyContent: 'space-between'
-        },
-        searchInput: {
-            display: 'block',
-            maxWidth: 450,
-            margin: '0 auto'
+            flexDirection: 'column',
+            alignItems: 'center'
         },
         list: {
 
@@ -41,6 +38,22 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(3),
             padding: theme.spacing(3),
             width: '100%'
+        },
+        suggestionButton: {
+            // display: 'block',
+            margin: '5px auto'
+        },
+        suggestionsBoxVisible: {
+            display: 'block',
+            position: 'fixed',
+            top: '100px',
+            left: '50px',
+            right: 50,
+            bottom: 100,
+            zIndex: 10
+        },
+        suggestionsBoxHidden: {
+            display: 'none'
         }
     })
 )
@@ -55,7 +68,9 @@ const CreateList = () => {
         itemAddDialogValue,
         itemAutocompleteValue,
         itemAddModalOpen,
+        toggleSuggestions,
         handleAddItemModalClose,
+        handleSuggestionsToggle,
         itemAutocompleteValueChange,
         dialogNameChange,
         dialogCategoryChange,
@@ -79,7 +94,7 @@ const CreateList = () => {
     })
 
     return (
-        <Container component='article' maxWidth='sm'>
+        <Container component='article' maxWidth='sm' className={classes.container}>
             <Typography 
                 variant='h1' 
                 className={classes.articleTitle} 
@@ -102,8 +117,15 @@ const CreateList = () => {
                 dialogValues={itemAddDialogValue}
                 dialogNameChange={dialogNameChange}
                 dialogCategoryChange={dialogCategoryChange}
-
             />
+            <Button 
+                color='secondary'
+                className={classes.suggestionButton}
+                startIcon={<HelpIcon />}
+                onClick={handleSuggestionsToggle}
+            >
+                Suggestions
+            </Button>
             <Paper  className={classes.listPaper} elevation={3} component='div'>
                 <List>
                     {pickedList}
@@ -118,6 +140,27 @@ const CreateList = () => {
             >
                 Save list
             </Button>
+            <Paper
+                className={toggleSuggestions 
+                    ? classes.suggestionsBoxVisible 
+                    : classes.suggestionsBoxHidden
+                } 
+                elevation={4}
+                component='article'
+            >
+                <List>
+                    {items.map(item => {
+                        return (
+                            <ListItem key={item.id} className={classes.list} divider={true}>
+                                <ListItemText primary={item.name} />
+                                <ListItemSecondaryAction>
+
+                                </ListItemSecondaryAction>
+                            </ListItem> 
+                        )
+                    })}
+                </List>
+            </Paper>
         </Container>
     )
 }

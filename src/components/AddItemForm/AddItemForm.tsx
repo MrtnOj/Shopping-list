@@ -30,6 +30,7 @@ const AddItemForm = (props: any) => {
                 selectOnFocus
                 clearOnBlur
                 handleHomeEndKeys
+                fullWidth={true}
                 renderOption={option => option.name}
                 freeSolo
                 renderInput={params => (<TextField {...params} label='Search Item or add new' variant='outlined' />)}
