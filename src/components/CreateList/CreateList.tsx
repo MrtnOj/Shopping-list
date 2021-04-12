@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import Box from '@material-ui/core/Box'
+import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             alignItems: 'center'
         },
-        list: {
-
+        suggestionItem: {
+            cursor: 'pointer'
         },
         listPaper: {
             boxSizing: 'border-box',
@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%'
         },
         suggestionButton: {
-            // display: 'block',
             margin: '5px auto'
         },
         suggestionsBoxVisible: {
@@ -50,7 +49,8 @@ const useStyles = makeStyles((theme: Theme) =>
             left: '50px',
             right: 50,
             bottom: 100,
-            zIndex: 10
+            zIndex: 10,
+            padding: theme.spacing(1)
         },
         suggestionsBoxHidden: {
             display: 'none'
@@ -69,20 +69,23 @@ const CreateList = () => {
         itemAutocompleteValue,
         itemAddModalOpen,
         toggleSuggestions,
+        checkedSuggestions,
         handleAddItemModalClose,
-        handleSuggestionsToggle,
+        handleSuggestionsVisible,
         itemAutocompleteValueChange,
         dialogNameChange,
         dialogCategoryChange,
         getOptionLabel,
         filterOptions,
         removeListItem,
-        addItem
+        addItem,
+        addFromSuggestions,
+        suggestionCheckHandler,
     } = useCreateList()
 
     const pickedList = list.map(item => {
         return (
-            <ListItem key={item.id} className={classes.list} divider={true}>
+            <ListItem key={item.id} divider={true}>
                 <ListItemText primary={item.name} />
                 <ListItemSecondaryAction>
                     <IconButton edge='end' size='small' color='inherit' onClick={() => removeListItem((item.id))}>
@@ -92,6 +95,15 @@ const CreateList = () => {
             </ListItem>
         )
     })
+
+    let listPaper = null
+    if (list.length > 0) {
+        listPaper = <Paper  className={classes.listPaper} elevation={3} component='div'>
+                        <List>
+                            {pickedList}
+                        </List>
+                    </Paper>
+    }
 
     return (
         <Container component='article' maxWidth='sm' className={classes.container}>
@@ -122,15 +134,11 @@ const CreateList = () => {
                 color='secondary'
                 className={classes.suggestionButton}
                 startIcon={<HelpIcon />}
-                onClick={handleSuggestionsToggle}
+                onClick={handleSuggestionsVisible}
             >
                 Suggestions
             </Button>
-            <Paper  className={classes.listPaper} elevation={3} component='div'>
-                <List>
-                    {pickedList}
-                </List>
-            </Paper>
+            {listPaper}
             <Button 
                 type='button' 
                 color='secondary' 
@@ -151,10 +159,18 @@ const CreateList = () => {
                 <List>
                     {items.map(item => {
                         return (
-                            <ListItem key={item.id} className={classes.list} divider={true}>
-                                <ListItemText primary={item.name} />
+                            <ListItem 
+                                key={item.id} 
+                                className={classes.suggestionItem}
+                                divider={true}
+                            >
+                                <ListItemText primary={item.name}/>
                                 <ListItemSecondaryAction>
-
+                                    <Checkbox 
+                                        edge='end'
+                                        onChange={() => suggestionCheckHandler(item)}
+                                        checked={checkedSuggestions.indexOf(item) !== -1}
+                                    />
                                 </ListItemSecondaryAction>
                             </ListItem> 
                         )

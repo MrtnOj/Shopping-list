@@ -38,6 +38,7 @@ const useCreateList = () => {
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
     const [toggleSuggestions, setToggleSuggestions] = useState<boolean>(false)
+    const [checkedSuggestions, setCheckedSuggestions] = useState<Item[]>([])
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
@@ -139,7 +140,6 @@ const useCreateList = () => {
             categoryName: itemAddDialogValue.category
         })
         .then(response => {
-            console.log(response.data)
             const newListItems = [...list, {name: itemAddDialogValue.name, id: response.data.id }]
             setList(newListItems)
             handleAddItemModalClose()
@@ -159,12 +159,30 @@ const useCreateList = () => {
 
     }
 
-    const handleSuggestionsToggle = () => {
+    const handleSuggestionsVisible = () => {
         if (toggleSuggestions === true) {
             setToggleSuggestions(false)
         } else {
             setToggleSuggestions(true)
         }
+    }
+
+    const suggestionCheckHandler = (item: Item) => {
+        const currentIndex = checkedSuggestions.indexOf(item)
+        const newChecked = [...checkedSuggestions]
+
+        if (currentIndex === -1) {
+            newChecked.push(item)
+        } else {
+            newChecked.splice(currentIndex, 1)
+        }
+        console.log(newChecked)
+        setCheckedSuggestions(newChecked)
+    }
+
+    const addFromSuggestions = (item: any) => {
+        const newListItems = [...list, {name: item.name, id: item.id }]
+        setList(newListItems)
     }
 
     const removeListItem = (itemId: number | undefined) => {
@@ -195,8 +213,9 @@ const useCreateList = () => {
         itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,
         toggleSuggestions: toggleSuggestions,
+        checkedSuggestions: checkedSuggestions,
         handleAddItemModalClose: handleAddItemModalClose,
-        handleSuggestionsToggle: handleSuggestionsToggle,
+        handleSuggestionsVisible: handleSuggestionsVisible,
         itemAutocompleteValueChange: itemAutocompleteValueChange,
         dialogNameChange: dialogNameChange,
         dialogCategoryChange: dialogCategoryChange,
@@ -206,6 +225,8 @@ const useCreateList = () => {
         getCategories: getCategories,
         removeListItem: removeListItem,
         addItem: addItem,
+        addFromSuggestions: addFromSuggestions,
+        suggestionCheckHandler: suggestionCheckHandler,
         saveList: saveList
     }
 }
