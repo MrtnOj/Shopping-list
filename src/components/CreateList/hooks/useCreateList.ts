@@ -18,13 +18,6 @@ export interface Category {
     inputValue?: string;
 }
 
-interface ListItems {
-    id: number,
-    name: string,
-    category?: string,
-    lasts?: number
-}
-
 type List = Item[]
 
 const useCreateList = () => {
@@ -181,8 +174,12 @@ const useCreateList = () => {
     }
 
     const addFromSuggestions = (item: any) => {
-        const newListItems = [...list, {name: item.name, id: item.id }]
+        // const newListItems = [...list, {name: item.name, id: item.id }]
+        // setList(newListItems)
+        const newListItems = [...list, ...checkedSuggestions]
         setList(newListItems)
+        handleSuggestionsVisible()
+        setCheckedSuggestions([])
     }
 
     const removeListItem = (itemId: number | undefined) => {
