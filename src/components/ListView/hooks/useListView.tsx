@@ -192,11 +192,19 @@ const useListView = () => {
     }
 
     const handleFinishModalOpen = () => {
-        setFinishModalOpen(true);
+        setFinishModalOpen(true)
     }
     
     const handleFinishModalClose = () => {
-        setFinishModalOpen(false);
+        console.log(pickedList)
+        axios.put('http://localhost:8080/items/bought', { items: pickedList, userId: localStorage.getItem('userId') })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        setFinishModalOpen(false)
     }
 
     const openItemSearch = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {

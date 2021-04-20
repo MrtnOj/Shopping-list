@@ -169,13 +169,10 @@ const useCreateList = () => {
         } else {
             newChecked.splice(currentIndex, 1)
         }
-        console.log(newChecked)
         setCheckedSuggestions(newChecked)
     }
 
     const addFromSuggestions = (item: any) => {
-        // const newListItems = [...list, {name: item.name, id: item.id }]
-        // setList(newListItems)
         const newListItems = [...list, ...checkedSuggestions]
         setList(newListItems)
         handleSuggestionsVisible()
