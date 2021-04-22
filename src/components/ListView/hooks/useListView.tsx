@@ -58,7 +58,6 @@ const useListView = () => {
         axios.get('http://localhost:8080/items/' + localStorage.getItem('userId'))
         .then(response => {
             setItems(response.data)
-            console.log(response.data)
         })
         .catch(err => {
             console.log(err)
@@ -69,7 +68,6 @@ const useListView = () => {
         axios.get('http://localhost:8080/categories/' + localStorage.getItem('userId'))
         .then(response => {
             setCategories(response.data)
-            console.log(response.data)
         })
         .catch(err => {
             console.log(err)
@@ -122,20 +120,19 @@ const useListView = () => {
     }
 
     const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category | string) => {
-
         if (typeof newValue === 'string') {
-            setTimeout(() => {
-              setItemAddModalOpen(true);
-              setItemAddDialogValue({
-                ...(itemAddDialogValue as Item),
-                category: newValue,
-              })
+            setItemAddModalOpen(true);
+            setItemAddDialogValue({
+            ...(itemAddDialogValue as Item),
+            category: newValue,
             })
         } else if (newValue && newValue.inputValue) {
             setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue.inputValue})
         } else {
-            setItemAddDialogValue({...(itemAddDialogValue as Item), category: (newValue ? newValue.name : '')})
+            setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue})
         }
+        //(newValue ? newValue.name : '')
+        console.log(itemAddDialogValue.category)
     }
 
     const filterOptions = (options: Item[] | Category[], params: any) => {
@@ -196,7 +193,10 @@ const useListView = () => {
     }
     
     const handleFinishModalClose = () => {
-        console.log(pickedList)
+        setFinishModalOpen(false)
+    }
+
+    const listPickingFinished = () => {
         axios.put('http://localhost:8080/items/bought', { items: pickedList, userId: localStorage.getItem('userId') })
         .then(response => {
             console.log(response)
@@ -237,7 +237,8 @@ const useListView = () => {
         itemCheckClicked: itemCheckClicked,
         itemCheckUndo: itemCheckUndo,
         getItems: getItems,
-        getList: getList
+        getList: getList,
+        listPickingFinished: listPickingFinished,
     }
 }
 

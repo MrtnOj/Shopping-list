@@ -38,6 +38,10 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(1),
             borderTop: '1px black solid',
             zIndex: 11
+        },
+        suggestionList: {
+            maxHeight: 400,
+            overflow: 'auto'
         }
     })
 )
@@ -54,7 +58,7 @@ const Suggestions = (props: any) => {
             elevation={4}
             component='article'
         >
-            <List>
+            <List className={classes.suggestionList}>
                 {props.items.map((item: Item) => {
                     return (
                         <ListItem 

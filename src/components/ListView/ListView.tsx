@@ -74,7 +74,8 @@ const ListView = (props: any) => {
         itemCheckClicked,
         getList,
         itemAutoCompleteValueChange,
-        filterOptions
+        filterOptions,
+        listPickingFinished
     } = useListView()
 
     useEffect(() => {
@@ -126,7 +127,7 @@ const ListView = (props: any) => {
                     </List>
                 </Paper>
             </Container>
-            <ListCompleteDialog open={finishModalOpen} handleClose={handleFinishModalClose} />
+            <ListCompleteDialog open={finishModalOpen} handleClose={handleFinishModalClose} handleFinished={listPickingFinished} />
             <Fab color='secondary' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
                 <AddIcon />
             </Fab>

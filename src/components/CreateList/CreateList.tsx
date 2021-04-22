@@ -58,6 +58,7 @@ const CreateList = () => {
         list,
         items,
         categories,
+        suggestions,
         itemAddDialogValue,
         itemAutocompleteValue,
         itemAddModalOpen,
@@ -135,7 +136,7 @@ const CreateList = () => {
                 </Button>
                 {listPaper}
                 <Suggestions 
-                    items={items}
+                    items={suggestions}
                     toggleSuggestions={toggleSuggestions}
                     suggestionCheckHandler={suggestionCheckHandler}
                     checkedSuggestions={checkedSuggestions}

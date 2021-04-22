@@ -75,8 +75,7 @@ const useAddItems = () => {
     const addItemToDB = (name: string, category?: Category | null | string, lasts?: string) => {
         axios.post('http://localhost:8080/items/' + localStorage.getItem('userId'), {
             name: name,
-            categoryId: (category as Category)?.id,
-            categoryName: (category as Category)?.name,
+            category: category,
             lasts: (lasts !== '' ? lasts : null)
         })
         .then(response => {

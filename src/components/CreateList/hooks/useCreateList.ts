@@ -30,12 +30,14 @@ const useCreateList = () => {
     const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ id: undefined, name: '', category: '' })
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
+    const [suggestions, setSuggestions] = useState<Item[]>([])
     const [toggleSuggestions, setToggleSuggestions] = useState<boolean>(false)
     const [checkedSuggestions, setCheckedSuggestions] = useState<Item[]>([])
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
         getCategories(localStorage.getItem('userId'))
+        getSuggestions(localStorage.getItem('userId'))
     }, [localStorage.getItem('userId')])
 
     const getItems = (userId: string | null) => {
@@ -55,11 +57,21 @@ const useCreateList = () => {
         })
     }
 
+    const getSuggestions = (userId: string | null) => {
+        axios.get('http://localhost:8080/items/suggestions/' + userId)
+        .then(response => {
+            setSuggestions(response.data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
     const itemAutocompleteValueChange = (event: React.ChangeEvent<any>, newValue: Item | string) => {
         if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.
             setTimeout(() => {
-              setItemAddModalOpen(true);
+              setItemAddModalOpen(true)
               setItemAddDialogValue({
                 name: newValue,
                 category: '',
@@ -95,7 +107,7 @@ const useCreateList = () => {
         } else if (newValue && newValue.inputValue) {
             setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue.inputValue})
         } else {
-            setItemAddDialogValue({...(itemAddDialogValue as Item), category: (newValue ? newValue.name : '')})
+            setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue})
         }
     }
 
@@ -127,15 +139,18 @@ const useCreateList = () => {
 
     const addItem = (event: any) => {
         event.preventDefault()
+        console.log(itemAddDialogValue.category)
         axios.post('http://localhost:8080/items/' + localStorage.getItem('userId'), {
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
-            categoryName: itemAddDialogValue.category
+            category: itemAddDialogValue.category
         })
         .then(response => {
             const newListItems = [...list, {name: itemAddDialogValue.name, id: response.data.id }]
             setList(newListItems)
             handleAddItemModalClose()
+            getItems(localStorage.getItem('userId'))
+            getCategories(localStorage.getItem('userId'))
         })
         .catch(err => {
             console.log(err)
@@ -149,7 +164,6 @@ const useCreateList = () => {
         })
         setItemAddModalOpen(false)
         setItemAutocompleteValue(null)
-
     }
 
     const handleSuggestionsVisible = () => {
@@ -203,6 +217,7 @@ const useCreateList = () => {
         list: list,
         items: items,
         categories: categories,
+        suggestions: suggestions,
         itemAddDialogValue: itemAddDialogValue,
         itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,

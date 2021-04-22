@@ -18,14 +18,14 @@ const ListCompleteDialog = (props: any) => {
         <Dialog 
             open={props.open} 
             onClose={props.handleClose} 
-            aria-labelledby='finish-dialog-title'
+            aria-labelledby='finish-dialog'
         >
-            <DialogTitle id='finish-dialog-title'>{'Mark shopping complete?'}</DialogTitle>
+            <DialogTitle id='finish-dialog'>{'Mark shopping complete?'}</DialogTitle>
             <DialogActions>
                 <Button onClick={props.handleClose} color="primary">
                     No, I forgot something
                 </Button>
-                <Button onClick={props.handleClose} color="secondary" autoFocus>
+                <Button onClick={props.handleFinished} color="secondary" autoFocus>
                     Yes
                 </Button>
             </DialogActions>
