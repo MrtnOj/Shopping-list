@@ -27,6 +27,7 @@ const UserItemsAndCategories = () => {
         tabValue,
         editModalOpen,
         editItemDialogValue,
+        saveItemEdit,
         editDialogNameChange,
         dialogCategoryChange,
         filterAutocompleteOptions,
@@ -68,7 +69,7 @@ const UserItemsAndCategories = () => {
             <EditElementDialog 
                 dialogOpen={editModalOpen}
                 dialogClose={handleEditModalClose}
-                confirmEdit={() => {}}
+                confirmEdit={saveItemEdit}
                 dialogValues={editItemDialogValue}
                 itemNameChange={editDialogNameChange}
                 categoryAutocompleteValue={editItemDialogValue.category}

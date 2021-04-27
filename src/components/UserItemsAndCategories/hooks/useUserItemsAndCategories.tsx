@@ -10,6 +10,7 @@ const useUserItemsAndCategories = () => {
     const [categories, setCategories] = useState<Category[]>([])
     const [editItemDialogValue, setEditItemDialogValue] = useState({ name: '', category: {}})
     const [editModalOpen, setEditModalOpen] = useState<boolean>(false)
+    const [editingElement, setEditingElement] = useState<Item | null>(null)
 
     const filter = createFilterOptions<Item | Category>()
 
@@ -40,7 +41,7 @@ const useUserItemsAndCategories = () => {
     }
 
     const editItemButtonPressed = (element: Item) => {
-        console.log(element)
+        setEditingElement(element)
         const category = categories.find(cat => cat.id === element.userCategoryId)
         setEditItemDialogValue({ name: element.name, category: (category as Category) })
         setEditModalOpen(true)
@@ -62,7 +63,7 @@ const useUserItemsAndCategories = () => {
         } else {
             setEditItemDialogValue({...(editItemDialogValue as Item), category: newValue})
         }
-        console.log(editItemDialogValue.category)
+        console.log(editItemDialogValue)
     }
 
     const filterAutocompleteOptions = (options: Item[] | Category[], params: any) => {
@@ -86,11 +87,30 @@ const useUserItemsAndCategories = () => {
           return option.name;
     }
 
+    const saveItemEdit = (event: any) => {
+        event.preventDefault()
+        console.log(editingElement)
+        console.log(editItemDialogValue.category)
+        axios.put('http://localhost:8080/items/' + editingElement!.id, {
+            userId: localStorage.getItem('userId'),
+            newName: editItemDialogValue.name,
+            category: editItemDialogValue.category
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        handleEditModalClose()
+    }
+
     const handleEditModalClose = () => {
         setEditItemDialogValue({
             name: '',
             category: ''
         })
+        setEditingElement(null)
         setEditModalOpen(false)
     }
 
@@ -116,6 +136,7 @@ const useUserItemsAndCategories = () => {
         editItemDialogValue: editItemDialogValue,
         editModalOpen: editModalOpen,
         editDialogNameChange: editDialogNameChange,
+        saveItemEdit: saveItemEdit,
         dialogCategoryChange: dialogCategoryChange,
         filterAutocompleteOptions: filterAutocompleteOptions,
         getOptionLabel: getOptionLabel,

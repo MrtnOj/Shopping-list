@@ -197,7 +197,7 @@ const useListView = () => {
     }
 
     const listPickingFinished = () => {
-        axios.put('http://localhost:8080/items/bought', { items: pickedList, userId: localStorage.getItem('userId') })
+        axios.post('http://localhost:8080/items/bought', { items: pickedList, userId: localStorage.getItem('userId') })
         .then(response => {
             console.log(response)
         })
