@@ -6,6 +6,7 @@ export interface Item {
     id?: number;
     name: string;
     categoryId?: number;
+    userCategoryId?: number;
     category?: string | Category | null;
     last_bought?: Date;
     lasts?: number;

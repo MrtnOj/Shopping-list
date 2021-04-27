@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Item } from '../../CreateList/hooks/useCreateList'
 import { Category } from '../../CreateList/hooks/useCreateList'
+import { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
 const useUserItemsAndCategories = () => {
     const [tabValue, setTabValue] = useState<number>(0)
     const [items, setItems] = useState<Item[]>([])
     const [categories, setCategories] = useState<Category[]>([])
+    const [editItemDialogValue, setEditItemDialogValue] = useState({ name: '', category: {}})
+    const [editModalOpen, setEditModalOpen] = useState<boolean>(false)
+
+    const filter = createFilterOptions<Item | Category>()
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
@@ -34,11 +39,70 @@ const useUserItemsAndCategories = () => {
         })
     }
 
-    const deleteItem = (itemId: number) => {
-        axios.delete('http://localhost:8080/items/' + itemId)
+    const editItemButtonPressed = (element: Item) => {
+        console.log(element)
+        const category = categories.find(cat => cat.id === element.userCategoryId)
+        setEditItemDialogValue({ name: element.name, category: (category as Category) })
+        setEditModalOpen(true)
+    }
+
+    const editDialogNameChange = (event: React.ChangeEvent<any>) => {
+        setEditItemDialogValue({ ...editItemDialogValue, name: event.target.value })
+    }
+
+    const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category | string) => {
+        if (typeof newValue === 'string') {
+            setEditModalOpen(true);
+            setEditItemDialogValue({
+            ...(editItemDialogValue as Item),
+            category: newValue,
+            })
+        } else if (newValue && newValue.inputValue) {
+            setEditItemDialogValue({...(editItemDialogValue as Item), category: newValue.inputValue})
+        } else {
+            setEditItemDialogValue({...(editItemDialogValue as Item), category: newValue})
+        }
+        console.log(editItemDialogValue.category)
+    }
+
+    const filterAutocompleteOptions = (options: Item[] | Category[], params: any) => {
+        const filtered = filter(options, params);
+        if (params.inputValue !== '') {
+          filtered.push({
+            inputValue: params.inputValue,
+            name: `Add "${params.inputValue}"`
+          })
+        }
+        return filtered
+    }
+
+    const getOptionLabel = (option: Item | Category | string) => {
+        if (typeof option === 'string') {
+            return option;
+          }
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          return option.name;
+    }
+
+    const handleEditModalClose = () => {
+        setEditItemDialogValue({
+            name: '',
+            category: ''
+        })
+        setEditModalOpen(false)
+    }
+
+    const deleteItemOrCategory = (id: number, isItem: boolean) => {
+        const url = isItem ? 'items' : 'categories'
+        axios.delete('http://localhost:8080/' + url + '/' + id)
         .then(response => {
-            console.log(response)
-            getItems(localStorage.getItem('userId'))
+            if (isItem) {
+                getItems(localStorage.getItem('userId'))
+            } else {
+                getCategories(localStorage.getItem('userId'))
+            }
         })
         .catch(err => {
             console.log(err)
@@ -49,7 +113,15 @@ const useUserItemsAndCategories = () => {
         items: items,
         categories: categories,
         tabValue: tabValue,
-        deleteItem: deleteItem,
+        editItemDialogValue: editItemDialogValue,
+        editModalOpen: editModalOpen,
+        editDialogNameChange: editDialogNameChange,
+        dialogCategoryChange: dialogCategoryChange,
+        filterAutocompleteOptions: filterAutocompleteOptions,
+        getOptionLabel: getOptionLabel,
+        editItemButtonPressed: editItemButtonPressed,
+        handleEditModalClose: handleEditModalClose,
+        deleteElement: deleteItemOrCategory,
         handleTabChange: handleTabChange
     }
 }

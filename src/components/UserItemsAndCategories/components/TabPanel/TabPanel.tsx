@@ -13,7 +13,9 @@ interface TabPanelProps {
     index: any;
     value: any;
     content: any;
-    deleteElement?: any
+    deleteElement?: any;
+    isItem?: boolean;
+    editElement?: any;
   }
 
   const useStyles = makeStyles((theme: Theme) =>
@@ -22,7 +24,7 @@ interface TabPanelProps {
 
         },
         listItem: {
-
+            marginBottom: '0.5rem'
         },
         iconButtons: {
             marginLeft: theme.spacing(2)
@@ -32,7 +34,7 @@ interface TabPanelProps {
 
 const TabPanel = (props: TabPanelProps) => {
     const classes = useStyles()
-    const { children, value, index, content, deleteElement, ...other } = props
+    const { children, value, index, content, deleteElement, isItem, editElement, ...other } = props
 
     return (
         <article 
@@ -44,20 +46,21 @@ const TabPanel = (props: TabPanelProps) => {
         >
             {value === index && (
                 <List className={classes.itemsList}>
-                    {content.map((item: any) => {
+                    {content.map((element: any) => {
                         return (
                             <ListItem
-                                key={item.id}
+                                key={element.id}
                                 className={classes.listItem}
                                 divider={true}
                             >
-                                <ListItemText primary={item.name} />
+                                <ListItemText primary={element.name} />
                                 <ListItemSecondaryAction>
                                     <IconButton
                                         edge='end'
                                         size='small'
                                         color='inherit'
                                         className={classes.iconButtons}
+                                        onClick={isItem ? () => editElement(element) : () => {}}
                                     >
                                         <EditIcon />
                                     </IconButton>
@@ -66,7 +69,7 @@ const TabPanel = (props: TabPanelProps) => {
                                         size='small'
                                         color='inherit'
                                         className={classes.iconButtons}
-                                        onClick={() => deleteElement(item.id)}
+                                        onClick={() => deleteElement(element.id, isItem)}
                                     >
                                         <DeleteIcon />
                                     </IconButton>

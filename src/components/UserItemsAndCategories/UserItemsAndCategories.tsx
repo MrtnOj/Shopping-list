@@ -3,9 +3,7 @@ import Container from '@material-ui/core/Container'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import TabPanel from './components/TabPanel'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import EditElementDialog from './components/EditElementDialog'
 import useUserItemsAndCategories from './hooks/useUserItemsAndCategories'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
@@ -23,11 +21,20 @@ const useStyles = makeStyles((theme: Theme) =>
 const UserItemsAndCategories = () => {
     const classes = useStyles()
 
-    const { items,
+    const { 
+        items,
         categories,
         tabValue,
+        editModalOpen,
+        editItemDialogValue,
+        editDialogNameChange,
+        dialogCategoryChange,
+        filterAutocompleteOptions,
+        getOptionLabel,
+        editItemButtonPressed,
+        handleEditModalClose,
         handleTabChange,
-        deleteItem
+        deleteElement
     } = useUserItemsAndCategories()
 
     return (
@@ -43,8 +50,33 @@ const UserItemsAndCategories = () => {
                 <Tab label="Categories" />
                 <Tab label="Recipes" disabled />
             </Tabs>
-            <TabPanel value={tabValue} index={0} content={items} deleteElement={deleteItem}/>
-            <TabPanel value={tabValue} index={1} content={categories} />
+            <TabPanel
+                value={tabValue}
+                index={0}
+                isItem={true}
+                content={items}
+                deleteElement={deleteElement}
+                editElement={editItemButtonPressed}
+            />
+            <TabPanel
+                value={tabValue}
+                index={1}
+                isItem={false}
+                content={categories}
+                deleteElement={deleteElement}
+            />
+            <EditElementDialog 
+                dialogOpen={editModalOpen}
+                dialogClose={handleEditModalClose}
+                confirmEdit={() => {}}
+                dialogValues={editItemDialogValue}
+                itemNameChange={editDialogNameChange}
+                categoryAutocompleteValue={editItemDialogValue.category}
+                dialogCategoryChange={dialogCategoryChange}
+                filterOptions={filterAutocompleteOptions}
+                categoryOptions={categories}
+                getOptionLabel={getOptionLabel}
+            />
         </Container>
     )
 }
