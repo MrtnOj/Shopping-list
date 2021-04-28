@@ -9,8 +9,11 @@ const useUserItemsAndCategories = () => {
     const [items, setItems] = useState<Item[]>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [editItemDialogValue, setEditItemDialogValue] = useState({ name: '', category: {}})
-    const [editModalOpen, setEditModalOpen] = useState<boolean>(false)
-    const [editingElement, setEditingElement] = useState<Item | null>(null)
+    const [editCategoryDialogValue, setEditCategoryDialogValue] = useState<string>('')
+    const [editItemModalOpen, setEditItemModalOpen] = useState<boolean>(false)
+    const [editCategoryModalOpen, setEditCategoryModalOpen] = useState<boolean>(false)
+    const [editingItem, setEditingItem] = useState<Item | null>(null)
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null)
 
     const filter = createFilterOptions<Item | Category>()
 
@@ -40,20 +43,34 @@ const useUserItemsAndCategories = () => {
         })
     }
 
-    const editItemButtonPressed = (element: Item) => {
-        setEditingElement(element)
-        const category = categories.find(cat => cat.id === element.userCategoryId)
-        setEditItemDialogValue({ name: element.name, category: (category as Category) })
-        setEditModalOpen(true)
+    const addItemButtonPressed = () => {
+        setEditItemModalOpen(true)
+    }
+
+    const addCategoryButtonPressed = () => {
+        setEditCategoryModalOpen(true)
+    }
+
+    const editItemButtonPressed = (item: Item) => {
+        setEditingItem(item)
+        const category = categories.find(cat => cat.id === item.userCategoryId)
+        setEditItemDialogValue({ name: item.name, category: (category as Category) })
+        setEditItemModalOpen(true)
+    }
+
+    const editCategoryButtonPressed = (category: Category) => {
+        setEditingCategory(category)
+        setEditCategoryDialogValue(category.name)
+        setEditCategoryModalOpen(true)
     }
 
     const editDialogNameChange = (event: React.ChangeEvent<any>) => {
         setEditItemDialogValue({ ...editItemDialogValue, name: event.target.value })
     }
 
-    const dialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category | string) => {
+    const editItemDialogCategoryChange = (event: React.ChangeEvent<any>, newValue: Category | string) => {
         if (typeof newValue === 'string') {
-            setEditModalOpen(true);
+            setEditItemModalOpen(true);
             setEditItemDialogValue({
             ...(editItemDialogValue as Item),
             category: newValue,
@@ -77,6 +94,10 @@ const useUserItemsAndCategories = () => {
         return filtered
     }
 
+    const editCategoryNameChange = (event: React.ChangeEvent<any>) => {
+        setEditCategoryDialogValue(event.target.value)
+    }
+
     const getOptionLabel = (option: Item | Category | string) => {
         if (typeof option === 'string') {
             return option;
@@ -89,29 +110,57 @@ const useUserItemsAndCategories = () => {
 
     const saveItemEdit = (event: any) => {
         event.preventDefault()
-        console.log(editingElement)
-        console.log(editItemDialogValue.category)
-        axios.put('http://localhost:8080/items/' + editingElement!.id, {
-            userId: localStorage.getItem('userId'),
-            newName: editItemDialogValue.name,
-            category: editItemDialogValue.category
-        })
-        .then(response => {
-            console.log(response)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        handleEditModalClose()
+        if (editingItem) {
+            axios.put('http://localhost:8080/items/' + editingItem!.id, {
+                userId: localStorage.getItem('userId'),
+                newName: editItemDialogValue.name,
+                category: editItemDialogValue.category
+            })
+            .then(response => {
+                console.log(response)
+                getItems(localStorage.getItem('userId'))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        } else {
+            axios.post('http://localhost:8080/items/' + localStorage.getItem('userId'), {
+                name: editItemDialogValue.name,
+                category: editItemDialogValue.category
+            })
+            .then(response => {
+                console.log(response)
+                getItems(localStorage.getItem('userId'))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+        handleItemEditModalClose()
     }
 
-    const handleEditModalClose = () => {
+    const saveCategoryEdit = (event: any) => {
+        event.preventDefault()
+        if (editingCategory) {
+            
+        } else {
+            
+        }
+
+    }
+
+    const handleItemEditModalClose = () => {
         setEditItemDialogValue({
             name: '',
             category: ''
         })
-        setEditingElement(null)
-        setEditModalOpen(false)
+        setEditingItem(null)
+        setEditItemModalOpen(false)
+    }
+
+    const handleCategoryEditModalClose = () => {
+        setEditCategoryDialogValue('')
+        setEditCategoryModalOpen(false)
     }
 
     const deleteItemOrCategory = (id: number, isItem: boolean) => {
@@ -134,14 +183,21 @@ const useUserItemsAndCategories = () => {
         categories: categories,
         tabValue: tabValue,
         editItemDialogValue: editItemDialogValue,
-        editModalOpen: editModalOpen,
+        editCategoryDialogValue: editCategoryDialogValue,
+        editItemModalOpen: editItemModalOpen,
+        editCategoryModalOpen: editCategoryModalOpen,
+        addItemButtonPressed: addItemButtonPressed,
+        addCategoryButtonPressed: addCategoryButtonPressed,
         editDialogNameChange: editDialogNameChange,
         saveItemEdit: saveItemEdit,
-        dialogCategoryChange: dialogCategoryChange,
+        editItemDialogCategoryChange: editItemDialogCategoryChange,
+        editCategoryNameChange: editCategoryNameChange,
         filterAutocompleteOptions: filterAutocompleteOptions,
         getOptionLabel: getOptionLabel,
         editItemButtonPressed: editItemButtonPressed,
-        handleEditModalClose: handleEditModalClose,
+        editCategoryButtonPressed: editCategoryButtonPressed,
+        handleItemEditModalClose: handleItemEditModalClose,
+        handleCategoryEditModalClose: handleCategoryEditModalClose,
         deleteElement: deleteItemOrCategory,
         handleTabChange: handleTabChange
     }

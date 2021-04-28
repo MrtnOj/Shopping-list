@@ -32,8 +32,8 @@ const NavBar = (props: { logOut: () => void }) => {
             <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
                 Create a list
             </Button>
-            <Button color="inherit" component={RouterLink} to="/" className={classes.links}>
-                Add items
+            <Button color="inherit" component={RouterLink} to="/useritems" className={classes.links}>
+                Edit items
             </Button>
             <Button color="inherit" component={RouterLink} to="/mylists" className={classes.links}>
                 My lists

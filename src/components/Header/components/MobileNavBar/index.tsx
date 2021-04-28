@@ -57,8 +57,8 @@ const MobileNavBar = (props: any) => {
                             </RouterLink>
                         </ListItem>
                         <ListItem color="inherit" alignItems="center" onClick={props.closeDrawer}>
-                            <RouterLink to="/" className={classes.link}>
-                                <ListItemText primary="Add items" />
+                            <RouterLink to="/useritems" className={classes.link}>
+                                <ListItemText primary="Edit Items" />
                             </RouterLink>
                         </ListItem>
                         <ListItem color="inherit" alignItems="center" onClick={props.closeDrawer}>

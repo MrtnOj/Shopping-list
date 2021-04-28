@@ -4,6 +4,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import TabPanel from './components/TabPanel'
 import EditElementDialog from './components/EditElementDialog'
+import EditCategoryDialog from './components/EditCategoryDialog'
 import useUserItemsAndCategories from './hooks/useUserItemsAndCategories'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
@@ -25,15 +26,22 @@ const UserItemsAndCategories = () => {
         items,
         categories,
         tabValue,
-        editModalOpen,
+        editItemModalOpen,
+        editCategoryModalOpen,
         editItemDialogValue,
+        editCategoryDialogValue,
+        addItemButtonPressed,
+        addCategoryButtonPressed,
         saveItemEdit,
         editDialogNameChange,
-        dialogCategoryChange,
+        editItemDialogCategoryChange,
+        editCategoryNameChange,
         filterAutocompleteOptions,
         getOptionLabel,
         editItemButtonPressed,
-        handleEditModalClose,
+        editCategoryButtonPressed,
+        handleItemEditModalClose,
+        handleCategoryEditModalClose,
         handleTabChange,
         deleteElement
     } = useUserItemsAndCategories()
@@ -58,6 +66,7 @@ const UserItemsAndCategories = () => {
                 content={items}
                 deleteElement={deleteElement}
                 editElement={editItemButtonPressed}
+                addButtonPressed={addItemButtonPressed}
             />
             <TabPanel
                 value={tabValue}
@@ -65,18 +74,27 @@ const UserItemsAndCategories = () => {
                 isItem={false}
                 content={categories}
                 deleteElement={deleteElement}
+                editElement={editCategoryButtonPressed}
+                addButtonPressed={addCategoryButtonPressed}
             />
             <EditElementDialog 
-                dialogOpen={editModalOpen}
-                dialogClose={handleEditModalClose}
+                dialogOpen={editItemModalOpen}
+                dialogClose={handleItemEditModalClose}
                 confirmEdit={saveItemEdit}
                 dialogValues={editItemDialogValue}
                 itemNameChange={editDialogNameChange}
                 categoryAutocompleteValue={editItemDialogValue.category}
-                dialogCategoryChange={dialogCategoryChange}
+                dialogCategoryChange={editItemDialogCategoryChange}
                 filterOptions={filterAutocompleteOptions}
                 categoryOptions={categories}
                 getOptionLabel={getOptionLabel}
+            />
+            <EditCategoryDialog 
+                dialogOpen={editCategoryModalOpen}
+                dialogClose={handleCategoryEditModalClose}
+                dialogValue={editCategoryDialogValue}
+                confirmEdit={() => {}}
+                nameChange={editCategoryNameChange}
             />
         </Container>
     )

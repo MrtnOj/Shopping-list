@@ -54,7 +54,7 @@ const EditElementDialog = (props: any) => {
                             Cancel
                         </Button>
                         <Button type="submit" color="primary">
-                            Add
+                            Save
                         </Button>
                     </DialogActions>
                 </form>
