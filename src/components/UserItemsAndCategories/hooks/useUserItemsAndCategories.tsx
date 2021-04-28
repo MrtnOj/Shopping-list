@@ -142,11 +142,29 @@ const useUserItemsAndCategories = () => {
     const saveCategoryEdit = (event: any) => {
         event.preventDefault()
         if (editingCategory) {
-            
+            axios.put('http://localhost:8080/categories/' + editingCategory.id, {
+                newCategoryName: editCategoryDialogValue
+            })
+            .then(response => {
+                getCategories(localStorage.getItem('userId'))
+                console.log(response)
+            })
+            .catch(err => {
+                console.log(err)
+            })
         } else {
-            
+            axios.post('http://localhost:8080/categories/' + localStorage.getItem('userId'), {
+                name: editCategoryDialogValue
+            })
+            .then(response => {
+                console.log(response)
+                getCategories(localStorage.getItem('userId'))
+            })
+            .catch(err => {
+                console.log(err)
+            })
         }
-
+        handleCategoryEditModalClose()
     }
 
     const handleItemEditModalClose = () => {
@@ -160,6 +178,7 @@ const useUserItemsAndCategories = () => {
 
     const handleCategoryEditModalClose = () => {
         setEditCategoryDialogValue('')
+        setEditingCategory(null)
         setEditCategoryModalOpen(false)
     }
 
@@ -190,6 +209,7 @@ const useUserItemsAndCategories = () => {
         addCategoryButtonPressed: addCategoryButtonPressed,
         editDialogNameChange: editDialogNameChange,
         saveItemEdit: saveItemEdit,
+        saveCategoryEdit: saveCategoryEdit,
         editItemDialogCategoryChange: editItemDialogCategoryChange,
         editCategoryNameChange: editCategoryNameChange,
         filterAutocompleteOptions: filterAutocompleteOptions,

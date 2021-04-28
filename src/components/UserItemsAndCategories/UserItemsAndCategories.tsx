@@ -33,6 +33,7 @@ const UserItemsAndCategories = () => {
         addItemButtonPressed,
         addCategoryButtonPressed,
         saveItemEdit,
+        saveCategoryEdit,
         editDialogNameChange,
         editItemDialogCategoryChange,
         editCategoryNameChange,
@@ -93,7 +94,7 @@ const UserItemsAndCategories = () => {
                 dialogOpen={editCategoryModalOpen}
                 dialogClose={handleCategoryEditModalClose}
                 dialogValue={editCategoryDialogValue}
-                confirmEdit={() => {}}
+                confirmEdit={saveCategoryEdit}
                 nameChange={editCategoryNameChange}
             />
         </Container>
