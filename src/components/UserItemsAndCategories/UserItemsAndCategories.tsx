@@ -28,10 +28,13 @@ const UserItemsAndCategories = () => {
         tabValue,
         editItemModalOpen,
         editCategoryModalOpen,
+        deleteModalOpen,
+        elementToDelete,
         editItemDialogValue,
         editCategoryDialogValue,
         addItemButtonPressed,
         addCategoryButtonPressed,
+        deleteButtonPressed,
         saveItemEdit,
         saveCategoryEdit,
         editDialogNameChange,
@@ -43,8 +46,10 @@ const UserItemsAndCategories = () => {
         editCategoryButtonPressed,
         handleItemEditModalClose,
         handleCategoryEditModalClose,
+        handleDeleteModalClose,
         handleTabChange,
-        deleteElement
+        deleteElement,
+
     } = useUserItemsAndCategories()
 
     return (
@@ -68,6 +73,10 @@ const UserItemsAndCategories = () => {
                 deleteElement={deleteElement}
                 editElement={editItemButtonPressed}
                 addButtonPressed={addItemButtonPressed}
+                deleteButtonPressed={deleteButtonPressed}
+                deleteModalOpen={deleteModalOpen}
+                elementToDelete={elementToDelete}
+                deleteModalClose={handleDeleteModalClose}
             />
             <TabPanel
                 value={tabValue}
@@ -77,6 +86,10 @@ const UserItemsAndCategories = () => {
                 deleteElement={deleteElement}
                 editElement={editCategoryButtonPressed}
                 addButtonPressed={addCategoryButtonPressed}
+                deleteButtonPressed={deleteButtonPressed}
+                deleteModalOpen={deleteModalOpen}
+                elementToDelete={elementToDelete}
+                deleteModalClose={handleDeleteModalClose}
             />
             <EditElementDialog 
                 dialogOpen={editItemModalOpen}

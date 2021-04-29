@@ -14,6 +14,8 @@ const useUserItemsAndCategories = () => {
     const [editCategoryModalOpen, setEditCategoryModalOpen] = useState<boolean>(false)
     const [editingItem, setEditingItem] = useState<Item | null>(null)
     const [editingCategory, setEditingCategory] = useState<Category | null>(null)
+    const [elementToDelete, setElementToDelete] = useState<any>(null)
+    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
 
     const filter = createFilterOptions<Item | Category>()
 
@@ -183,9 +185,19 @@ const useUserItemsAndCategories = () => {
         setEditCategoryModalOpen(false)
     }
 
-    const deleteItemOrCategory = (id: number, isItem: boolean) => {
+    const handleDeleteModalClose = () => {
+        setDeleteModalOpen(false)
+        setElementToDelete(null)
+    }
+
+    const deleteButtonPressed = (element: any) => {
+        setDeleteModalOpen(true)
+        setElementToDelete(element)
+    }
+
+    const deleteItemOrCategory = (isItem: boolean) => {
         const url = isItem ? 'items' : 'categories'
-        axios.delete('http://localhost:8080/' + url + '/' + id)
+        axios.delete('http://localhost:8080/' + url + '/' + elementToDelete.id)
         .then(response => {
             if (isItem) {
                 getItems(localStorage.getItem('userId'))
@@ -196,31 +208,43 @@ const useUserItemsAndCategories = () => {
         .catch(err => {
             console.log(err)
         })
+        handleDeleteModalClose()
     }
 
     return {
         items: items,
         categories: categories,
+        elementToDelete: elementToDelete,
+        // input values
         tabValue: tabValue,
         editItemDialogValue: editItemDialogValue,
         editCategoryDialogValue: editCategoryDialogValue,
+        // modal states
         editItemModalOpen: editItemModalOpen,
         editCategoryModalOpen: editCategoryModalOpen,
-        addItemButtonPressed: addItemButtonPressed,
-        addCategoryButtonPressed: addCategoryButtonPressed,
-        editDialogNameChange: editDialogNameChange,
-        saveItemEdit: saveItemEdit,
-        saveCategoryEdit: saveCategoryEdit,
-        editItemDialogCategoryChange: editItemDialogCategoryChange,
-        editCategoryNameChange: editCategoryNameChange,
-        filterAutocompleteOptions: filterAutocompleteOptions,
-        getOptionLabel: getOptionLabel,
-        editItemButtonPressed: editItemButtonPressed,
-        editCategoryButtonPressed: editCategoryButtonPressed,
+        deleteModalOpen: deleteModalOpen,
+        // modal close handlers
         handleItemEditModalClose: handleItemEditModalClose,
         handleCategoryEditModalClose: handleCategoryEditModalClose,
+        handleDeleteModalClose: handleDeleteModalClose,
+        //functions when buttons are pressed
+        addItemButtonPressed: addItemButtonPressed,
+        addCategoryButtonPressed: addCategoryButtonPressed,
+        deleteButtonPressed: deleteButtonPressed,
+        editItemButtonPressed: editItemButtonPressed,
+        editCategoryButtonPressed: editCategoryButtonPressed,
+        handleTabChange: handleTabChange,
+        // input changes
+        editDialogNameChange: editDialogNameChange,
+        editItemDialogCategoryChange: editItemDialogCategoryChange,
+        editCategoryNameChange: editCategoryNameChange,
+        // autocomplete functions
+        filterAutocompleteOptions: filterAutocompleteOptions,
+        getOptionLabel: getOptionLabel,
+        // api request senders
+        saveItemEdit: saveItemEdit,
+        saveCategoryEdit: saveCategoryEdit,
         deleteElement: deleteItemOrCategory,
-        handleTabChange: handleTabChange
     }
 }
 
