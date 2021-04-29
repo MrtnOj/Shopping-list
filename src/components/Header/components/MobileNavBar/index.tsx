@@ -34,20 +34,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 const MobileNavBar = (props: any) => {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return (
         <Toolbar>
-            <IconButton 
-                edge="start" 
-                className={classes.menuButton} 
-                color="inherit" 
-                aria-label="menu"
-                aria-haspopup="true"
-                onClick={props.openDrawer}
-            >
-                <MenuIcon />
-            </IconButton>
+            { localStorage.getItem('token') && (
+                <IconButton 
+                    edge="start" 
+                    className={classes.menuButton} 
+                    color="inherit" 
+                    aria-label="menu"
+                    aria-haspopup="true"
+                    onClick={props.openDrawer}
+                >
+                    <MenuIcon />
+                </IconButton>
+            )}
             <Drawer open={props.drawerOpen} onClose={props.closeDrawer}>
                 <nav className={classes.drawer}>
                     <List>

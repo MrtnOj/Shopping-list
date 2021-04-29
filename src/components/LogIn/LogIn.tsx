@@ -112,7 +112,7 @@ const LogIn = () => {
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            {/* {loginRedirect ? <Redirect to="/createlist" /> : null} */}
+            {loginRedirect ? <Redirect to="/createlist" /> : null}
         </Container>
     )
 }

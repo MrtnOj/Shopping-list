@@ -14,16 +14,27 @@ function App() {
 
   let routes = (
     <Switch>
-      <Route path="/createlist" component={CreateList} />
       <Route path="/login" component={LogIn}/>
       <Route path="/register" component={Register}/>
-      <Route path="/useritems" component={UserItemsAndCategories} />
-      <Route path="/mylists/:listId" component={ListView} />
-      <Route path="/mylists" component={MyLists}/>
-      <Route path="/" component={AddItems} />
+      <Route path="/" component={LogIn} />
       <Redirect to="/" />
     </Switch>
   )
+
+  if ( localStorage.getItem('token') ) {
+    routes = (
+      <Switch>
+        <Route path="/createlist" component={CreateList} />
+        <Route path="/login" component={LogIn}/>
+        <Route path="/register" component={Register}/>
+        <Route path="/useritems" component={UserItemsAndCategories} />
+        <Route path="/mylists/:listId" component={ListView} />
+        <Route path="/mylists" component={MyLists}/>
+        <Route path="/" component={AddItems} />
+        <Redirect to="/" />
+    </Switch>
+    )
+  }
 
   return (
     <Layout>

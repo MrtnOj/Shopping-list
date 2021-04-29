@@ -50,13 +50,13 @@ const Header = () => {
         <React.Fragment>
             <AppBar color='primary' position='fixed'>
                 {mobileView 
-                    ? <MobileNavBar 
-                        openDrawer={handleDrawerOpen} 
-                        closeDrawer={handleDrawerClose}
-                        drawerOpen={drawerOpen}
-                        logOut={logOut}
+                    ?   <MobileNavBar 
+                            openDrawer={handleDrawerOpen} 
+                            closeDrawer={handleDrawerClose}
+                            drawerOpen={drawerOpen}
+                            logOut={logOut}
                         /> 
-                    : <DesktopNavBar logOut={logOut} />}
+                    :   <DesktopNavBar logOut={logOut} />}
             </AppBar>
             {loginRedirect}
         </React.Fragment>

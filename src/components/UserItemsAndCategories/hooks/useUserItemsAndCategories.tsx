@@ -131,6 +131,7 @@ const useUserItemsAndCategories = () => {
             .then(response => {
                 console.log(response)
                 getItems(localStorage.getItem('userId'))
+                getCategories(localStorage.getItem('userId'))
             })
             .catch(err => {
                 console.log(err)

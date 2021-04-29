@@ -22,22 +22,27 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 const NavBar = (props: { logOut: () => void }) => {
-    const classes = useStyles();
+    const classes = useStyles()
+
 
     return (
         <Toolbar>
             <Typography variant="h1" className={classes.title} color="inherit">
                 Shopping
             </Typography>
-            <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
-                Create a list
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/useritems" className={classes.links}>
-                Edit items
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/mylists" className={classes.links}>
-                My lists
-            </Button>
+            { localStorage.getItem('token') && (
+                <React.Fragment>
+                    <Button color="inherit" component={RouterLink} to="/createlist" className={classes.links}>
+                        Create a list
+                    </Button>
+                    <Button color="inherit" component={RouterLink} to="/useritems" className={classes.links}>
+                        Edit items
+                    </Button>
+                    <Button color="inherit" component={RouterLink} to="/mylists" className={classes.links}>
+                        My lists
+                    </Button>
+                </React.Fragment>
+            )}
             {!localStorage.getItem('token')
                 ?
                 <Button color="secondary" variant="contained" component={RouterLink} to="/login">
