@@ -42,7 +42,7 @@ const useCreateList = () => {
     }, [localStorage.getItem('userId')])
 
     const getItems = (userId: string | null) => {
-        axios.get('/items/' + userId, {
+        axios.get('items/' + userId, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
@@ -53,7 +53,7 @@ const useCreateList = () => {
     }
 
     const getCategories = (userId: string | null) => {
-        axios.get('/categories/' + userId, {
+        axios.get('categories/' + userId, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
@@ -67,7 +67,7 @@ const useCreateList = () => {
     }
 
     const getSuggestions = (userId: string | null) => {
-        axios.get('/items/suggestions/' + userId, {
+        axios.get('items/suggestions/' + userId, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
@@ -154,12 +154,13 @@ const useCreateList = () => {
         event.preventDefault()
         console.log(itemAddDialogValue.category)
         axios.post('/items/' + localStorage.getItem('userId'), {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            },
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
             category: itemAddDialogValue.category
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
         })
         .then(response => {
             const newListItems = [...list, {name: itemAddDialogValue.name, id: response.data.id }]
@@ -218,11 +219,11 @@ const useCreateList = () => {
 
     const saveList = (): void => {
         axios.post('/list', {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            },
             list: list,
             userId: localStorage.getItem('userId')
+        }, { headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
         })
         .then(response => {
             console.log(response)

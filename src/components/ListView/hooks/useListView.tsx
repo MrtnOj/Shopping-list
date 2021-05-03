@@ -181,13 +181,14 @@ const useListView = () => {
     const addItemToList = (event: any) => {
         event.preventDefault()
         axios.post('/list/add/' + listData.id, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            },
             userId: localStorage.getItem('userId'),
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
             category: itemAddDialogValue.category
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
         })
         .then(response => {
             const newListItems = [...listItems, {name: itemAddDialogValue.name, id: response.data.itemId }]
@@ -212,9 +213,12 @@ const useListView = () => {
     }
 
     const listPickingFinished = () => {
-        axios.post('/items/bought', {
+        axios.post('/items/bought/' + localStorage.getItem('userId'), {
             items: pickedList,
-            userId: localStorage.getItem('userId') 
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
         })
         .then(response => {
             console.log(response)

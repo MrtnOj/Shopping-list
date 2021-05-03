@@ -29,14 +29,22 @@ const useUserItemsAndCategories = () => {
     }
 
     const getItems = (userId: string | null) => {
-        axios.get('/items/' + userId)
+        axios.get('/items/' + userId, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             setItems(response.data)
         })
     }
 
     const getCategories = (userId: string | null) => {
-        axios.get('/categories/' + userId)
+        axios.get('/categories/' + userId, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             setCategories(response.data)
         })
@@ -116,6 +124,10 @@ const useUserItemsAndCategories = () => {
                 userId: localStorage.getItem('userId'),
                 newName: editItemDialogValue.name,
                 category: editItemDialogValue.category
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
             })
             .then(response => {
                 getItems(localStorage.getItem('userId'))
@@ -144,6 +156,10 @@ const useUserItemsAndCategories = () => {
         if (editingCategory) {
             axios.put('/categories/' + editingCategory.id, {
                 newCategoryName: editCategoryDialogValue
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
             })
             .then(response => {
                 getCategories(localStorage.getItem('userId'))
@@ -154,6 +170,10 @@ const useUserItemsAndCategories = () => {
         } else {
             axios.post('/categories/' + localStorage.getItem('userId'), {
                 name: editCategoryDialogValue
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
             })
             .then(response => {
                 getCategories(localStorage.getItem('userId'))
@@ -192,7 +212,11 @@ const useUserItemsAndCategories = () => {
 
     const deleteItemOrCategory = (isItem: boolean) => {
         const url = isItem ? '/items' : '/categories'
-        axios.delete(url + '/' + elementToDelete.id)
+        axios.delete(url + '/' + elementToDelete.id, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             if (isItem) {
                 getItems(localStorage.getItem('userId'))
