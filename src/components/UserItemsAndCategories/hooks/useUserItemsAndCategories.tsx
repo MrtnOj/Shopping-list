@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '../../../util/axiosAPI'
 import { Item } from '../../CreateList/hooks/useCreateList'
 import { Category } from '../../CreateList/hooks/useCreateList'
 import { createFilterOptions } from '@material-ui/lab/Autocomplete'
@@ -29,14 +29,14 @@ const useUserItemsAndCategories = () => {
     }
 
     const getItems = (userId: string | null) => {
-        axios.get('http://localhost:8080/items/' + userId)
+        axios.get('/items/' + userId)
         .then(response => {
             setItems(response.data)
         })
     }
 
     const getCategories = (userId: string | null) => {
-        axios.get('http://localhost:8080/categories/' + userId)
+        axios.get('/categories/' + userId)
         .then(response => {
             setCategories(response.data)
         })
@@ -82,7 +82,6 @@ const useUserItemsAndCategories = () => {
         } else {
             setEditItemDialogValue({...(editItemDialogValue as Item), category: newValue})
         }
-        console.log(editItemDialogValue)
     }
 
     const filterAutocompleteOptions = (options: Item[] | Category[], params: any) => {
@@ -113,25 +112,23 @@ const useUserItemsAndCategories = () => {
     const saveItemEdit = (event: any) => {
         event.preventDefault()
         if (editingItem) {
-            axios.put('http://localhost:8080/items/' + editingItem!.id, {
+            axios.put('/items/' + editingItem!.id, {
                 userId: localStorage.getItem('userId'),
                 newName: editItemDialogValue.name,
                 category: editItemDialogValue.category
             })
             .then(response => {
-                console.log(response)
                 getItems(localStorage.getItem('userId'))
             })
             .catch(err => {
                 console.log(err)
             })
         } else {
-            axios.post('http://localhost:8080/items/' + localStorage.getItem('userId'), {
+            axios.post('/items/' + localStorage.getItem('userId'), {
                 name: editItemDialogValue.name,
                 category: editItemDialogValue.category
             })
             .then(response => {
-                console.log(response)
                 getItems(localStorage.getItem('userId'))
                 getCategories(localStorage.getItem('userId'))
             })
@@ -145,22 +142,20 @@ const useUserItemsAndCategories = () => {
     const saveCategoryEdit = (event: any) => {
         event.preventDefault()
         if (editingCategory) {
-            axios.put('http://localhost:8080/categories/' + editingCategory.id, {
+            axios.put('/categories/' + editingCategory.id, {
                 newCategoryName: editCategoryDialogValue
             })
             .then(response => {
                 getCategories(localStorage.getItem('userId'))
-                console.log(response)
             })
             .catch(err => {
                 console.log(err)
             })
         } else {
-            axios.post('http://localhost:8080/categories/' + localStorage.getItem('userId'), {
+            axios.post('/categories/' + localStorage.getItem('userId'), {
                 name: editCategoryDialogValue
             })
             .then(response => {
-                console.log(response)
                 getCategories(localStorage.getItem('userId'))
             })
             .catch(err => {
@@ -196,8 +191,8 @@ const useUserItemsAndCategories = () => {
     }
 
     const deleteItemOrCategory = (isItem: boolean) => {
-        const url = isItem ? 'items' : 'categories'
-        axios.delete('http://localhost:8080/' + url + '/' + elementToDelete.id)
+        const url = isItem ? '/items' : '/categories'
+        axios.delete(url + '/' + elementToDelete.id)
         .then(response => {
             if (isItem) {
                 getItems(localStorage.getItem('userId'))

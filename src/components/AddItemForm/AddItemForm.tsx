@@ -7,16 +7,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        
-    })
-)
+// import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 const AddItemForm = (props: any) => {
-    const classes = useStyles()
 
     return (
         <React.Fragment>

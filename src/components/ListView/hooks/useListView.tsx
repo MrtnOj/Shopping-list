@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
-import axios from 'axios'
+import axios from '../../../util/axiosAPI'
 
 export interface Item {
     id?: number;
@@ -43,7 +43,11 @@ const useListView = () => {
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
 
     const getList = useCallback((listId: number) => {
-        axios.get('http://localhost:8080/list/listdetails/' + listId)
+        axios.get('/list/listdetails/' + listId, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then(response => {
                 setListData(response.data)
                 setListItems(response.data.user_items)
@@ -55,7 +59,11 @@ const useListView = () => {
     }, [])
 
     const getItems = () => {
-        axios.get('http://localhost:8080/items/' + localStorage.getItem('userId'))
+        axios.get('/items/' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             setItems(response.data)
         })
@@ -65,7 +73,11 @@ const useListView = () => {
     }
 
     const getCategories = () => {
-        axios.get('http://localhost:8080/categories/' + localStorage.getItem('userId'))
+        axios.get('categories/' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             setCategories(response.data)
         })
@@ -131,7 +143,6 @@ const useListView = () => {
         } else {
             setItemAddDialogValue({...(itemAddDialogValue as Item), category: newValue})
         }
-        //(newValue ? newValue.name : '')
         console.log(itemAddDialogValue.category)
     }
 
@@ -169,7 +180,11 @@ const useListView = () => {
 
     const addItemToList = (event: any) => {
         event.preventDefault()
-        axios.post('http://localhost:8080/list/add/' + listData.id, {
+        axios.post('/list/add/' + listData.id, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
+            userId: localStorage.getItem('userId'),
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
             category: itemAddDialogValue.category
@@ -197,7 +212,10 @@ const useListView = () => {
     }
 
     const listPickingFinished = () => {
-        axios.post('http://localhost:8080/items/bought', { items: pickedList, userId: localStorage.getItem('userId') })
+        axios.post('/items/bought', {
+            items: pickedList,
+            userId: localStorage.getItem('userId') 
+        })
         .then(response => {
             console.log(response)
         })

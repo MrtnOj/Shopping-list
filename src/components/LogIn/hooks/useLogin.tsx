@@ -1,9 +1,6 @@
-import React, { useReducer, useEffect, useState, useContext } from 'react'
-import { AuthContext } from '../../../context/auth-context'
-import authReducer, { initialState } from '../../../reducers/auth'
+import React, { useEffect, useState,} from 'react'
 
-
-import axios from 'axios'
+import axios from '../../../util/axiosAPI'
 
 const useLogin = () => {
     const [username, setUsername] = useState('')
@@ -11,9 +8,6 @@ const useLogin = () => {
     const [errorMessage, setErrorMessage] = useState('')
     const [alertOpen, setAlertOpen] = useState(false)
     const [loginRedirect, setLoginRedirect] = useState(false)
-
-    // const [authState, dispatch] = useReducer(authReducer, initialState)
-    const {state, dispatch} = useContext(AuthContext)
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setUsername(event.target.value)
@@ -31,8 +25,7 @@ const useLogin = () => {
     }
 
     const userLogin = (username: string, password: string): void => {
-        dispatch( { type: 'LOGIN_START' } )
-        axios.post('http://localhost:8080/auth/login', {
+        axios.post('/auth/login', {
             username: username,
             password: password
         })
@@ -40,12 +33,6 @@ const useLogin = () => {
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('userId', response.data.userId)
             localStorage.setItem('username', response.data.username)
-            dispatch({ 
-                type: 'LOGIN_SUCCESS',
-                userId: response.data.userId,
-                token: response.data.token,
-                username: response.data.username 
-            })
             setLoginRedirect(true)
         })
         .catch(err => {

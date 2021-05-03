@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createFilterOptions } from '@material-ui/lab/Autocomplete'
-
-import axios from 'axios'
+import axios from '../../../util/axiosAPI'
 
 interface Category {
     id?: number;
@@ -66,14 +65,21 @@ const useAddItems = () => {
     }
 
     const getCategories = () => {
-        axios.get('http://localhost:8080/categories/' + localStorage.getItem('userId'))
+        axios.get('/categories/' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then(response => {
                 setCategories(response.data)
             })
     }
 
     const addItemToDB = (name: string, category?: Category | null | string, lasts?: string) => {
-        axios.post('http://localhost:8080/items/' + localStorage.getItem('userId'), {
+        axios.post('/items/' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
             name: name,
             category: category,
             lasts: (lasts !== '' ? lasts : null)

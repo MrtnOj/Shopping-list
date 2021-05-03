@@ -25,12 +25,13 @@ function App() {
     routes = (
       <Switch>
         <Route path="/createlist" component={CreateList} />
+        <Route path="/additems" component={AddItems} />
         <Route path="/login" component={LogIn}/>
         <Route path="/register" component={Register}/>
         <Route path="/useritems" component={UserItemsAndCategories} />
         <Route path="/mylists/:listId" component={ListView} />
         <Route path="/mylists" component={MyLists}/>
-        <Route path="/" component={AddItems} />
+        <Route path="/" component={CreateList} />
         <Redirect to="/" />
     </Switch>
     )

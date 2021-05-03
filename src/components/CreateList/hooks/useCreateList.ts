@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../util/axiosAPI'
 import { useEffect, useState } from 'react'
 import { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
@@ -42,14 +42,22 @@ const useCreateList = () => {
     }, [localStorage.getItem('userId')])
 
     const getItems = (userId: string | null) => {
-        axios.get('http://localhost:8080/items/' + userId)
+        axios.get('/items/' + userId, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             setItems(response.data)
         })
     }
 
     const getCategories = (userId: string | null) => {
-        axios.get('http://localhost:8080/categories/' + userId)
+        axios.get('/categories/' + userId, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             setCategories(response.data)
         })
@@ -59,7 +67,11 @@ const useCreateList = () => {
     }
 
     const getSuggestions = (userId: string | null) => {
-        axios.get('http://localhost:8080/items/suggestions/' + userId)
+        axios.get('/items/suggestions/' + userId, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
             setSuggestions(response.data)
         })
@@ -141,7 +153,10 @@ const useCreateList = () => {
     const addItem = (event: any) => {
         event.preventDefault()
         console.log(itemAddDialogValue.category)
-        axios.post('http://localhost:8080/items/' + localStorage.getItem('userId'), {
+        axios.post('/items/' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
             category: itemAddDialogValue.category
@@ -202,7 +217,10 @@ const useCreateList = () => {
     }
 
     const saveList = (): void => {
-        axios.post('http://localhost:8080/list', {
+        axios.post('/list', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
             list: list,
             userId: localStorage.getItem('userId')
         })

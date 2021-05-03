@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import axios from 'axios'
+import axios from '../../../util/axiosAPI'
 
 const useRegister = () => {
     const [username, setUsername] = useState('')
@@ -37,7 +37,7 @@ const useRegister = () => {
 
     const registerUser = (username: string, email: string, password: string, repeatPassword: string): void => {
         if (password === repeatPassword) {
-            axios.post('http://localhost:8080/auth/signup', {
+            axios.post('/auth/signup', {
                 username: username,
                 email: email,
                 password: password,
@@ -47,7 +47,6 @@ const useRegister = () => {
                 setIsError(false)
                 setAlertOpen(true)
                 setResultMessage(response.data.message)
-                
                 // setSuccessRedirect(true)
                 
             })
