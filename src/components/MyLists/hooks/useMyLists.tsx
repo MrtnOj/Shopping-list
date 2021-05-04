@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import axios from 'axios'
+import axios from '../../../util/axiosAPI'
 
 interface ListTile {
     id: number;
@@ -19,19 +19,26 @@ const useMyLists = () => {
     }, [])
 
     const getLists = () => {
-        axios.get('http://localhost:8080/list/' + localStorage.getItem('userId'))
-            .then(response => {
-                setMyLists(response.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        axios.get('/list/' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(response => {
+            setMyLists(response.data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     const deleteList = (listId: number) => {
-        axios.delete('http://localhost:8080/list/delete/' + listId)
+        axios.delete('/list/delete/' + listId + '?userId=' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         .then(response => {
-            console.log(response)
             getLists()
         })
         .catch(err => {

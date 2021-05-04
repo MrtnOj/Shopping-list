@@ -139,6 +139,10 @@ const useUserItemsAndCategories = () => {
             axios.post('/items/' + localStorage.getItem('userId'), {
                 name: editItemDialogValue.name,
                 category: editItemDialogValue.category
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
             })
             .then(response => {
                 getItems(localStorage.getItem('userId'))
@@ -154,7 +158,7 @@ const useUserItemsAndCategories = () => {
     const saveCategoryEdit = (event: any) => {
         event.preventDefault()
         if (editingCategory) {
-            axios.put('/categories/' + editingCategory.id, {
+            axios.put('/categories/' + editingCategory.id + '?userId=' + localStorage.getItem('userId'), {
                 newCategoryName: editCategoryDialogValue
             }, {
                 headers: {
@@ -211,11 +215,11 @@ const useUserItemsAndCategories = () => {
     }
 
     const deleteItemOrCategory = (isItem: boolean) => {
-        const url = isItem ? '/items' : '/categories'
-        axios.delete(url + '/' + elementToDelete.id, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            }
+        const url = isItem ? '/items/' : '/categories/'
+        axios.delete(url + elementToDelete.id + '?userId=' + localStorage.getItem('userId'), {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
         })
         .then(response => {
             if (isItem) {

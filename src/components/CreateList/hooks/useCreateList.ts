@@ -221,7 +221,8 @@ const useCreateList = () => {
         axios.post('/list', {
             list: list,
             userId: localStorage.getItem('userId')
-        }, { headers: {
+        }, { 
+            headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         })

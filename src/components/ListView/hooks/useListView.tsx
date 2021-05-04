@@ -43,7 +43,7 @@ const useListView = () => {
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
 
     const getList = useCallback((listId: number) => {
-        axios.get('/list/listdetails/' + listId, {
+        axios.get('/list/listdetails/' + listId + '?userId=' + localStorage.getItem('userId'), {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
@@ -51,7 +51,6 @@ const useListView = () => {
             .then(response => {
                 setListData(response.data)
                 setListItems(response.data.user_items)
-                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)
