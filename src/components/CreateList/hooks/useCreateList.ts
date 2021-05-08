@@ -1,5 +1,5 @@
 import axios from '../../../util/axiosAPI'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
 export interface Item {
@@ -19,13 +19,13 @@ export interface Category {
     inputValue?: string;
 }
 
-type List = Item[]
+interface List { name: string; items: Item[] }
 
 const useCreateList = () => {
 
     const filter = createFilterOptions<Item | Category>()
 
-    const [list, setList] = useState<List>([])
+    const [list, setList] = useState<List>({name: '', items: []})
     const [items, setItems] = useState<Item[]>([])
     const [categories, setCategories] = useState([])
     const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ id: undefined, name: '', category: '' })
@@ -34,6 +34,7 @@ const useCreateList = () => {
     const [suggestions, setSuggestions] = useState<Item[]>([])
     const [toggleSuggestions, setToggleSuggestions] = useState<boolean>(false)
     const [checkedSuggestions, setCheckedSuggestions] = useState<Item[]>([])
+    const [saveListDialogOpen, setSaveListDialogOpen] = useState<boolean>(false)
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
@@ -103,7 +104,7 @@ const useCreateList = () => {
                 name: newValue.name,
                 category: ''
             })
-            const newList = [...list, {name: newValue.name, id: newValue.id }]
+            const newList = {...list, items: [...list.items, {name: newValue.name, id: newValue.id }]}
             setList(newList)
         }
     }
@@ -126,6 +127,10 @@ const useCreateList = () => {
 
     const dialogNameChange = (event: React.ChangeEvent<any>) => {
         setItemAddDialogValue({...(itemAddDialogValue as Item), name: event.target.value, id: event.target.value.id })
+    }
+
+    const listNameChange = (event: React.ChangeEvent<any>) => {
+        setList({...list, name: event.target.value})
     }
 
     const filterOptions = (options: Item[] | Category[], params: any) => {
@@ -163,7 +168,7 @@ const useCreateList = () => {
             }
         })
         .then(response => {
-            const newListItems = [...list, {name: itemAddDialogValue.name, id: response.data.id }]
+            const newListItems = {...list, items: [...list.items, {name: itemAddDialogValue.name, id: response.data.id }]}
             setList(newListItems)
             handleAddItemModalClose()
             getItems(localStorage.getItem('userId'))
@@ -204,17 +209,31 @@ const useCreateList = () => {
     }
 
     const addFromSuggestions = (item: any) => {
-        const newListItems = [...list, ...checkedSuggestions]
+        const newListItems = {...list, items: {...list.items, ...checkedSuggestions}}
         setList(newListItems)
         handleSuggestionsVisible()
         setCheckedSuggestions([])
     }
 
     const removeListItem = (itemId: number | undefined) => {
-        const newList = list.filter(item => {
+        const newList = list.items.filter(item => {
             return item.id !== itemId
         })
-        setList(newList)
+        setList({...list, items: {...list.items, ...newList}})
+    }
+
+    const handleSaveListDialogClose = () => {
+        setSaveListDialogOpen(false)
+    }
+
+    const saveListButtonPressed = () => {
+        setSaveListDialogOpen(true)
+    }
+
+    const saveListConfirm = (event: any) => {
+        event.preventDefault()
+        saveList()
+        handleSaveListDialogClose()
     }
 
     const saveList = (): void => {
@@ -241,14 +260,17 @@ const useCreateList = () => {
         suggestions: suggestions,
         itemAddDialogValue: itemAddDialogValue,
         itemAddModalOpen: itemAddModalOpen,
+        saveListDialogOpen: saveListDialogOpen,
         itemAutocompleteValue: itemAutocompleteValue,
         toggleSuggestions: toggleSuggestions,
         checkedSuggestions: checkedSuggestions,
         handleAddItemModalClose: handleAddItemModalClose,
+        handleSaveListDialogClose: handleSaveListDialogClose,
         handleSuggestionsVisible: handleSuggestionsVisible,
         itemAutocompleteValueChange: itemAutocompleteValueChange,
         dialogNameChange: dialogNameChange,
         dialogCategoryChange: dialogCategoryChange,
+        listNameChange: listNameChange,
         getOptionLabel: getOptionLabel,
         filterOptions: filterOptions,
         getItems: getItems,
@@ -257,7 +279,10 @@ const useCreateList = () => {
         addItem: addItem,
         addFromSuggestions: addFromSuggestions,
         suggestionCheckHandler: suggestionCheckHandler,
-        saveList: saveList
+        saveListButtonPressed: saveListButtonPressed,
+        saveListConfirm: saveListConfirm,
+        saveList: saveList,
+
     }
 }
 

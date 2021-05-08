@@ -2,10 +2,12 @@ import React from 'react'
 import useCreateList from './hooks/useCreateList'
 import AddItemForm from '../AddItemForm/AddItemForm'
 import Suggestions from './components/Suggestions'
+import ConfirmSaveDialog from './components/ConfirmSaveDialog'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
@@ -64,20 +66,25 @@ const CreateList = () => {
         itemAddModalOpen,
         toggleSuggestions,
         checkedSuggestions,
+        saveListDialogOpen,
         handleAddItemModalClose,
         handleSuggestionsVisible,
+        handleSaveListDialogClose,
         itemAutocompleteValueChange,
         dialogNameChange,
         dialogCategoryChange,
+        listNameChange,
         getOptionLabel,
         filterOptions,
         removeListItem,
         addItem,
         addFromSuggestions,
         suggestionCheckHandler,
+        saveListButtonPressed,
+        saveListConfirm
     } = useCreateList()
 
-    const pickedList = list.map(item => {
+    const pickedList = list.items.map(item => {
         return (
             <ListItem key={item.id} divider={true}>
                 <ListItemText primary={item.name} />
@@ -91,7 +98,7 @@ const CreateList = () => {
     })
 
     let listPaper = null
-    if (list.length > 0) {
+    if (list.items.length > 0) {
         listPaper = <Paper  className={classes.listPaper} elevation={3} component='div'>
                         <List className={classes.list}>
                             {pickedList}
@@ -149,12 +156,18 @@ const CreateList = () => {
                 color='secondary' 
                 variant='contained' 
                 size='large'
-                onClick={saveList}
-                disabled={list.length < 1}
+                onClick={saveListButtonPressed}
+                disabled={list.items.length < 1}
                 className={classes.saveButton}
             >
                 Save list
             </Button>
+            <ConfirmSaveDialog 
+                dialogOpen={saveListDialogOpen}
+                dialogClose={handleSaveListDialogClose}
+                nameChange={listNameChange}
+                saveList={saveListConfirm}
+            />
         </React.Fragment>
     )
 }
