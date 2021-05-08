@@ -20,6 +20,7 @@ const ConfirmSaveDialog = (props: any) => {
                                 label="List name"
                                 type="text"
                                 variant="outlined"
+                                value={props.nameValue}
                             />
                         </DialogContent>
                         <DialogActions>

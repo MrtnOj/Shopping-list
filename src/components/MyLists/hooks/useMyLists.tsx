@@ -4,6 +4,7 @@ import axios from '../../../util/axiosAPI'
 
 interface ListTile {
     id: number;
+    name: string;
     createdAt?: string;
     updatedAt?: string; 
 }

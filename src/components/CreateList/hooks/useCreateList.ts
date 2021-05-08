@@ -219,7 +219,7 @@ const useCreateList = () => {
         const newList = list.items.filter(item => {
             return item.id !== itemId
         })
-        setList({...list, items: {...list.items, ...newList}})
+        setList({...list, items: newList })
     }
 
     const handleSaveListDialogClose = () => {
@@ -228,6 +228,8 @@ const useCreateList = () => {
 
     const saveListButtonPressed = () => {
         setSaveListDialogOpen(true)
+        const randomName = 'list' + String(Math.floor(Math.random() * 10000))
+        setList({...list, name: randomName})
     }
 
     const saveListConfirm = (event: any) => {

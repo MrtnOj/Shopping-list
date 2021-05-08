@@ -63,7 +63,7 @@ const MyLists = (props: any) => {
                 key={list.id}
             >
                 <Typography variant='h5' color='secondary' align='center' component='h2' className={classes.id}>
-                    ID: {list.id}
+                    {list.name}
                 </Typography>
                 <Typography variant='h6' color='inherit' align='center' component='h3' className={classes.date}>
                     {list.createdAt?.split('T')[0]}

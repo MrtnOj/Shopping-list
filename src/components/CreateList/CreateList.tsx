@@ -165,6 +165,7 @@ const CreateList = () => {
             <ConfirmSaveDialog 
                 dialogOpen={saveListDialogOpen}
                 dialogClose={handleSaveListDialogClose}
+                nameValue={list.name}
                 nameChange={listNameChange}
                 saveList={saveListConfirm}
             />
