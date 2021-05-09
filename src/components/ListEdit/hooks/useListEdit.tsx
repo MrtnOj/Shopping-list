@@ -1,47 +1,22 @@
-import React, { useCallback, useState } from 'react'
-import { createFilterOptions } from '@material-ui/lab/Autocomplete'
+import React, { useEffect, useState, useCallback } from 'react'
 
 import axios from '../../../util/axiosAPI'
+import { ListData, Item, Category } from '../../ListView/hooks/useListView'
+import { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
-export interface Item {
-    id?: number;
-    name: string;
-    categoryId?: number;
-    category?: string | Category | null;
-    last_bought?: Date;
-    lasts?: number;
-    inputValue?: string
-}
-
-export interface Category {
-    id?: number;
-    name: string
-    inputValue?: string;
-}
-
-export type ListData = {
-    id? : number;
-    name?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-    userId?: number;
-    items?: Item[]
-} 
-
-const useListView = () => {
+const useListEdit = () => {
 
     const filter = createFilterOptions<Item | Category>()
 
     const [listData, setListData] = useState<ListData>({})
-    const [items, setItems] = useState<Item[]>([])
-    const [categories, setCategories] = useState([])
-    const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ name: '', category: '' })
     const [listItems, setListItems] = useState<Item[]>([])
-    const [pickedList, setPickedList] = useState<Item[]>([])
-    const [finishModalOpen, setFinishModalOpen] = useState<boolean>(false)
-    const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
+    const [items, setItems] = useState<Item[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
     const [itemSearchOpen, setItemSearchOpen] = useState<boolean>(false)
+    const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
+    const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ name: '', category: '' })
+
 
     const getList = useCallback((listId: number) => {
         axios.get('/list/listdetails/' + listId + '?userId=' + localStorage.getItem('userId'), {
@@ -84,27 +59,6 @@ const useListView = () => {
         .catch(err => {
             console.log(err)
         })
-    }
-
-    const itemCheckClicked = (itemKey: number | undefined): void => {
-        // remove clicked item from list items
-        const newListItems = listItems?.filter(item => item.id !== itemKey)
-        setListItems(newListItems)
-        if (newListItems.length < 1) {
-            handleFinishModalOpen()
-        }
-        // put item into picked items list
-        const clickedItem = listItems.find(item => item.id === itemKey)
-        let newPickedItems = [...pickedList, clickedItem as Item]
-        setPickedList(newPickedItems)
-    }
-
-    const itemCheckUndo = (itemKey: number | undefined): void => {
-        const newPickedItems = pickedList.filter(item => item.id !== itemKey)
-        const clickedItem = pickedList.find(item => item.id === itemKey)
-        setPickedList(newPickedItems)
-        let newListItems = [...listItems, clickedItem as Item]
-        setListItems(newListItems)
     }
 
     const itemAutocompleteValueChange = (event: React.ChangeEvent<any>, newValue: Item | string) => {
@@ -203,64 +157,32 @@ const useListView = () => {
         setItemAddDialogValue({...(itemAddDialogValue as Item), name: event.target.value})
     }
 
-    const handleFinishModalOpen = () => {
-        setFinishModalOpen(true)
-    }
-    
-    const handleFinishModalClose = () => {
-        setFinishModalOpen(false)
-    }
-
-    const listPickingFinished = () => {
-        axios.post('/items/bought/' + localStorage.getItem('userId'), {
-            items: pickedList,
-        }, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        .then(response => {
-            console.log(response)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        setFinishModalOpen(false)
-    }
-
     const openItemSearch = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         getItems()
         getCategories()
         setItemSearchOpen(true)
-    }   
+    } 
 
     return {
-        listData: listData,
         items: items,
         categories: categories,
-        itemAddDialogValue: itemAddDialogValue,
-        itemAddModalOpen: itemAddModalOpen,
+        listData: listData,
         listItems: listItems,
-        pickedList: pickedList,
-        finishModalOpen: finishModalOpen,
         itemSearchOpen: itemSearchOpen,
+        itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,
-        addItemTolist: addItemToList,
-        handleFinishModalOpen: handleFinishModalOpen,
-        handleFinishModalClose: handleFinishModalClose,
-        handleAddItemModalClose: handleAddItemModalClose,
-        openItemSearch: openItemSearch,
-        itemAutoCompleteValueChange: itemAutocompleteValueChange,
-        dialogNameChange: dialogNameChange,
-        dialogCategoryChange: dialogCategoryChange,
-        getOptionLabel: getOptionLabel,
-        filterOptions: filterOptions,
-        itemCheckClicked: itemCheckClicked,
-        itemCheckUndo: itemCheckUndo,
-        getItems: getItems,
+        itemAddDialogValue: itemAddDialogValue,
         getList: getList,
-        listPickingFinished: listPickingFinished,
+        openItemSearch: openItemSearch,
+        itemAutocompleteValueChange: itemAutocompleteValueChange,
+        handleAddItemModalClose: handleAddItemModalClose,
+        dialogCategoryChange: dialogCategoryChange,
+        dialogNameChange: dialogNameChange,
+        filterOptions: filterOptions,
+        getOptionLabel: getOptionLabel,
+        addItemToList: addItemToList,
+
     }
 }
 
-export default useListView
+export default useListEdit

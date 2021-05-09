@@ -80,11 +80,16 @@ const MyLists = (props: any) => {
                     color='primary'
                     variant='contained'
                     className={classes.useListButton}
-                    onClick={() => props.history.push({ pathname: '/mylists/' + list.id})}
+                    onClick={() => props.history.push({ pathname: '/mylists/use/' + list.id })}
                 >
                     Shop
                 </Button>
-                <Button color='inherit' variant='contained' className={classes.viewListButton}>
+                <Button 
+                    color='inherit'
+                    variant='contained'
+                    className={classes.viewListButton}
+                    onClick={() => props.history.push({ pathname: '/mylists/edit/' + list.id })}    
+                >
                     View
                 </Button>
             </Paper>
