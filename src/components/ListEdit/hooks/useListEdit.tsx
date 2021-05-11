@@ -25,8 +25,8 @@ const useListEdit = () => {
             }
         })
             .then(response => {
-                setListData(response.data)
-                setListItems(response.data.user_items)
+                setListData({...response.data, items: response.data.user_items})
+                console.log(listData)
             })
             .catch(err => {
                 console.log(err)
@@ -153,6 +153,13 @@ const useListEdit = () => {
         })
     }
 
+    const removeListItem = (itemId: number) => {
+        const newList = listData.items?.filter(item => {
+            return item.id !== itemId
+        })
+        setListData({...listData, items: newList })
+    }
+
     const dialogNameChange = (event: React.ChangeEvent<any>) => {
         setItemAddDialogValue({...(itemAddDialogValue as Item), name: event.target.value})
     }
@@ -181,7 +188,7 @@ const useListEdit = () => {
         filterOptions: filterOptions,
         getOptionLabel: getOptionLabel,
         addItemToList: addItemToList,
-
+        removeListItem: removeListItem,
     }
 }
 

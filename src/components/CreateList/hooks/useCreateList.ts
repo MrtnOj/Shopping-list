@@ -209,7 +209,7 @@ const useCreateList = () => {
     }
 
     const addFromSuggestions = (item: any) => {
-        const newListItems = {...list, items: {...list.items, ...checkedSuggestions}}
+        const newListItems = {...list, items: [...list.items, ...checkedSuggestions]}
         setList(newListItems)
         handleSuggestionsVisible()
         setCheckedSuggestions([])

@@ -16,8 +16,14 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         listNameInput: {
+            width: '80%',
+            left: '10%',
+            right: '10%',
             marginTop: '100px',
+            marginLeft: 0,
+            marginRight: 0,
             marginBottom: 30,
+
         },
         listPaper: {
             boxSizing: 'border-box',
@@ -62,18 +68,19 @@ const ListEdit = (props: any) => {
         filterOptions,
         getOptionLabel,
         addItemToList,
+        removeListItem,
     } = useListEdit()
 
     useEffect(() => {
         getList(props.match.params.listId)
     }, [props.match.params.listId])
 
-    const listElements = listItems.map(item => {
+    const listElements = listData.items?.map(item => {
         return (
             <ListItem key={item.id} className={classes.listItem} divider={true}>
                 <ListItemText primary={item.name} />
                 <ListItemSecondaryAction>
-                    <IconButton edge='end' size='small' >
+                    <IconButton edge='end' size='small' onClick={() => removeListItem(item.id!)}>
                         <RemoveCircle />
                     </IconButton>
                 </ListItemSecondaryAction>
@@ -89,6 +96,7 @@ const ListEdit = (props: any) => {
                     type="text"
                     value={listData.name}
                     className={classes.listNameInput}
+                    inputProps={{min: 0, style: { textAlign: 'center' }}}
                     InputLabelProps={{ shrink: true }}
                 />
                 <List>
