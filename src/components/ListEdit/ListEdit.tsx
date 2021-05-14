@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: 0,
             marginRight: 0,
             marginBottom: 30,
-
         },
         listPaper: {
             boxSizing: 'border-box',
@@ -36,19 +35,26 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(3),
             width: '100%'
         },
+        actionsSection: {
+            position: 'absolute',
+            width: '100%',
+            height: 40,
+            right: 0,
+            bottom: 15,
+            margin: 0,
+            display: 'flex',
+            justifyContent: 'space-between'
+
+        },
         listItem: {
             flexGrow: 1,
             marginBottom: theme.spacing(1)
         },
         addButton: {
-            position: 'relative',
-            display: 'block',
+            marginLeft: theme.spacing(2)
         },
         saveButton: {
-            position: 'fixed',
-            bottom: 15,
-            left: '50%',
-            transform: 'translateX(-50%)'
+            marginRight: theme.spacing(2)
         }
     })
 )
@@ -58,7 +64,6 @@ const ListEdit = (props: any) => {
 
     const {
         listData,
-        listItems,
         items,
         categories,
         itemSearchOpen,
@@ -71,10 +76,12 @@ const ListEdit = (props: any) => {
         handleAddItemModalClose,
         dialogCategoryChange,
         dialogNameChange,
+        listNameChange,
         filterOptions,
         getOptionLabel,
         addItemToList,
         removeListItem,
+        saveListNameChange
     } = useListEdit()
 
     useEffect(() => {
@@ -95,32 +102,45 @@ const ListEdit = (props: any) => {
     })
 
     return (
-        <Container component='article' maxWidth='sm'>
+        <Container component='article' maxWidth='sm' >
                 <TextField
                     id="list-name"
                     label="List name"
                     type="text"
                     value={listData.name}
+                    onChange={listNameChange}
                     className={classes.listNameInput}
                     inputProps={{min: 0, style: { textAlign: 'center' }}}
                     InputLabelProps={{ shrink: true }}
                 />
-                <Fab color='primary' size='small' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
-                    <AddIcon />
-                </Fab>
                 <List>
                     {listElements}
                 </List>
-                <Button 
-                    type='button' 
-                    color='secondary' 
-                    variant='contained' 
-                    size='large'
-                    className={classes.saveButton}
-                    onClick={() => {}}
-                >
-                    Save & exit
-                </Button>
+                <section className={classes.actionsSection}>
+                    <Button 
+                        type='button'
+                        color='primary'
+                        variant='contained'
+                        size='small'
+                        className={classes.addButton}
+                        onClick={openItemSearch}
+                    >
+                        Add items
+                    </Button>
+                    <Button 
+                        type='button' 
+                        color='secondary' 
+                        variant='contained' 
+                        size='small'
+                        className={classes.saveButton}
+                        onClick={() => {
+                            saveListNameChange()
+                            props.history.push('/mylists')
+                        }}
+                        >
+                        Save & exit
+                    </Button>
+                </section>
                 <AddItemDialog 
                     addItem={addItemToList}
                     openItemSearch={openItemSearch}

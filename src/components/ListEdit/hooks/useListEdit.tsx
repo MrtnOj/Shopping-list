@@ -3,14 +3,15 @@ import React, { useEffect, useState, useCallback } from 'react'
 import axios from '../../../util/axiosAPI'
 import { ListData, Item, Category } from '../../ListView/hooks/useListView'
 import { createFilterOptions } from '@material-ui/lab/Autocomplete'
+import { PinDropSharp } from '@material-ui/icons'
 
 const useListEdit = () => {
 
     const filter = createFilterOptions<Item | Category>()
 
     const [listData, setListData] = useState<ListData>({})
-    const [listItems, setListItems] = useState<Item[]>([])
     const [items, setItems] = useState<Item[]>([])
+    const [nameChanged, setNameChanged] = useState<boolean>(false)
     const [categories, setCategories] = useState<Category[]>([])
     const [itemSearchOpen, setItemSearchOpen] = useState<boolean>(false)
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
@@ -174,27 +175,54 @@ const useListEdit = () => {
         setItemAddDialogValue({...(itemAddDialogValue as Item), name: event.target.value})
     }
 
+    const listNameChange = (event: React.ChangeEvent<any>) => {
+        setListData({...listData, name: event.target.value})
+        setNameChanged(true)
+    }
+
     const openItemSearch = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         getItems()
         getCategories()
         setItemSearchOpen(true)
     } 
 
+    const saveListNameChange = () => {
+        if (!nameChanged) {
+            return
+        }
+        axios.put('/list/' + listData.id, {
+            userId: localStorage.getItem('userId'),
+            newName: listData.name
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(response => {
+            console.log(response.data)
+            
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
     return {
         items: items,
         categories: categories,
         listData: listData,
-        listItems: listItems,
         itemSearchOpen: itemSearchOpen,
         itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,
         itemAddDialogValue: itemAddDialogValue,
         getList: getList,
+        saveListNameChange: saveListNameChange,
         openItemSearch: openItemSearch,
         itemAutocompleteValueChange: itemAutocompleteValueChange,
         handleAddItemModalClose: handleAddItemModalClose,
         dialogCategoryChange: dialogCategoryChange,
         dialogNameChange: dialogNameChange,
+        listNameChange: listNameChange,
         filterOptions: filterOptions,
         getOptionLabel: getOptionLabel,
         addItemToList: addItemToList,

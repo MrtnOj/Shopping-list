@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
             gridTemplateColumns:
                 '4fr 4fr 4fr 4fr',
             gridTemplateRows:
-                '50% 40%',
+                '45% 45%',
             gridTemplateAreas: `
-                "id id date date"
+                "name name date date"
                 "useListButton viewListButton . deleteButton"
                 `,
             justifyContent: 'space-around',
@@ -41,8 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
         viewListButton: {
             gridArea: 'viewListButton'
         },
-        id: {
-            gridArea: 'id'
+        name: {
+            gridArea: 'name',
+            textAlign: 'left',
+            paddingLeft: theme.spacing(1)
+            
         },
         date: {
             gridArea: 'date'
@@ -62,10 +65,10 @@ const MyLists = (props: any) => {
                 component='section' 
                 key={list.id}
             >
-                <Typography variant='h5' color='secondary' align='center' component='h2' className={classes.id}>
+                <Typography variant='h4' color='secondary' align='center' component='h2' className={classes.name}>
                     {list.name}
                 </Typography>
-                <Typography variant='h6' color='inherit' align='center' component='h3' className={classes.date}>
+                <Typography variant='h5' color='inherit' align='center' component='h3' className={classes.date}>
                     {list.createdAt?.split('T')[0]}
                 </Typography>
                 <IconButton 
@@ -97,7 +100,7 @@ const MyLists = (props: any) => {
     })
 
     return (
-        <Container component='article' maxWidth='md'>
+        <Container component='article' maxWidth='sm'>
             <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
                 My lists
             </Typography>

@@ -123,7 +123,7 @@ const ListView = (props: any) => {
                         {listElements}
                     </List>
                     <List className={classes.pickedList}>
-                        {pickedListItems}
+                        {pickedListItems.reverse()}
                     </List>
                 </Paper>
             </Container>
