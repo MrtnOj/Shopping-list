@@ -144,8 +144,9 @@ const useListEdit = () => {
             }
         })
         .then(response => {
-            const newListItems = [...listItems, {name: itemAddDialogValue.name, id: response.data.itemId }]
-            setListItems(newListItems)
+            // const newListItems = [...listData.items, {name: itemAddDialogValue.name, id: response.data.itemId }]
+            const newListData = { ...listData, items: [...listData.items!, {name: itemAddDialogValue.name, id: response.data.itemId }]}
+            setListData(newListData)
             handleAddItemModalClose()
         })
         .catch(err => {
