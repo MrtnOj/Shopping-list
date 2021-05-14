@@ -10,7 +10,8 @@ export interface Item {
     category?: string | Category | null;
     last_bought?: Date;
     lasts?: number;
-    inputValue?: string
+    inputValue?: string;
+    list_item?: any
 }
 
 export interface Category {

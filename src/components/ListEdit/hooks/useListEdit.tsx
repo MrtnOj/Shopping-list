@@ -26,7 +26,7 @@ const useListEdit = () => {
         })
             .then(response => {
                 setListData({...response.data, items: response.data.user_items})
-                console.log(listData)
+                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)
@@ -144,7 +144,6 @@ const useListEdit = () => {
             }
         })
         .then(response => {
-            // const newListItems = [...listData.items, {name: itemAddDialogValue.name, id: response.data.itemId }]
             const newListData = { ...listData, items: [...listData.items!, {name: itemAddDialogValue.name, id: response.data.itemId }]}
             setListData(newListData)
             handleAddItemModalClose()
@@ -154,11 +153,21 @@ const useListEdit = () => {
         })
     }
 
-    const removeListItem = (itemId: number) => {
+    const removeListItem = (itemId: any) => {
         const newList = listData.items?.filter(item => {
-            return item.id !== itemId
+            return item.list_item.id !== itemId
         })
-        setListData({...listData, items: newList })
+        axios.delete('/list/listitem/delete/' + itemId + '?userId=' + localStorage.getItem('userId'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(response => {
+            setListData({...listData, items: newList })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     const dialogNameChange = (event: React.ChangeEvent<any>) => {

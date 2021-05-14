@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
 import RemoveCircle from '@material-ui/icons/RemoveCircle'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
@@ -40,10 +41,15 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(1)
         },
         addButton: {
-            position: 'fixed',
-            right: theme.spacing(2),
-            bottom: theme.spacing(2)
+            position: 'relative',
+            display: 'block',
         },
+        saveButton: {
+            position: 'fixed',
+            bottom: 15,
+            left: '50%',
+            transform: 'translateX(-50%)'
+        }
     })
 )
 
@@ -80,7 +86,7 @@ const ListEdit = (props: any) => {
             <ListItem key={item.id} className={classes.listItem} divider={true}>
                 <ListItemText primary={item.name} />
                 <ListItemSecondaryAction>
-                    <IconButton edge='end' size='small' onClick={() => removeListItem(item.id!)}>
+                    <IconButton edge='end' size='small' onClick={() => removeListItem(item.list_item.id)}>
                         <RemoveCircle />
                     </IconButton>
                 </ListItemSecondaryAction>
@@ -99,12 +105,22 @@ const ListEdit = (props: any) => {
                     inputProps={{min: 0, style: { textAlign: 'center' }}}
                     InputLabelProps={{ shrink: true }}
                 />
+                <Fab color='primary' size='small' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
+                    <AddIcon />
+                </Fab>
                 <List>
                     {listElements}
                 </List>
-                <Fab color='primary' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
-                    <AddIcon />
-                </Fab>
+                <Button 
+                    type='button' 
+                    color='secondary' 
+                    variant='contained' 
+                    size='large'
+                    className={classes.saveButton}
+                    onClick={() => {}}
+                >
+                    Save & exit
+                </Button>
                 <AddItemDialog 
                     addItem={addItemToList}
                     openItemSearch={openItemSearch}
