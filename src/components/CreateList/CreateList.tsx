@@ -26,17 +26,19 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
         },
         background: {
             width: '100%',
             position: 'absolute',
-            top: 270,
-            height: 200,
-            objectPosition: '100px 50px',
+            top: 0,
+            height: '100vh',
+            backgroundImage: 'url("groceries1.jpg")',
+            backgroundSize: 'cover',
             left: 0,
             margin:0,
             zIndex: -1,
-            opacity: '70%'
+            opacity: '80%'
         },
         listPaper: {
             boxSizing: 'border-box',
@@ -119,8 +121,9 @@ const CreateList = () => {
 
     return (
         <React.Fragment>
+            <section className={classes.background}>
+            </section>
             <Container component='article' maxWidth='sm' className={classes.container}>
-                <img src="groceries1.jpg" className={classes.background} />
                 <Typography 
                     variant='h4'
                     component='h1' 
