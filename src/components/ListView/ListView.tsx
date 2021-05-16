@@ -19,7 +19,7 @@ import AddItemDialog from './components/AddItemDialog'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         articleTitle: {
-            margin: '100px 10px 20px 10px'
+            marginBottom: '1.5rem',
         },
         listPaper: {
             boxSizing: 'border-box',
@@ -119,6 +119,9 @@ const ListView = (props: any) => {
                     elevation={3} 
                     component='div' 
                 >
+                    <Typography variant='h4' component='h1' className={classes.articleTitle} color='primary' align='center'>
+                        {listData.name}
+                    </Typography>
                     <List>
                         {listElements}
                     </List>

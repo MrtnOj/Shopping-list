@@ -105,7 +105,11 @@ const useCreateList = () => {
                 category: ''
             })
             const newList = {...list, items: [...list.items, {name: newValue.name, id: newValue.id }]}
+            const newItems = items.filter(item => item.id !== newValue.id)
+            const newSuggestions = suggestions.filter(item => item.id !== newValue.id)
+            setSuggestions(newSuggestions)
             setList(newList)
+            setItems(newItems)
         }
     }
 
@@ -208,9 +212,18 @@ const useCreateList = () => {
         setCheckedSuggestions(newChecked)
     }
 
-    const addFromSuggestions = (item: any) => {
+    const addFromSuggestions = () => {
         const newListItems = {...list, items: [...list.items, ...checkedSuggestions]}
+        let newSuggestions = [...suggestions]
+        let newItems = [...items]
+        // Taking off items from suggestions and item autocomplete item pool after they are added to list
+        checkedSuggestions.forEach(suggestion => {
+            newSuggestions = newSuggestions.filter(item => item.id !== suggestion.id)
+            newItems = newItems.filter(item => item.id !== suggestion.id)
+        })
         setList(newListItems)
+        setItems(newItems)
+        setSuggestions(newSuggestions)
         handleSuggestionsVisible()
         setCheckedSuggestions([])
     }
@@ -220,6 +233,7 @@ const useCreateList = () => {
             return item.id !== itemId
         })
         setList({...list, items: newList })
+        getItems(localStorage.getItem('userId'))
     }
 
     const handleSaveListDialogClose = () => {

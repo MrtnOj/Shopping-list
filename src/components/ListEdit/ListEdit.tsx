@@ -11,7 +11,7 @@ import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
-import RemoveCircle from '@material-ui/icons/RemoveCircle'
+import CancelIcon from '@material-ui/icons/Cancel'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -94,7 +94,7 @@ const ListEdit = (props: any) => {
                 <ListItemText primary={item.name} />
                 <ListItemSecondaryAction>
                     <IconButton edge='end' size='small' onClick={() => removeListItem(item.list_item.id)}>
-                        <RemoveCircle />
+                        <CancelIcon />
                     </IconButton>
                 </ListItemSecondaryAction>
             </ListItem>
@@ -137,7 +137,7 @@ const ListEdit = (props: any) => {
                             saveListNameChange()
                             props.history.push('/mylists')
                         }}
-                        >
+                    >
                         Save & exit
                     </Button>
                 </section>

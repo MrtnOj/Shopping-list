@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(2),
             padding: theme.spacing(2),
             width: '100%',
-            height: '15vh'
+            height: '8rem'
         },
         deleteButton: {
             gridArea: 'deleteButton'
