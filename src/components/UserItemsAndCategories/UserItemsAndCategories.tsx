@@ -13,6 +13,14 @@ const useStyles = makeStyles((theme: Theme) =>
         container: {
 
         },
+        hiddenTitle: {
+            position: 'absolute',
+            left: '-10000px',
+            top: 'auto',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden'
+        },
         tabs: {
             marginTop: 70
         }
@@ -54,6 +62,7 @@ const UserItemsAndCategories = () => {
 
     return (
         <Container component='article' maxWidth='sm' className={classes.container}>
+            <h1 className={classes.hiddenTitle}>Edit items and categories</h1>
             <Tabs 
                 value={tabValue}
                 variant='fullWidth'
@@ -67,6 +76,7 @@ const UserItemsAndCategories = () => {
             </Tabs>
             <TabPanel
                 value={tabValue}
+                name='Items'
                 index={0}
                 isItem={true}
                 content={items}
@@ -80,6 +90,7 @@ const UserItemsAndCategories = () => {
             />
             <TabPanel
                 value={tabValue}
+                name='Categories'
                 index={1}
                 isItem={false}
                 content={categories}

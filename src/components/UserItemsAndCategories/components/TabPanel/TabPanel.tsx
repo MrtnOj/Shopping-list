@@ -19,6 +19,7 @@ interface TabPanelProps {
     children?: React.ReactNode;
     index: any;
     value: any;
+    name: string;
     content: any;
     deleteElement?: any;
     isItem?: boolean;
@@ -47,7 +48,15 @@ interface TabPanelProps {
             right: '50\%',
             bottom: theme.spacing(2),
             transform: 'translateX(-50\%)'
-        }
+        },
+        hiddenTitle: {
+            position: 'absolute',
+            left: '-10000px',
+            top: 'auto',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden'
+        },
     })
 )
 
@@ -66,19 +75,21 @@ const TabPanel = (props: TabPanelProps) => {
         elementToDelete,
         deleteModalOpen,
         deleteModalClose,
+        name,
         ...other
     } = props
 
     return (
-        <article 
+        <section 
             role='tabpanel'
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
+            id={`${name} Tab`}
+            aria-labelledby={name}
             {...other}
         >
             {value === index && (
                 <React.Fragment>
+                    <h2 className={classes.hiddenTitle}>{name}</h2>
                     <List className={classes.itemsList}>
                         {content.map((element: any) => {
                             return (
@@ -135,7 +146,7 @@ const TabPanel = (props: TabPanelProps) => {
                     </Fab>
                 </React.Fragment>
             ) }
-        </article>
+        </section>
 
     )
 }

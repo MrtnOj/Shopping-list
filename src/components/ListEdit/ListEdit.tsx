@@ -7,8 +7,6 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import TextField from '@material-ui/core/TextField'
-import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import CancelIcon from '@material-ui/icons/Cancel'
@@ -45,6 +43,14 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             justifyContent: 'space-between'
 
+        },
+        hiddenTitle: {
+            position: 'absolute',
+            left: '-10000px',
+            top: 'auto',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden'
         },
         listItem: {
             flexGrow: 1,
@@ -103,62 +109,63 @@ const ListEdit = (props: any) => {
 
     return (
         <Container component='article' maxWidth='sm' >
-                <TextField
-                    id="list-name"
-                    label="List name"
-                    type="text"
-                    value={listData.name}
-                    onChange={listNameChange}
-                    className={classes.listNameInput}
-                    inputProps={{min: 0, style: { textAlign: 'center' }}}
-                    InputLabelProps={{ shrink: true }}
-                />
-                <List>
-                    {listElements}
-                </List>
-                <section className={classes.actionsSection}>
-                    <Button 
-                        type='button'
-                        color='primary'
-                        variant='contained'
-                        size='small'
-                        className={classes.addButton}
-                        onClick={openItemSearch}
-                    >
-                        Add items
-                    </Button>
-                    <Button 
-                        type='button' 
-                        color='secondary' 
-                        variant='contained' 
-                        size='small'
-                        className={classes.saveButton}
-                        onClick={() => {
-                            saveListNameChange()
-                            props.history.push('/mylists')
-                        }}
-                    >
-                        Save & exit
-                    </Button>
-                </section>
-                <AddItemDialog 
-                    addItem={addItemToList}
-                    openItemSearch={openItemSearch}
-                    itemSearchOpen={itemSearchOpen}
-                    handleItemSearchClose={handleAddItemModalClose}
-                    itemAutocompleteValue={itemAutocompleteValue}
-                    categoryAutocompleteValue={itemAddDialogValue.category}
-                    autoCompleteValueChange={itemAutocompleteValueChange}
-                    filterOptions={filterOptions}
-                    itemOptions={items}
-                    categoryOptions={categories}
-                    getOptionLabel={getOptionLabel}
-                    dialogOpen={itemAddModalOpen}
-                    dialogClose={handleAddItemModalClose}
-                    dialogValues={itemAddDialogValue}
-                    dialogNameChange={dialogNameChange}
-                    dialogCategoryChange={dialogCategoryChange}
-                />
+            <h1 className={classes.hiddenTitle}>{`Edit list - ${listData.name}`}</h1>
+            <TextField
+                id="list-name"
+                label="List name"
+                type="text"
+                value={listData.name}
+                onChange={listNameChange}
+                className={classes.listNameInput}
+                inputProps={{min: 0, style: { textAlign: 'center' }}}
+                InputLabelProps={{ shrink: true }}
+            />
+            <List>
+                {listElements}
+            </List>
+            <section className={classes.actionsSection}>
+                <Button 
+                    type='button'
+                    color='primary'
+                    variant='contained'
+                    size='small'
+                    className={classes.addButton}
+                    onClick={openItemSearch}
+                >
+                    Add items
+                </Button>
+                <Button 
+                    type='button' 
+                    color='secondary' 
+                    variant='contained' 
+                    size='small'
+                    className={classes.saveButton}
+                    onClick={() => {
+                        saveListNameChange()
+                        props.history.push('/mylists')
+                    }}
+                >
+                    Save & exit
+                </Button>
+            </section>
+            <AddItemDialog 
+                addItem={addItemToList}
+                openItemSearch={openItemSearch}
+                itemSearchOpen={itemSearchOpen}
+                handleItemSearchClose={handleAddItemModalClose}
+                itemAutocompleteValue={itemAutocompleteValue}
+                categoryAutocompleteValue={itemAddDialogValue.category}
+                autoCompleteValueChange={itemAutocompleteValueChange}
+                filterOptions={filterOptions}
+                itemOptions={items}
+                categoryOptions={categories}
+                getOptionLabel={getOptionLabel}
+                dialogOpen={itemAddModalOpen}
+                dialogClose={handleAddItemModalClose}
+                dialogValues={itemAddDialogValue}
+                dialogNameChange={dialogNameChange}
+                dialogCategoryChange={dialogCategoryChange}
+            />
         </Container>
     )
 }

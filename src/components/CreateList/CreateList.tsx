@@ -28,6 +28,14 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundImage: 'url("groceries1.jpg")',
             backgroundSize: 'cover',
         },
+        hiddenTitle: {
+            position: 'absolute',
+            left: '-10000px',
+            top: 'auto',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden'
+        },
         inputSection: {
             boxSizing: 'border-box',
             width: '100%',
@@ -150,6 +158,7 @@ const CreateList = () => {
     return (
         <React.Fragment>
             <Container component='article' maxWidth='sm' className={classes.container}>
+                <h1 className={classes.hiddenTitle}>Create a List!</h1>
                 <Paper className={widescreen ? classes.widescreenInputSection : classes.inputSection} elevation={3} component='section'>
                     <AddItemForm
                         itemAutocompleteValue={itemAutocompleteValue}

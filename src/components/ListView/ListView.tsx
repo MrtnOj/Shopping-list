@@ -39,7 +39,15 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         pickedListItem: {
             textDecoration: 'line-through'
-        }, 
+        },
+        hiddenTitle: {
+            position: 'absolute',
+            left: '-10000px',
+            top: 'auto',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden'
+        },
         addButton: {
             position: 'fixed',
             left: '50\%',
@@ -111,15 +119,13 @@ const ListView = (props: any) => {
     return (
         <React.Fragment>
             <Container component='article' maxWidth='sm'>
-                {/* <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
-                    List {props.match.params.listId}
-                </Typography> */}
+                <h1 className={classes.hiddenTitle}>{`Shopping ${listData.name}`}</h1>
                 <Paper 
                     className={classes.listPaper} 
                     elevation={3} 
-                    component='div' 
+                    component='section' 
                 >
-                    <Typography variant='h4' component='h1' className={classes.articleTitle} color='primary' align='center'>
+                    <Typography variant='h4' component='h2' className={classes.articleTitle} color='primary' align='center'>
                         {listData.name}
                     </Typography>
                     <List>

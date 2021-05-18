@@ -93,7 +93,7 @@ const MyLists = (props: any) => {
                     className={classes.viewListButton}
                     onClick={() => props.history.push({ pathname: '/mylists/edit/' + list.id })}    
                 >
-                    View
+                    Edit
                 </Button>
             </Paper>
         )

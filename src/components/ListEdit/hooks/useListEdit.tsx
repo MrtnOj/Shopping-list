@@ -3,7 +3,6 @@ import React, { useEffect, useState, useCallback } from 'react'
 import axios from '../../../util/axiosAPI'
 import { ListData, Item, Category } from '../../ListView/hooks/useListView'
 import { createFilterOptions } from '@material-ui/lab/Autocomplete'
-import { PinDropSharp } from '@material-ui/icons'
 
 const useListEdit = () => {
 

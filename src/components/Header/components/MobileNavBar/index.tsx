@@ -21,14 +21,18 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: "1.5rem"
         },
         drawer: {
-            width: "160px",
+            width: "180px",
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
+            fontSize: '1.3rem'
         },
         link: {
             textDecoration: "none",
-
-        }
+            margin: theme.spacing(2)
+        },
+        linkText: {
+            fontSize: '20px'
+        },
     })
 );
 
@@ -55,17 +59,17 @@ const MobileNavBar = (props: any) => {
                     <List>
                         <ListItem color="inherit" alignItems="center" onClick={props.closeDrawer}>
                             <RouterLink to="/createlist" className={classes.link}>
-                                <ListItemText primary="Create a list" />
+                                <ListItemText primary="Create a list" classes={{ primary: classes.linkText }} />
                             </RouterLink>
                         </ListItem>
                         <ListItem color="inherit" alignItems="center" onClick={props.closeDrawer}>
                             <RouterLink to="/useritems" className={classes.link}>
-                                <ListItemText primary="Edit Items" />
+                                <ListItemText primary="Edit Items" classes={{ primary: classes.linkText }} />
                             </RouterLink>
                         </ListItem>
                         <ListItem color="inherit" alignItems="center" onClick={props.closeDrawer}>
                             <RouterLink to="/mylists" className={classes.link}>
-                                <ListItemText primary="My lists" />
+                                <ListItemText primary="My lists" classes={{ primary: classes.linkText }} />
                             </RouterLink>
                         </ListItem>
                     </List>
