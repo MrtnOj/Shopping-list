@@ -1,6 +1,6 @@
 const prod = {
     url: {
-        API_URL: ''
+        API_URL: 'http://http://ec2-3-19-31-244.us-east-2.compute.amazonaws.com/api/'
     }
 }
 
