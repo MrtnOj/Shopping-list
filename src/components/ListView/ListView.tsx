@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Redirect } from 'react-router'
 import useListView from './hooks/useListView'
 import ListCompleteDialog from './components/ListCompleteDialog'
 import Container from '@material-ui/core/Container'
@@ -71,6 +72,7 @@ const ListView = (props: any) => {
         pickedList,
         finishModalOpen,
         itemSearchOpen,
+        finishedRedirect,
         addItemTolist,
         handleFinishModalClose,
         handleAddItemModalClose,
@@ -118,6 +120,7 @@ const ListView = (props: any) => {
 
     return (
         <React.Fragment>
+            {finishedRedirect ? <Redirect to='/createlist' /> : null}
             <Container component='article' maxWidth='sm'>
                 <h1 className={classes.hiddenTitle}>{`Shopping ${listData.name}`}</h1>
                 <Paper 

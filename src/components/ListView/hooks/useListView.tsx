@@ -43,6 +43,7 @@ const useListView = () => {
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemSearchOpen, setItemSearchOpen] = useState<boolean>(false)
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
+    const [finishedRedirect, setFinishedRedirect] = useState<boolean>(false)
 
     const getList = useCallback((listId: number) => {
         axios.get('/list/listdetails/' + listId + '?userId=' + localStorage.getItem('userId'), {
@@ -221,12 +222,12 @@ const useListView = () => {
             }
         })
         .then(response => {
-            console.log(response)
+            setFinishModalOpen(false)
+            setFinishedRedirect(true)
         })
         .catch(err => {
             console.log(err)
         })
-        setFinishModalOpen(false)
     }
 
     const openItemSearch = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -246,6 +247,7 @@ const useListView = () => {
         finishModalOpen: finishModalOpen,
         itemSearchOpen: itemSearchOpen,
         itemAutocompleteValue: itemAutocompleteValue,
+        finishedRedirect: finishedRedirect,
         addItemTolist: addItemToList,
         handleFinishModalOpen: handleFinishModalOpen,
         handleFinishModalClose: handleFinishModalClose,

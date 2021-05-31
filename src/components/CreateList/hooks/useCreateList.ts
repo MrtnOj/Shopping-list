@@ -35,6 +35,7 @@ const useCreateList = () => {
     const [toggleSuggestions, setToggleSuggestions] = useState<boolean>(false)
     const [checkedSuggestions, setCheckedSuggestions] = useState<Item[]>([])
     const [saveListDialogOpen, setSaveListDialogOpen] = useState<boolean>(false)
+    const [listSaveRedirect, setListSaveRedirect] = useState<boolean>(false)
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
@@ -263,6 +264,7 @@ const useCreateList = () => {
         })
         .then(response => {
             console.log(response)
+            setListSaveRedirect(true)
         })
         .catch(err => {
             console.log(err)
