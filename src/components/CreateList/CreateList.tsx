@@ -2,6 +2,7 @@ import React from 'react'
 import useCreateList from './hooks/useCreateList'
 import AddItemForm from '../AddItemForm/AddItemForm'
 import Suggestions from './components/Suggestions'
+import CommentDialog from '../UI/CommentDialog'
 import ConfirmSaveDialog from './components/ConfirmSaveDialog'
 import ListPaper from './components/ListPaper'
 import Container from '@material-ui/core/Container'
@@ -165,6 +166,9 @@ const CreateList = () => {
                 />
             </Container>
             {!widescreen && saveButton}
+            {/* <CommentDialog 
+                
+            /> */}
             <ConfirmSaveDialog 
                 dialogOpen={saveListDialogOpen}
                 dialogClose={handleSaveListDialogClose}

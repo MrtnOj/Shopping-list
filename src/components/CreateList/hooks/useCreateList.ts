@@ -10,7 +10,8 @@ export interface Item {
     category?: string | Category | null;
     last_bought?: Date;
     lasts?: number;
-    inputValue?: string
+    inputValue?: string;
+    comment?: string
 }
 
 export interface Category {
@@ -36,7 +37,11 @@ const useCreateList = () => {
     const [checkedSuggestions, setCheckedSuggestions] = useState<Item[]>([])
     const [saveListDialogOpen, setSaveListDialogOpen] = useState<boolean>(false)
     const [listSaveRedirect, setListSaveRedirect] = useState<boolean>(false)
-    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
+    const [commentDialogOpen, setCommentDialogOpen] = useState<boolean>(false)
+    const [commentDialogValue, setCommentDialogValue] = useState<string>('')
+    const [commentItemId, setCommentItemId] = useState<number | null>(null)
+
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
@@ -279,6 +284,20 @@ const useCreateList = () => {
         .catch(err => {
             console.log(err)
         })
+    }
+
+    const addCommentButtonClicked = (id: number, event: any) => {
+        setCommentDialogOpen(true)
+        setCommentItemId(id)
+    }
+
+    const handleCommentDialogValueChange = (event: React.ChangeEvent<any>) => {
+        setCommentDialogValue(event.target.value)
+    }
+
+    const handleCommentDialogClose = () => {
+        setCommentDialogOpen(false)
+        setCommentItemId(null)
     }
 
     return {
