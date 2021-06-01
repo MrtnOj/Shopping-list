@@ -3,21 +3,12 @@ import useCreateList from './hooks/useCreateList'
 import AddItemForm from '../AddItemForm/AddItemForm'
 import Suggestions from './components/Suggestions'
 import ConfirmSaveDialog from './components/ConfirmSaveDialog'
+import ListPaper from './components/ListPaper'
 import Container from '@material-ui/core/Container'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import { createStyles, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import IconButton from '@material-ui/core/IconButton'
-import CancelIcon from '@material-ui/icons/Cancel'
 import HelpIcon from '@material-ui/icons/Help'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,29 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             alignItems: 'center',
         },
-        listPaper: {
-            position: 'relative',
-            boxSizing: 'border-box',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            marginTop: theme.spacing(3),
-            marginBottom: theme.spacing(3),
-            padding: theme.spacing(3),
-            width: '100%',
-            minHeight: '350px'
-        },
-        list: {
-            marginBottom: '4rem'
-        },
         suggestionButton: {
             margin: '5px auto'
-        },
-        saveButton: {
-            position: 'fixed',
-            bottom: 15,
-            left: '50%',
-            transform: 'translateX(-50%)'
         },
         widescreenInputSection: {
             boxSizing: 'border-box',
@@ -82,6 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+        },
+        saveButton: {
+            position: 'fixed',
+            bottom: 15,
+            left: '50%',
+            transform: 'translateX(-50%)'
         },
         wideScreenSaveButton: {
             position: 'absolute',
@@ -127,37 +103,6 @@ const CreateList = () => {
         saveListConfirm
     } = useCreateList()
 
-    const pickedList = list.items.map(item => {
-        return (
-            <ListItem key={item.id} divider={true}>
-                <ListItemText primary={item.name} />
-                <ListItemSecondaryAction>
-                    <IconButton 
-                        aria-controls='item-actions-menu'
-                        aria-haspopup='true'
-                        edge='end'
-                        size='small'
-                        color='inherit'
-                        onClick={handleDotsClick}
-                    >
-                        <MoreVertIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
-                <Menu
-                    id="item-actions-menu"
-                    anchorEl={menuAnchorEl}
-                    keepMounted
-                    open={Boolean(menuAnchorEl)}
-                    onClose={closeDotsMenu}
-                    TransitionComponent={Fade}
-                >
-                    <MenuItem onClick={() => removeListItem((item.id))}>Remove</MenuItem>
-                    <MenuItem onClick={closeDotsMenu}>Add comment</MenuItem>
-                </Menu>
-            </ListItem>
-        )
-    })
-
     const saveButton = 
         <Button 
             type='button' 
@@ -170,15 +115,6 @@ const CreateList = () => {
         >
             Save list
         </Button>
-
-    const listPaper = 
-        <Paper  className={classes.listPaper} elevation={3} component='section'>
-            <List className={classes.list}>
-                {pickedList}
-            </List>
-            {widescreen && saveButton}
-        </Paper>
-
 
     return (
         <React.Fragment>
@@ -209,7 +145,16 @@ const CreateList = () => {
                         Suggestions
                     </Button>
                 </Paper>
-                {listPaper}
+                <ListPaper 
+                    list={list}
+                    menuAnchorEl={menuAnchorEl}
+                    handleDotsClick={handleDotsClick}
+                    closeDotsMenu={closeDotsMenu}
+                    removeListItem={removeListItem}
+                    saveListButtonPressed={saveListButtonPressed}
+                    widescreen={widescreen}
+                    saveButton={saveButton}
+                />
                 <Suggestions 
                     items={suggestions}
                     toggleSuggestions={toggleSuggestions}
