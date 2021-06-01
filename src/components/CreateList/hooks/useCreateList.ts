@@ -298,6 +298,23 @@ const useCreateList = () => {
     const handleCommentDialogClose = () => {
         setCommentDialogOpen(false)
         setCommentItemId(null)
+        setMenuAnchorEl(null)
+    }
+
+    const saveItemComment = (event: any) => {
+        event.preventDefault()
+        const updatedCommentItems = list.items.map(item => {
+            if (item.id !== commentItemId) {
+                return item
+            }
+            return {
+                ...item,
+                comment: commentDialogValue
+            }
+        })
+        const updatedList = {...list, items: updatedCommentItems}
+        setList(updatedList)
+        handleCommentDialogClose()
     }
 
     return {
@@ -312,6 +329,12 @@ const useCreateList = () => {
         toggleSuggestions: toggleSuggestions,
         checkedSuggestions: checkedSuggestions,
         menuAnchorEl: menuAnchorEl,
+        commentDialogOpen: commentDialogOpen,
+        commentDialogValue: commentDialogValue,
+        addCommentButtonClicked: addCommentButtonClicked,
+        handleCommentDialogValueChange: handleCommentDialogValueChange,
+        handleCommentDialogClose: handleCommentDialogClose,
+        saveItemComment: saveItemComment,
         handleAddItemModalClose: handleAddItemModalClose,
         handleSaveListDialogClose: handleSaveListDialogClose,
         handleSuggestionsVisible: handleSuggestionsVisible,

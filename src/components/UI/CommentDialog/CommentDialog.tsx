@@ -18,17 +18,17 @@ const CommentDialog = (props: any) => {
 
     return (
         <Dialog open={props.dialogOpen} onClose={props.dialogClose} aria-labelledby="add-comment-dialog">
-            <form onSubmit={props.saveList}>
+            <form onSubmit={props.saveComment}>
                 <DialogTitle id="add-comment-dialog">Add comment</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
-                        id="list-name"
-                        onChange={props.nameChange}
-                        label="List name"
+                        id="item-comment"
+                        onChange={props.valueChange}
+                        label="Comment"
                         type="text"
                         variant="outlined"
-                        value={props.nameValue}
+                        value={props.value}
                     />
                 </DialogContent>
                 <DialogActions>

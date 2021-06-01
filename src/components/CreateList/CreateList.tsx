@@ -85,6 +85,12 @@ const CreateList = () => {
         checkedSuggestions,
         saveListDialogOpen,
         menuAnchorEl,
+        commentDialogOpen,
+        commentDialogValue,
+        addCommentButtonClicked,
+        handleCommentDialogValueChange,
+        handleCommentDialogClose,
+        saveItemComment,
         handleAddItemModalClose,
         handleSuggestionsVisible,
         handleSaveListDialogClose,
@@ -155,6 +161,7 @@ const CreateList = () => {
                     saveListButtonPressed={saveListButtonPressed}
                     widescreen={widescreen}
                     saveButton={saveButton}
+                    addCommentButtonClicked={addCommentButtonClicked}
                 />
                 <Suggestions 
                     items={suggestions}
@@ -166,9 +173,13 @@ const CreateList = () => {
                 />
             </Container>
             {!widescreen && saveButton}
-            {/* <CommentDialog 
-                
-            /> */}
+            <CommentDialog 
+                dialogOpen={commentDialogOpen}
+                dialogClose={handleCommentDialogClose}
+                saveComment={saveItemComment}
+                valueChange={handleCommentDialogValueChange}
+                value={commentDialogValue}
+            />
             <ConfirmSaveDialog 
                 dialogOpen={saveListDialogOpen}
                 dialogClose={handleSaveListDialogClose}

@@ -66,7 +66,7 @@ const ListPaper = (props: any) => {
                     TransitionComponent={Fade}
                 >
                     <MenuItem onClick={() => props.removeListItem((item.id))}>Remove</MenuItem>
-                    <MenuItem onClick={props.closeDotsMenu}>Add comment</MenuItem>
+                    <MenuItem onClick={() => props.addCommentButtonClicked(item.id)}>Add comment</MenuItem>
                 </Menu>
                 <ListItemSecondaryAction>
                     <IconButton 
