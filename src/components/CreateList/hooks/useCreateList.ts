@@ -36,6 +36,7 @@ const useCreateList = () => {
     const [checkedSuggestions, setCheckedSuggestions] = useState<Item[]>([])
     const [saveListDialogOpen, setSaveListDialogOpen] = useState<boolean>(false)
     const [listSaveRedirect, setListSaveRedirect] = useState<boolean>(false)
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     useEffect(() => {
         getItems(localStorage.getItem('userId'))
@@ -229,11 +230,20 @@ const useCreateList = () => {
         setCheckedSuggestions([])
     }
 
+    const handleDotsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuAnchorEl(event.currentTarget)
+    }
+
+    const closeDotsMenu = () => {
+        setMenuAnchorEl(null)
+    }
+
     const removeListItem = (itemId: number | undefined) => {
         const newList = list.items.filter(item => {
             return item.id !== itemId
         })
         setList({...list, items: newList })
+        closeDotsMenu()
         getItems(localStorage.getItem('userId'))
     }
 
@@ -282,9 +292,12 @@ const useCreateList = () => {
         itemAutocompleteValue: itemAutocompleteValue,
         toggleSuggestions: toggleSuggestions,
         checkedSuggestions: checkedSuggestions,
+        menuAnchorEl: menuAnchorEl,
         handleAddItemModalClose: handleAddItemModalClose,
         handleSaveListDialogClose: handleSaveListDialogClose,
         handleSuggestionsVisible: handleSuggestionsVisible,
+        handleDotsClick: handleDotsClick,
+        closeDotsMenu: closeDotsMenu,
         itemAutocompleteValueChange: itemAutocompleteValueChange,
         dialogNameChange: dialogNameChange,
         dialogCategoryChange: dialogCategoryChange,

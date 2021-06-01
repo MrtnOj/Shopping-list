@@ -8,12 +8,16 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import { createStyles, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton'
 import CancelIcon from '@material-ui/icons/Cancel'
 import HelpIcon from '@material-ui/icons/Help'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -103,9 +107,12 @@ const CreateList = () => {
         toggleSuggestions,
         checkedSuggestions,
         saveListDialogOpen,
+        menuAnchorEl,
         handleAddItemModalClose,
         handleSuggestionsVisible,
         handleSaveListDialogClose,
+        handleDotsClick,
+        closeDotsMenu,
         itemAutocompleteValueChange,
         dialogNameChange,
         dialogCategoryChange,
@@ -125,10 +132,28 @@ const CreateList = () => {
             <ListItem key={item.id} divider={true}>
                 <ListItemText primary={item.name} />
                 <ListItemSecondaryAction>
-                    <IconButton edge='end' size='small' color='inherit' onClick={() => removeListItem((item.id))}>
-                        <CancelIcon />
+                    <IconButton 
+                        aria-controls='item-actions-menu'
+                        aria-haspopup='true'
+                        edge='end'
+                        size='small'
+                        color='inherit'
+                        onClick={handleDotsClick}
+                    >
+                        <MoreVertIcon />
                     </IconButton>
                 </ListItemSecondaryAction>
+                <Menu
+                    id="item-actions-menu"
+                    anchorEl={menuAnchorEl}
+                    keepMounted
+                    open={Boolean(menuAnchorEl)}
+                    onClose={closeDotsMenu}
+                    TransitionComponent={Fade}
+                >
+                    <MenuItem onClick={() => removeListItem((item.id))}>Remove</MenuItem>
+                    <MenuItem onClick={closeDotsMenu}>Add comment</MenuItem>
+                </Menu>
             </ListItem>
         )
     })
