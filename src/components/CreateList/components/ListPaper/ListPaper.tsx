@@ -1,5 +1,4 @@
 import React from 'react'
-import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -9,13 +8,9 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
+import Chip from '@material-ui/core/Chip'
 import Fade from '@material-ui/core/Fade'
-import { createStyles, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'flex-start',
             marginTop: theme.spacing(3),
             marginBottom: theme.spacing(3),
-            padding: theme.spacing(3),
+            padding: theme.spacing(3) ,
             width: '100%',
             minHeight: '350px'
         },
@@ -46,6 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
             bottom: '15px',
             left: '50%',
             transform: 'translateX(-50%)'
+        },
+        listItemText: {
+            flexGrow: 'unset',
+            marginRight: theme.spacing(1)
         }
     })
 )
@@ -55,8 +54,12 @@ const ListPaper = (props: any) => {
 
     const pickedList = props.list.items.map((item: any) => {
         return (
-            <ListItem key={item.id} divider={true}>
-                <ListItemText primary={item.name} />
+            <ListItem key={item.id} divider={true} >
+                <ListItemText primary={item.name} className={classes.listItemText} />
+                {item.comment
+                    ? <Chip label={item.comment} variant='outlined' size='small' onDelete={() => props.deleteComment(item.id)}/>
+                    : null
+                }
                 <Menu
                     id="item-actions-menu"
                     anchorEl={props.menuAnchorEl}

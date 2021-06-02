@@ -11,7 +11,7 @@ export interface Item {
     last_bought?: Date;
     lasts?: number;
     inputValue?: string;
-    comment?: string
+    comment?: string | null
 }
 
 export interface Category {
@@ -299,6 +299,22 @@ const useCreateList = () => {
         setCommentDialogOpen(false)
         setCommentItemId(null)
         setMenuAnchorEl(null)
+        setCommentDialogValue('')
+    }
+
+    const deleteItemComment = (id: number) => {
+        const updatedCommentItems = list.items.map(item => {
+            if (item.id !== id) {
+                return item
+            }
+            return {
+                ...item,
+                comment: null
+            }
+        })
+        const updatedList = {...list, items: updatedCommentItems}
+        setList(updatedList)
+        handleCommentDialogClose()
     }
 
     const saveItemComment = (event: any) => {
@@ -334,6 +350,7 @@ const useCreateList = () => {
         addCommentButtonClicked: addCommentButtonClicked,
         handleCommentDialogValueChange: handleCommentDialogValueChange,
         handleCommentDialogClose: handleCommentDialogClose,
+        deleteItemComment: deleteItemComment,
         saveItemComment: saveItemComment,
         handleAddItemModalClose: handleAddItemModalClose,
         handleSaveListDialogClose: handleSaveListDialogClose,

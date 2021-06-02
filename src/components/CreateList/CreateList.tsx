@@ -88,6 +88,7 @@ const CreateList = () => {
         commentDialogOpen,
         commentDialogValue,
         addCommentButtonClicked,
+        deleteItemComment,
         handleCommentDialogValueChange,
         handleCommentDialogClose,
         saveItemComment,
@@ -162,6 +163,7 @@ const CreateList = () => {
                     widescreen={widescreen}
                     saveButton={saveButton}
                     addCommentButtonClicked={addCommentButtonClicked}
+                    deleteComment={deleteItemComment}
                 />
                 <Suggestions 
                     items={suggestions}
