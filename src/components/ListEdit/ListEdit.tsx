@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import useListEdit from './hooks/useListEdit'
 import AddItemDialog from '../ListView/components/AddItemDialog'
+import CommentDialog from '../UI/CommentDialog'
+import ListElement from '../UI/ListElement'
 import Container from '@material-ui/core/Container'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -76,6 +78,16 @@ const ListEdit = (props: any) => {
         itemAddModalOpen,
         itemAutocompleteValue,
         itemAddDialogValue,
+        menuAnchorEl,
+        commentDialogOpen,
+        commentDialogValue,
+        addCommentButtonClicked,
+        handleCommentDialogValueChange,
+        handleCommentDialogClose,
+        deleteItemComment,
+        saveItemComment,
+        handleDotsClick,
+        closeDotsMenu,
         getList,
         openItemSearch,
         itemAutocompleteValueChange,
@@ -96,14 +108,27 @@ const ListEdit = (props: any) => {
 
     const listElements = listData.items?.map(item => {
         return (
-            <ListItem key={item.id} className={classes.listItem} divider={true}>
-                <ListItemText primary={item.name} />
-                <ListItemSecondaryAction>
-                    <IconButton edge='end' size='small' onClick={() => removeListItem(item.list_item.id)}>
-                        <CancelIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
-            </ListItem>
+            <ListElement
+                id={item.id}
+                listItemId={item.list_item.id}
+                name={item.name}
+                comment={item.comment}
+                deleteComment={deleteItemComment}
+                menuAnchorEl={menuAnchorEl}
+                closeDotsMenu={closeDotsMenu}
+                removeListItem={removeListItem}
+                addCommentButtonClicked={addCommentButtonClicked}
+                handleDotsClick={handleDotsClick}
+            />
+
+            // <ListItem key={item.id} className={classes.listItem} divider={true}>
+            //     <ListItemText primary={item.name} />
+            //     <ListItemSecondaryAction>
+            //         <IconButton edge='end' size='small' onClick={() => removeListItem(item.list_item.id)}>
+            //             <CancelIcon />
+            //         </IconButton>
+            //     </ListItemSecondaryAction>
+            // </ListItem>
         )
     })
 
@@ -165,6 +190,13 @@ const ListEdit = (props: any) => {
                 dialogValues={itemAddDialogValue}
                 dialogNameChange={dialogNameChange}
                 dialogCategoryChange={dialogCategoryChange}
+            />
+            <CommentDialog
+                dialogOpen={commentDialogOpen}
+                dialogClose={handleCommentDialogClose}
+                saveComment={saveItemComment}
+                valueChange={handleCommentDialogValueChange}
+                value={commentDialogValue}
             />
         </Container>
     )

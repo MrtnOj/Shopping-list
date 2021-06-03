@@ -16,6 +16,10 @@ const useListEdit = () => {
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
     const [itemAutocompleteValue, setItemAutocompleteValue] = useState<Item | null>(null)
     const [itemAddDialogValue, setItemAddDialogValue] = useState<Item>({ name: '', category: '' })
+    const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
+    const [commentDialogOpen, setCommentDialogOpen] = useState<boolean>(false)
+    const [commentDialogValue, setCommentDialogValue] = useState<string>('')
+    const [commentItemId, setCommentItemId] = useState<number | null>(null)
 
 
     const getList = useCallback((listId: number) => {
@@ -164,6 +168,7 @@ const useListEdit = () => {
         })
         .then(response => {
             setListData({...listData, items: newList })
+            closeDotsMenu()
         })
         .catch(err => {
             console.log(err)
@@ -206,6 +211,62 @@ const useListEdit = () => {
         })
     }
 
+    const addCommentButtonClicked = (id: number, event: any) => {
+        setCommentDialogOpen(true)
+        setCommentItemId(id)
+    }
+
+    const handleCommentDialogValueChange = (event: React.ChangeEvent<any>) => {
+        setCommentDialogValue(event.target.value)
+    }
+
+    const handleCommentDialogClose = () => {
+        setCommentDialogOpen(false)
+        setCommentItemId(null)
+        setMenuAnchorEl(null)
+        setCommentDialogValue('')
+    }
+
+    const deleteItemComment = (id: number) => {
+        const updatedCommentItems = listData.items?.map(item => {
+            if (item.id !== id) {
+                return item
+            }
+            return {
+                ...item,
+                comment: null
+            }
+        })
+        const updatedList = {...listData, items: updatedCommentItems}
+        setListData(updatedList)
+        handleCommentDialogClose()
+    }
+
+    const saveItemComment = (event: any) => {
+        event.preventDefault()
+        const updatedCommentItems = listData.items?.map(item => {
+            if (item.id !== commentItemId) {
+                return item
+            }
+            return {
+                ...item,
+                comment: commentDialogValue
+            }
+        })
+        const updatedList = {...listData, items: updatedCommentItems}
+        setListData(updatedList)
+        handleCommentDialogClose()
+    }
+
+    const handleDotsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuAnchorEl(event.currentTarget)
+    }
+
+    const closeDotsMenu = () => {
+        setMenuAnchorEl(null)
+    }
+
+
     return {
         items: items,
         categories: categories,
@@ -214,6 +275,16 @@ const useListEdit = () => {
         itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,
         itemAddDialogValue: itemAddDialogValue,
+        menuAnchorEl: menuAnchorEl,
+        commentDialogOpen: commentDialogOpen,
+        commentDialogValue: commentDialogValue,
+        addCommentButtonClicked: addCommentButtonClicked,
+        handleCommentDialogValueChange: handleCommentDialogValueChange,
+        handleCommentDialogClose: handleCommentDialogClose,
+        deleteItemComment: deleteItemComment,
+        saveItemComment: saveItemComment,
+        handleDotsClick: handleDotsClick,
+        closeDotsMenu: closeDotsMenu,
         getList: getList,
         saveListNameChange: saveListNameChange,
         openItemSearch: openItemSearch,

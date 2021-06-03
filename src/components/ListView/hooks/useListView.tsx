@@ -11,7 +11,8 @@ export interface Item {
     last_bought?: Date;
     lasts?: number;
     inputValue?: string;
-    list_item?: any
+    list_item?: any;
+    comment?: string | null;
 }
 
 export interface Category {
