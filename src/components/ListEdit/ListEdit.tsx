@@ -112,7 +112,7 @@ const ListEdit = (props: any) => {
                 id={item.id}
                 listItemId={item.list_item.id}
                 name={item.name}
-                comment={item.comment}
+                comment={item.list_item.comment}
                 deleteComment={deleteItemComment}
                 menuAnchorEl={menuAnchorEl}
                 closeDotsMenu={closeDotsMenu}
