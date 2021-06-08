@@ -71,7 +71,7 @@ const ListEdit = (props: any) => {
     const classes = useStyles()
 
     const {
-        listData,
+        list,
         items,
         categories,
         itemSearchOpen,
@@ -106,7 +106,7 @@ const ListEdit = (props: any) => {
         getList(props.match.params.listId)
     }, [props.match.params.listId])
 
-    const listElements = listData.items?.map(item => {
+    const listElements = list.items?.map(item => {
         return (
             <ListElement
                 id={item.id}
@@ -134,12 +134,12 @@ const ListEdit = (props: any) => {
 
     return (
         <Container component='article' maxWidth='sm' >
-            <h1 className={classes.hiddenTitle}>{`Edit list - ${listData.name}`}</h1>
+            <h1 className={classes.hiddenTitle}>{`Edit list - ${list.name}`}</h1>
             <TextField
                 id="list-name"
                 label="List name"
                 type="text"
-                value={listData.name}
+                value={list.name}
                 onChange={listNameChange}
                 className={classes.listNameInput}
                 inputProps={{min: 0, style: { textAlign: 'center' }}}

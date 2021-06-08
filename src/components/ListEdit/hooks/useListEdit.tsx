@@ -8,7 +8,9 @@ const useListEdit = () => {
 
     const filter = createFilterOptions<Item | Category>()
 
-    const [listData, setListData] = useState<ListData>({})
+    const [list, setList] = useState<ListData>({})
+    const [changedList, setChangedList] = useState<ListData>({})
+    const [listChanged, setListChanged] = useState<boolean>(false)
     const [items, setItems] = useState<Item[]>([])
     const [nameChanged, setNameChanged] = useState<boolean>(false)
     const [categories, setCategories] = useState<Category[]>([])
@@ -29,7 +31,8 @@ const useListEdit = () => {
             }
         })
             .then(response => {
-                setListData({...response.data, items: response.data.user_items})
+                setList({...response.data, items: response.data.user_items})
+                setChangedList({...response.data, items: response.data.user_items})
                 console.log(response.data)
             })
             .catch(err => {
@@ -137,7 +140,8 @@ const useListEdit = () => {
 
     const addItemToList = (event: any) => {
         event.preventDefault()
-        axios.post('/list/add/' + listData.id, {
+
+        axios.post('/list/add/' + list.id, {
             userId: localStorage.getItem('userId'),
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
@@ -148,8 +152,8 @@ const useListEdit = () => {
             }
         })
         .then(response => {
-            const newListData = { ...listData, items: [...listData.items!, {name: itemAddDialogValue.name, id: response.data.itemId }]}
-            setListData(newListData)
+            const newListData = { ...list, items: [...list.items!, {name: itemAddDialogValue.name, id: response.data.itemId }]}
+            setList(newListData)
             handleAddItemModalClose()
         })
         .catch(err => {
@@ -158,7 +162,7 @@ const useListEdit = () => {
     }
 
     const removeListItem = (itemId: any) => {
-        const newList = listData.items?.filter(item => {
+        const newList = list.items?.filter(item => {
             return item.list_item.id !== itemId
         })
         axios.delete('/list/listitem/delete/' + itemId + '?userId=' + localStorage.getItem('userId'), {
@@ -167,7 +171,7 @@ const useListEdit = () => {
             }
         })
         .then(response => {
-            setListData({...listData, items: newList })
+            setList({...list, items: newList })
             closeDotsMenu()
         })
         .catch(err => {
@@ -180,7 +184,7 @@ const useListEdit = () => {
     }
 
     const listNameChange = (event: React.ChangeEvent<any>) => {
-        setListData({...listData, name: event.target.value})
+        setList({...list, name: event.target.value})
         setNameChanged(true)
     }
 
@@ -194,9 +198,9 @@ const useListEdit = () => {
         if (!nameChanged) {
             return
         }
-        axios.put('/list/' + listData.id, {
+        axios.put('/list/' + list.id, {
             userId: localStorage.getItem('userId'),
-            newName: listData.name
+            newName: list.name
         }, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -228,7 +232,7 @@ const useListEdit = () => {
     }
 
     const deleteItemComment = (id: number) => {
-        const updatedCommentItems = listData.items?.map(item => {
+        const updatedCommentItems = list.items?.map(item => {
             if (item.id !== id) {
                 return item
             }
@@ -237,14 +241,14 @@ const useListEdit = () => {
                 comment: null
             }
         })
-        const updatedList = {...listData, items: updatedCommentItems}
-        setListData(updatedList)
+        const updatedList = {...list, items: updatedCommentItems}
+        setList(updatedList)
         handleCommentDialogClose()
     }
 
     const saveItemComment = (event: any) => {
         event.preventDefault()
-        const updatedCommentItems = listData.items?.map(item => {
+        const updatedCommentItems = list.items?.map(item => {
             if (item.id !== commentItemId) {
                 return item
             }
@@ -253,8 +257,8 @@ const useListEdit = () => {
                 comment: commentDialogValue
             }
         })
-        const updatedList = {...listData, items: updatedCommentItems}
-        setListData(updatedList)
+        const updatedList = {...list, items: updatedCommentItems}
+        setList(updatedList)
         handleCommentDialogClose()
     }
 
@@ -270,7 +274,7 @@ const useListEdit = () => {
     return {
         items: items,
         categories: categories,
-        listData: listData,
+        list: list,
         itemSearchOpen: itemSearchOpen,
         itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,
