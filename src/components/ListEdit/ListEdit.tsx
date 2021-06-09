@@ -5,13 +5,8 @@ import CommentDialog from '../UI/CommentDialog'
 import ListElement from '../UI/ListElement'
 import Container from '@material-ui/core/Container'
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import TextField from '@material-ui/core/TextField'
-import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
-import CancelIcon from '@material-ui/icons/Cancel'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -71,7 +66,6 @@ const ListEdit = (props: any) => {
     const classes = useStyles()
 
     const {
-        list,
         items,
         categories,
         itemSearchOpen,
@@ -81,6 +75,7 @@ const ListEdit = (props: any) => {
         menuAnchorEl,
         commentDialogOpen,
         commentDialogValue,
+        changedList,
         addCommentButtonClicked,
         handleCommentDialogValueChange,
         handleCommentDialogClose,
@@ -99,20 +94,21 @@ const ListEdit = (props: any) => {
         getOptionLabel,
         addItemToList,
         removeListItem,
-        saveListNameChange
+        saveList,
+        addUserItem
     } = useListEdit()
 
     useEffect(() => {
         getList(props.match.params.listId)
     }, [props.match.params.listId])
 
-    const listElements = list.items?.map(item => {
+    const listElements = changedList.items?.map(item => {
         return (
             <ListElement
                 id={item.id}
-                listItemId={item.list_item.id}
+                listItemId={item.list_item?.id}
                 name={item.name}
-                comment={item.list_item.comment}
+                comment={item.list_item?.comment}
                 deleteComment={deleteItemComment}
                 menuAnchorEl={menuAnchorEl}
                 closeDotsMenu={closeDotsMenu}
@@ -120,26 +116,17 @@ const ListEdit = (props: any) => {
                 addCommentButtonClicked={addCommentButtonClicked}
                 handleDotsClick={handleDotsClick}
             />
-
-            // <ListItem key={item.id} className={classes.listItem} divider={true}>
-            //     <ListItemText primary={item.name} />
-            //     <ListItemSecondaryAction>
-            //         <IconButton edge='end' size='small' onClick={() => removeListItem(item.list_item.id)}>
-            //             <CancelIcon />
-            //         </IconButton>
-            //     </ListItemSecondaryAction>
-            // </ListItem>
         )
     })
 
     return (
         <Container component='article' maxWidth='sm' >
-            <h1 className={classes.hiddenTitle}>{`Edit list - ${list.name}`}</h1>
+            <h1 className={classes.hiddenTitle}>{`Edit list - ${changedList.name}`}</h1>
             <TextField
                 id="list-name"
                 label="List name"
                 type="text"
-                value={list.name}
+                value={changedList.name}
                 onChange={listNameChange}
                 className={classes.listNameInput}
                 inputProps={{min: 0, style: { textAlign: 'center' }}}
@@ -166,7 +153,7 @@ const ListEdit = (props: any) => {
                     size='small'
                     className={classes.saveButton}
                     onClick={() => {
-                        saveListNameChange()
+                        saveList()
                         props.history.push('/mylists')
                     }}
                 >
@@ -174,7 +161,8 @@ const ListEdit = (props: any) => {
                 </Button>
             </section>
             <AddItemDialog 
-                addItem={addItemToList}
+                addItemToList={addItemToList}
+                addItem={addUserItem}
                 openItemSearch={openItemSearch}
                 itemSearchOpen={itemSearchOpen}
                 handleItemSearchClose={handleAddItemModalClose}

@@ -10,9 +10,11 @@ const useListEdit = () => {
 
     const [list, setList] = useState<ListData>({})
     const [changedList, setChangedList] = useState<ListData>({})
-    const [listChanged, setListChanged] = useState<boolean>(false)
+    const [listChanged, setListChanged] = useState({
+        name: false,
+        items: false
+    })
     const [items, setItems] = useState<Item[]>([])
-    const [nameChanged, setNameChanged] = useState<boolean>(false)
     const [categories, setCategories] = useState<Category[]>([])
     const [itemSearchOpen, setItemSearchOpen] = useState<boolean>(false)
     const [itemAddModalOpen, setItemAddModalOpen] = useState<boolean>(false)
@@ -81,11 +83,13 @@ const useListEdit = () => {
         } else if (newValue && newValue.inputValue) {
             setItemAddModalOpen(true)
             setItemAddDialogValue({
+                id: newValue.id,
                 name: newValue.inputValue,
                 category: '',
             })
         } else {
             setItemAddDialogValue({
+                id: newValue.id,
                 name: newValue.name,
                 category: ''
             })
@@ -140,9 +144,21 @@ const useListEdit = () => {
 
     const addItemToList = (event: any) => {
         event.preventDefault()
+        const newList = {
+            ...changedList,
+            items: [
+                ...(changedList.items as Item[]),
+                {name: itemAddDialogValue.name, id: itemAddDialogValue.id, list_item: null }
+            ]
+        }
+        setChangedList(newList)
+        setListChanged({...listChanged, items: true})
+        handleAddItemModalClose()
+    }
 
-        axios.post('/list/add/' + list.id, {
-            userId: localStorage.getItem('userId'),
+    const addUserItem = (event: any) => {
+        event.preventDefault()
+        axios.post('/items/' + localStorage.getItem('userId'), {
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,
             category: itemAddDialogValue.category
@@ -152,9 +168,18 @@ const useListEdit = () => {
             }
         })
         .then(response => {
-            const newListData = { ...list, items: [...list.items!, {name: itemAddDialogValue.name, id: response.data.itemId }]}
-            setList(newListData)
+            const newListItems = {
+                ...changedList,
+                items: [
+                    ...(changedList.items as Item[]),
+                    {name: itemAddDialogValue.name, id: response.data.id, list_item: null}
+                ]
+            }
+            setChangedList(newListItems)
+            setListChanged({...listChanged, items: true})
             handleAddItemModalClose()
+            getItems()
+            getCategories()
         })
         .catch(err => {
             console.log(err)
@@ -162,21 +187,12 @@ const useListEdit = () => {
     }
 
     const removeListItem = (itemId: any) => {
-        const newList = list.items?.filter(item => {
-            return item.list_item.id !== itemId
+        const newListItems = changedList.items?.filter(item => {
+            return item.id !== itemId
         })
-        axios.delete('/list/listitem/delete/' + itemId + '?userId=' + localStorage.getItem('userId'), {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        .then(response => {
-            setList({...list, items: newList })
-            closeDotsMenu()
-        })
-        .catch(err => {
-            console.log(err)
-        })
+        setChangedList({...changedList, items: newListItems})
+        closeDotsMenu()
+        setListChanged({...listChanged, items: true})
     }
 
     const dialogNameChange = (event: React.ChangeEvent<any>) => {
@@ -184,8 +200,8 @@ const useListEdit = () => {
     }
 
     const listNameChange = (event: React.ChangeEvent<any>) => {
-        setList({...list, name: event.target.value})
-        setNameChanged(true)
+        setChangedList({...list, name: event.target.value})
+        setListChanged({...listChanged, name: true})
     }
 
     const openItemSearch = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -194,13 +210,34 @@ const useListEdit = () => {
         setItemSearchOpen(true)
     } 
 
-    const saveListNameChange = () => {
-        if (!nameChanged) {
+    const saveList = () => {
+        if (!listChanged.items && !listChanged.name) {
             return
         }
+        if (listChanged.name) {
+            listNameChangeRequest()
+        }
+        if (listChanged.items) {
+            axios.put('/list/update', {
+                list: changedList
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then(response => {
+    
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    }
+
+    const listNameChangeRequest = () => {
         axios.put('/list/' + list.id, {
             userId: localStorage.getItem('userId'),
-            newName: list.name
+            newName: changedList.name
         }, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -208,7 +245,6 @@ const useListEdit = () => {
         })
         .then(response => {
             console.log(response.data)
-            
         })
         .catch(err => {
             console.log(err)
@@ -232,33 +268,35 @@ const useListEdit = () => {
     }
 
     const deleteItemComment = (id: number) => {
-        const updatedCommentItems = list.items?.map(item => {
+        const updatedCommentItems = changedList.items?.map(item => {
             if (item.id !== id) {
                 return item
             }
             return {
                 ...item,
-                comment: null
+                list_item: {...item.list_item, comment: null}
             }
         })
-        const updatedList = {...list, items: updatedCommentItems}
-        setList(updatedList)
+        const updatedList = {...changedList, items: updatedCommentItems}
+        setChangedList(updatedList)
+        setListChanged({...listChanged, items: true})
         handleCommentDialogClose()
     }
 
     const saveItemComment = (event: any) => {
         event.preventDefault()
-        const updatedCommentItems = list.items?.map(item => {
+        const updatedCommentItems = changedList.items?.map(item => {
             if (item.id !== commentItemId) {
                 return item
             }
             return {
                 ...item,
-                comment: commentDialogValue
+                list_item: {...item.list_item, comment: commentDialogValue}
             }
         })
-        const updatedList = {...list, items: updatedCommentItems}
-        setList(updatedList)
+        const updatedList = {...changedList, items: updatedCommentItems}
+        setChangedList(updatedList)
+        setListChanged({...listChanged, items: true})
         handleCommentDialogClose()
     }
 
@@ -275,6 +313,7 @@ const useListEdit = () => {
         items: items,
         categories: categories,
         list: list,
+        changedList: changedList,
         itemSearchOpen: itemSearchOpen,
         itemAddModalOpen: itemAddModalOpen,
         itemAutocompleteValue: itemAutocompleteValue,
@@ -290,7 +329,7 @@ const useListEdit = () => {
         handleDotsClick: handleDotsClick,
         closeDotsMenu: closeDotsMenu,
         getList: getList,
-        saveListNameChange: saveListNameChange,
+        saveList: saveList,
         openItemSearch: openItemSearch,
         itemAutocompleteValueChange: itemAutocompleteValueChange,
         handleAddItemModalClose: handleAddItemModalClose,
@@ -301,6 +340,7 @@ const useListEdit = () => {
         getOptionLabel: getOptionLabel,
         addItemToList: addItemToList,
         removeListItem: removeListItem,
+        addUserItem: addUserItem
     }
 }
 

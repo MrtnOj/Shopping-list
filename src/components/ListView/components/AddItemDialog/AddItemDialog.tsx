@@ -41,7 +41,7 @@ const AddItemDialog = (props: any) => {
                     <Button onClick={props.handleItemSearchClose} color="primary">
                         Cancel
                     </Button>
-                    <Button type="submit" color="primary" onClick={props.addItem}>
+                    <Button type="submit" color="primary" onClick={props.addItemToList}>
                         Add
                     </Button>
                 </DialogActions>

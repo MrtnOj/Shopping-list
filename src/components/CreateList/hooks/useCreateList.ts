@@ -168,7 +168,6 @@ const useCreateList = () => {
 
     const addItem = (event: any) => {
         event.preventDefault()
-        console.log(itemAddDialogValue.category)
         axios.post('/items/' + localStorage.getItem('userId'), {
             itemId: itemAutocompleteValue?.id,
             name: itemAddDialogValue.name,

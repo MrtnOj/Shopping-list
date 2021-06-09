@@ -145,6 +145,7 @@ const ListView = (props: any) => {
             </Fab>
             <AddItemDialog 
                 addItem={addItemTolist}
+                addUserItem={addItemTolist}
                 openItemSearch={openItemSearch}
                 itemSearchOpen={itemSearchOpen}
                 handleItemSearchClose={handleAddItemModalClose}
