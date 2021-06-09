@@ -200,7 +200,7 @@ const useListEdit = () => {
     }
 
     const listNameChange = (event: React.ChangeEvent<any>) => {
-        setChangedList({...list, name: event.target.value})
+        setChangedList({...changedList, name: event.target.value})
         setListChanged({...listChanged, name: true})
     }
 
@@ -251,7 +251,7 @@ const useListEdit = () => {
         })
     }
 
-    const addCommentButtonClicked = (id: number, event: any) => {
+    const addCommentButtonClicked = (id: number) => {
         setCommentDialogOpen(true)
         setCommentItemId(id)
     }
@@ -285,10 +285,11 @@ const useListEdit = () => {
 
     const saveItemComment = (event: any) => {
         event.preventDefault()
+        console.log(commentItemId)
         const updatedCommentItems = changedList.items?.map(item => {
             if (item.id !== commentItemId) {
                 return item
-            }
+            } 
             return {
                 ...item,
                 list_item: {...item.list_item, comment: commentDialogValue}

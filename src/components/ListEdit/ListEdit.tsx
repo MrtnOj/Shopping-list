@@ -105,10 +105,11 @@ const ListEdit = (props: any) => {
     const listElements = changedList.items?.map(item => {
         return (
             <ListElement
+                key={item.id}
                 id={item.id}
-                listItemId={item.list_item?.id}
+                listItemId={item.list_item.id}
                 name={item.name}
-                comment={item.list_item?.comment}
+                comment={item.list_item.comment}
                 deleteComment={deleteItemComment}
                 menuAnchorEl={menuAnchorEl}
                 closeDotsMenu={closeDotsMenu}

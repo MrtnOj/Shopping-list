@@ -23,7 +23,7 @@ const ListElement = (props: any) => {
     const classes = useStyles()
 
     return (
-        <ListItem key={props.id} divider={true} >
+        <ListItem divider={true} >
             <ListItemText primary={props.name} className={classes.listItemText} />
             {props.comment
                 ? <Chip label={props.comment} variant='outlined' size='small' onDelete={() => props.deleteComment(props.id)}/>

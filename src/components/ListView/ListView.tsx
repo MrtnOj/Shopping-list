@@ -3,6 +3,7 @@ import { Redirect } from 'react-router'
 import useListView from './hooks/useListView'
 import ListCompleteDialog from './components/ListCompleteDialog'
 import Container from '@material-ui/core/Container'
+import Chip from '@material-ui/core/Chip'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
@@ -96,6 +97,10 @@ const ListView = (props: any) => {
         return (
             <ListItem key={item.id} className={classes.listItem} divider={true}>
                 <ListItemText primary={item.name} />
+                {item.list_item.comment
+                    ? <Chip label={item.list_item.comment} />
+                    : null
+                }
                 <ListItemSecondaryAction>
                     <IconButton edge='end' size='small' color='secondary' onClick={() => itemCheckClicked(item.id)}>
                         <CheckIcon />
