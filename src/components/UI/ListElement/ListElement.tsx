@@ -37,8 +37,8 @@ const ListElement = (props: any) => {
                 onClose={props.closeDotsMenu}
                 TransitionComponent={Fade}
             >
-                <MenuItem onClick={() => props.removeListItem((props.id))}>Remove</MenuItem>
-                <MenuItem onClick={() => props.addCommentButtonClicked(props.id)}>Add comment</MenuItem>
+                <MenuItem onClick={props.removeListItem}>Remove</MenuItem>
+                <MenuItem onClick={props.addCommentButtonClicked}>Add comment</MenuItem>
             </Menu>
             <ListItemSecondaryAction>
                 <IconButton 
@@ -47,7 +47,7 @@ const ListElement = (props: any) => {
                     edge='end'
                     size='small'
                     color='inherit'
-                    onClick={props.handleDotsClick}
+                    onClick={(event) => props.handleDotsClick(event, props.id)}
                 >
                     <MoreVertIcon />
                 </IconButton>

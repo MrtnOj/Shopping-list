@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import useListEdit from './hooks/useListEdit'
+import Alert from '../UI/Alert'
+import Snackbar from '@material-ui/core/Snackbar'
 import AddItemDialog from '../ListView/components/AddItemDialog'
 import CommentDialog from '../UI/CommentDialog'
 import ListElement from '../UI/ListElement'
@@ -58,6 +60,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         saveButton: {
             marginRight: theme.spacing(2)
+        },
+        alert: {
+            marginBottom: theme.spacing(9)
         }
     })
 )
@@ -76,6 +81,8 @@ const ListEdit = (props: any) => {
         commentDialogOpen,
         commentDialogValue,
         changedList,
+        alertOpen,
+        handleAlertClose,
         addCommentButtonClicked,
         handleCommentDialogValueChange,
         handleCommentDialogClose,
@@ -107,9 +114,9 @@ const ListEdit = (props: any) => {
             <ListElement
                 key={item.id}
                 id={item.id}
-                listItemId={item.list_item.id}
+                listItemId={item.list_item?.id}
                 name={item.name}
-                comment={item.list_item.comment}
+                comment={item.list_item?.comment}
                 deleteComment={deleteItemComment}
                 menuAnchorEl={menuAnchorEl}
                 closeDotsMenu={closeDotsMenu}
@@ -155,12 +162,17 @@ const ListEdit = (props: any) => {
                     className={classes.saveButton}
                     onClick={() => {
                         saveList()
-                        props.history.push('/mylists')
+                        props.history.push('/mylists/use/' + props.match.params.listId)
                     }}
                 >
-                    Save & exit
+                    Save & shop
                 </Button>
             </section>
+            <Snackbar open={alertOpen} autoHideDuration={9000} onClose={handleAlertClose} className={classes.alert}>
+                <Alert onClose={handleAlertClose} severity='error'>
+                    This item is already in the list
+                </Alert>
+            </Snackbar>
             <AddItemDialog 
                 addItemToList={addItemToList}
                 addItem={addUserItem}

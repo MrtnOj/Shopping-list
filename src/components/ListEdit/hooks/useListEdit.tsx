@@ -24,6 +24,8 @@ const useListEdit = () => {
     const [commentDialogOpen, setCommentDialogOpen] = useState<boolean>(false)
     const [commentDialogValue, setCommentDialogValue] = useState<string>('')
     const [commentItemId, setCommentItemId] = useState<number | null>(null)
+    const [alertOpen, setAlertOpen] = useState<boolean>(false)
+
 
 
     const getList = useCallback((listId: number) => {
@@ -35,7 +37,6 @@ const useListEdit = () => {
             .then(response => {
                 setList({...response.data, items: response.data.user_items})
                 setChangedList({...response.data, items: response.data.user_items})
-                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)
@@ -144,6 +145,18 @@ const useListEdit = () => {
 
     const addItemToList = (event: any) => {
         event.preventDefault()
+        let duplicateItem = false
+        changedList.items?.forEach(item => {
+            if (itemAddDialogValue.id === item.id) {
+                setAlertOpen(true)
+                handleAddItemModalClose()
+                duplicateItem = true
+                return
+            }
+        })
+        if (duplicateItem) {
+            return
+        }
         const newList = {
             ...changedList,
             items: [
@@ -186,9 +199,9 @@ const useListEdit = () => {
         })
     }
 
-    const removeListItem = (itemId: any) => {
+    const removeListItem = () => {
         const newListItems = changedList.items?.filter(item => {
-            return item.id !== itemId
+            return item.id !== commentItemId
         })
         setChangedList({...changedList, items: newListItems})
         closeDotsMenu()
@@ -251,9 +264,8 @@ const useListEdit = () => {
         })
     }
 
-    const addCommentButtonClicked = (id: number) => {
+    const addCommentButtonClicked = () => {
         setCommentDialogOpen(true)
-        setCommentItemId(id)
     }
 
     const handleCommentDialogValueChange = (event: React.ChangeEvent<any>) => {
@@ -285,7 +297,6 @@ const useListEdit = () => {
 
     const saveItemComment = (event: any) => {
         event.preventDefault()
-        console.log(commentItemId)
         const updatedCommentItems = changedList.items?.map(item => {
             if (item.id !== commentItemId) {
                 return item
@@ -301,12 +312,20 @@ const useListEdit = () => {
         handleCommentDialogClose()
     }
 
-    const handleDotsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleDotsClick = (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
         setMenuAnchorEl(event.currentTarget)
+        setCommentItemId(id)
     }
 
     const closeDotsMenu = () => {
         setMenuAnchorEl(null)
+    }
+
+    const handleAlertClose = (event?: React.SyntheticEvent, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setAlertOpen(false)
     }
 
 
@@ -322,6 +341,8 @@ const useListEdit = () => {
         menuAnchorEl: menuAnchorEl,
         commentDialogOpen: commentDialogOpen,
         commentDialogValue: commentDialogValue,
+        alertOpen: alertOpen,
+        handleAlertClose: handleAlertClose,
         addCommentButtonClicked: addCommentButtonClicked,
         handleCommentDialogValueChange: handleCommentDialogValueChange,
         handleCommentDialogClose: handleCommentDialogClose,

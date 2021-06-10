@@ -193,8 +193,7 @@ const useListView = () => {
             }
         })
         .then(response => {
-            const newListItems = [...listItems, {name: itemAddDialogValue.name, id: response.data.itemId }]
-            setListItems(newListItems)
+            getList(response.data.listId)
             handleAddItemModalClose()
         })
         .catch(err => {

@@ -39,8 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
         listItem: {
             flexGrow: 1
         },
-        pickedListItem: {
-            textDecoration: 'line-through'
+        pickedListItemText: {
+            textDecoration: 'line-through',
+            flexGrow: 'unset',
+            marginRight: theme.spacing(1)
         },
         hiddenTitle: {
             position: 'absolute',
@@ -56,6 +58,10 @@ const useStyles = makeStyles((theme: Theme) =>
             right: '50\%',
             bottom: theme.spacing(2),
             transform: 'translateX(-50\%)'
+        },
+        listItemText: {
+            flexGrow: 'unset',
+            marginRight: theme.spacing(1)
         }
     })
 )
@@ -96,9 +102,9 @@ const ListView = (props: any) => {
     const listElements = listItems.map(item => {
         return (
             <ListItem key={item.id} className={classes.listItem} divider={true}>
-                <ListItemText primary={item.name} />
+                <ListItemText primary={item.name} className={classes.listItemText} />
                 {item.list_item.comment
-                    ? <Chip label={item.list_item.comment} />
+                    ? <Chip label={item.list_item.comment} size='small' />
                     : null
                 }
                 <ListItemSecondaryAction>
@@ -112,8 +118,12 @@ const ListView = (props: any) => {
 
     const pickedListItems = pickedList.map(item => {
         return (
-            <ListItem key={item.id} className={classes.pickedListItem} divider={true}>
-                <ListItemText primary={item.name} />
+            <ListItem key={item.id} divider={true}>
+                <ListItemText primary={item.name} className={classes.pickedListItemText}/>
+                {item.list_item.comment
+                    ? <Chip label={item.list_item.comment} size='small' />
+                    : null
+                }
                 <ListItemSecondaryAction>
                     <IconButton edge='end' size='small' color='inherit' onClick={() => itemCheckUndo(item.id)}>
                         <RestoreIcon />
