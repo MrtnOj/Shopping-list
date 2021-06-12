@@ -12,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Fab from '@material-ui/core/Fab'
-import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import CheckIcon from '@material-ui/icons/Check'
 import AddIcon from '@material-ui/icons/Add'
@@ -23,7 +22,7 @@ import AddItemDialog from './components/AddItemDialog'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         articleTitle: {
-            marginBottom: '1.5rem',
+
         },
         listPaper: {
             boxSizing: 'border-box',
@@ -54,7 +53,12 @@ const useStyles = makeStyles((theme: Theme) =>
             overflow: 'hidden'
         },
         addButton: {
-            
+            position: 'sticky',
+            marginTop: theme.spacing(-3),
+            left: '50\%',
+            right: '50\%',
+            bottom: theme.spacing(2),
+            transform: 'translateX(-50\%)'
         },
         listItemText: {
             flexGrow: 'unset',
@@ -66,20 +70,11 @@ const useStyles = makeStyles((theme: Theme) =>
             top: 0,
             paddingTop: theme.spacing(10)
         },
-        editButton: {
-            
-        },
-        actionsSection: {
-            boxSizing: 'border-box',
-            position: 'sticky',
-            width: 'inherit',
-            marginTop: theme.spacing(2),
-            bottom: theme.spacing(1),
+        listHeader: {
             display: 'flex',
-            zIndex: 10,
-            alignContent: 'center',
+            justifyContent: 'center',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            marginBottom: theme.spacing(2)
         }
     })
 )
@@ -154,16 +149,25 @@ const ListView = (props: any) => {
     return (
         <React.Fragment>
             {finishedRedirect ? <Redirect to='/createlist' /> : null}
-            <Container component='article' maxWidth='sm' className={classes.container}>
-                <h1 className={classes.hiddenTitle}>{`Shopping ${listData.name}`}</h1>
+            <Container component='div' maxWidth='sm' className={classes.container}>
+                <h1 className={classes.hiddenTitle}>{`Shopping page - ${listData.name}`}</h1>
                 <Paper 
                     className={classes.listPaper} 
                     elevation={3} 
-                    component='section' 
+                    component='article' 
                 >
-                    <Typography variant='h4' component='h2' className={classes.articleTitle} color='primary' align='center'>
-                        {listData.name}
-                    </Typography>
+                    <header className={classes.listHeader}>
+                        <Typography variant='h4' component='h1' className={classes.articleTitle} color='primary' align='center'>
+                            {listData.name}
+                        </Typography>
+                        <IconButton 
+                            edge='end'
+                            color='inherit'
+                            onClick={() => props.history.push('/mylists/edit/' + props.match.params.listId)}
+                        >
+                            <EditIcon />
+                        </IconButton>
+                    </header>
                     <List>
                         {listElements}
                     </List>
@@ -171,25 +175,11 @@ const ListView = (props: any) => {
                         {pickedListItems.reverse()}
                     </List>
                 </Paper>
-                <section className={classes.actionsSection}>
-                    <Button 
-                        type='button'
-                        color='primary'
-                        variant='contained'
-                        className={classes.editButton}
-                        startIcon={<EditIcon />}
-                    >
-                        Edit
-                    </Button>
-                    <Fab color='secondary' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
-                        <AddIcon />
-                    </Fab>
-                </section>
             </Container>
             <ListCompleteDialog open={finishModalOpen} handleClose={handleFinishModalClose} handleFinished={listPickingFinished} />
-            {/* <Fab color='secondary' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
+            <Fab color='secondary' aria-label='add-items-to-list' className={classes.addButton} onClick={openItemSearch}>
                 <AddIcon />
-            </Fab> */}
+            </Fab>
             <AddItemDialog 
                 addItem={addItemTolist}
                 addUserItem={addItemTolist}

@@ -234,7 +234,7 @@ const useListView = () => {
         getItems()
         getCategories()
         setItemSearchOpen(true)
-    }   
+    }
 
     return {
         listData: listData,

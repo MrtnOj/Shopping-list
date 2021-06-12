@@ -1,4 +1,5 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import useCreateList from './hooks/useCreateList'
 import AddItemForm from '../AddItemForm/AddItemForm'
 import Suggestions from './components/Suggestions'
@@ -35,20 +36,19 @@ const useStyles = makeStyles((theme: Theme) =>
         inputSection: {
             boxSizing: 'border-box',
             width: '100%',
-            padding: '1rem',
-            paddingTop: '2rem',
+            padding: '2rem 1rem 1rem 1rem',
             marginTop: '70px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
         },
         suggestionButton: {
-            margin: '5px auto'
+            margin: '15px auto 5px auto'
         },
         widescreenInputSection: {
             boxSizing: 'border-box',
             width: '100%',
-            padding: '3rem',
+            padding: '3rem 2rem 1rem 2rem',
             marginTop: '120px',
             display: 'flex',
             flexDirection: 'column',
@@ -56,14 +56,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         saveButton: {
             position: 'fixed',
-            bottom: 15,
+            bottom: theme.spacing(2),
             left: '50%',
             transform: 'translateX(-50%)'
         },
         wideScreenSaveButton: {
             position: 'absolute',
             width: '12rem',
-            bottom: '15px',
+            bottom: theme.spacing(3),
             left: '50%',
             transform: 'translateX(-50%)'
         }
@@ -87,6 +87,8 @@ const CreateList = () => {
         menuAnchorEl,
         commentDialogOpen,
         commentDialogValue,
+        listSaveRedirect,
+        savedListId,
         addCommentButtonClicked,
         deleteItemComment,
         handleCommentDialogValueChange,
@@ -189,6 +191,7 @@ const CreateList = () => {
                 nameChange={listNameChange}
                 saveList={saveListConfirm}
             />
+            {listSaveRedirect ? <Redirect to={'/mylists/use/' + savedListId} /> : null}
         </React.Fragment>
     )
 }

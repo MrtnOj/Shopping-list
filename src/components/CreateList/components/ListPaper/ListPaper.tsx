@@ -2,7 +2,7 @@ import React from 'react'
 import ListElement from '../../../UI/ListElement'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { createStyles, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -16,23 +16,27 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(3),
             padding: theme.spacing(3) ,
             width: '100%',
-            minHeight: '350px'
+            minHeight: '350px',
+        },
+        wideScreenListPaper: {
+            position: 'relative',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            marginTop: theme.spacing(3),
+            marginBottom: theme.spacing(3),
+            padding: theme.spacing(5) ,
+            width: '100%',
+            minHeight: '350px',
         },
         list: {
-            marginBottom: '4rem'
+            marginBottom: theme.spacing(3),
+            boxSizing: 'border-box',
+            overflow: 'auto'
         },
-        saveButton: {
-            position: 'fixed',
-            bottom: 15,
-            left: '50%',
-            transform: 'translateX(-50%)'
-        },
-        wideScreenSaveButton: {
-            position: 'absolute',
-            width: '12rem',
-            bottom: '15px',
-            left: '50%',
-            transform: 'translateX(-50%)'
+        widescreenList: {
+            paddingBottom: theme.spacing(6)
         },
         listItemText: {
             flexGrow: 'unset',
@@ -43,10 +47,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ListPaper = (props: any) => {
     const classes = useStyles()
+    const widescreen = useMediaQuery('(min-width:600px)')
 
     return (
-        <Paper  className={classes.listPaper} elevation={3} component='section'>
-            <List className={classes.list}>
+        <Paper  className={widescreen ? classes.wideScreenListPaper : classes.listPaper} elevation={3} component='section'>
+            <List className={widescreen ? classes.widescreenList : classes.list}>
                 {props.list.items.map((item: any) => {
                     return (
                         <ListElement

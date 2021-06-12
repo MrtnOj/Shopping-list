@@ -37,6 +37,7 @@ const useCreateList = () => {
     const [checkedSuggestions, setCheckedSuggestions] = useState<Item[]>([])
     const [saveListDialogOpen, setSaveListDialogOpen] = useState<boolean>(false)
     const [listSaveRedirect, setListSaveRedirect] = useState<boolean>(false)
+    const [savedListId, setSavedListId] = useState<number | null>(null)
     const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
     const [commentDialogOpen, setCommentDialogOpen] = useState<boolean>(false)
     const [commentDialogValue, setCommentDialogValue] = useState<string>('')
@@ -234,17 +235,18 @@ const useCreateList = () => {
         setCheckedSuggestions([])
     }
 
-    const handleDotsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleDotsClick = (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
         setMenuAnchorEl(event.currentTarget)
+        setCommentItemId(id)
     }
 
     const closeDotsMenu = () => {
         setMenuAnchorEl(null)
     }
 
-    const removeListItem = (itemId: number | undefined) => {
+    const removeListItem = () => {
         const newList = list.items.filter(item => {
-            return item.id !== itemId
+            return item.id !== commentItemId
         })
         setList({...list, items: newList })
         closeDotsMenu()
@@ -278,6 +280,7 @@ const useCreateList = () => {
         })
         .then(response => {
             console.log(response)
+            setSavedListId(response.data)
             setListSaveRedirect(true)
         })
         .catch(err => {
@@ -285,9 +288,8 @@ const useCreateList = () => {
         })
     }
 
-    const addCommentButtonClicked = (id: number, event: any) => {
+    const addCommentButtonClicked = (event: any) => {
         setCommentDialogOpen(true)
-        setCommentItemId(id)
     }
 
     const handleCommentDialogValueChange = (event: React.ChangeEvent<any>) => {
@@ -346,6 +348,8 @@ const useCreateList = () => {
         menuAnchorEl: menuAnchorEl,
         commentDialogOpen: commentDialogOpen,
         commentDialogValue: commentDialogValue,
+        listSaveRedirect: listSaveRedirect,
+        savedListId: savedListId,
         addCommentButtonClicked: addCommentButtonClicked,
         handleCommentDialogValueChange: handleCommentDialogValueChange,
         handleCommentDialogClose: handleCommentDialogClose,
@@ -371,7 +375,6 @@ const useCreateList = () => {
         saveListButtonPressed: saveListButtonPressed,
         saveListConfirm: saveListConfirm,
         saveList: saveList,
-
     }
 }
 

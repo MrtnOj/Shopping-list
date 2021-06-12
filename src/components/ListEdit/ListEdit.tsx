@@ -9,6 +9,9 @@ import Container from '@material-ui/core/Container'
 import List from '@material-ui/core/List'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add'
+import SaveIcon from '@material-ui/icons/Save'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -21,27 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: 0,
             marginRight: 0,
             marginBottom: 30,
-        },
-        listPaper: {
-            boxSizing: 'border-box',
-            display: 'flex',
-            flexDirection: 'column',
-            alignContent: 'center',
-            justifyContent: 'space-evenly',
-            marginTop: theme.spacing(10),
-            padding: theme.spacing(3),
-            width: '100%'
-        },
-        actionsSection: {
-            position: 'absolute',
-            width: '100%',
-            height: 40,
-            right: 0,
-            bottom: 15,
-            margin: 0,
-            display: 'flex',
-            justifyContent: 'space-between'
-
         },
         hiddenTitle: {
             position: 'absolute',
@@ -56,10 +38,17 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(1)
         },
         addButton: {
-            marginLeft: theme.spacing(2)
+            position: 'sticky',
+            marginTop: theme.spacing(3),
+            left: '50\%',
+            right: '50\%',
+            bottom: theme.spacing(2),
+            transform: 'translateX(-50\%)'
         },
         saveButton: {
-            marginRight: theme.spacing(2)
+            left: '50\%',
+            right: '50\%',
+            transform: 'translateX(-50\%)'
         },
         alert: {
             marginBottom: theme.spacing(9)
@@ -140,34 +129,31 @@ const ListEdit = (props: any) => {
                 inputProps={{min: 0, style: { textAlign: 'center' }}}
                 InputLabelProps={{ shrink: true }}
             />
+            <Button 
+                type='button' 
+                color='inherit' 
+                variant='contained' 
+                size='small'
+                className={classes.saveButton}
+                startIcon={<SaveIcon />}
+                onClick={() => {
+                    saveList()
+                    props.history.push('/mylists/use/' + props.match.params.listId)
+                }}
+            >
+                Save & shop
+            </Button>
             <List>
                 {listElements}
             </List>
-            <section className={classes.actionsSection}>
-                <Button 
-                    type='button'
-                    color='primary'
-                    variant='contained'
-                    size='small'
-                    className={classes.addButton}
-                    onClick={openItemSearch}
-                >
-                    Add items
-                </Button>
-                <Button 
-                    type='button' 
-                    color='secondary' 
-                    variant='contained' 
-                    size='small'
-                    className={classes.saveButton}
-                    onClick={() => {
-                        saveList()
-                        props.history.push('/mylists/use/' + props.match.params.listId)
-                    }}
-                >
-                    Save & shop
-                </Button>
-            </section>
+            <Fab
+                color='secondary'
+                aria-label='add-items-to-list'
+                className={classes.addButton}
+                onClick={openItemSearch}
+            >
+                <AddIcon />
+            </Fab>
             <Snackbar open={alertOpen} autoHideDuration={9000} onClose={handleAlertClose} className={classes.alert}>
                 <Alert onClose={handleAlertClose} severity='error'>
                     This item is already in the list
