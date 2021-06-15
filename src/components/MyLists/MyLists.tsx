@@ -49,7 +49,15 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         date: {
             gridArea: 'date'
-        }
+        },
+        hiddenTitle: {
+            position: 'absolute',
+            left: '-10000px',
+            top: 'auto',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden'
+        },
     })
 )
 
@@ -101,8 +109,9 @@ const MyLists = (props: any) => {
 
     return (
         <Container component='article' maxWidth='sm'>
-            <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
-                My lists
+            <h1 className={classes.hiddenTitle}>My lists</h1>
+            <Typography variant='h1' component='p' className={classes.articleTitle} color='primary' align='center'>
+                {myLists.length === 0 ? 'You have no lists saved yet' : null}
             </Typography>
             {listTiles}
         </Container>

@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import { Item } from '../../hooks/useCreateList'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,6 +58,12 @@ const Suggestions = (props: any) => {
             elevation={4}
             component='article'
         >
+            {props.items.length === 0
+                ? <Typography variant='h5' component='p' color='primary' align='center'>
+                    No suggestions yet. You need to use the app for a bit longer to provide enough information.
+                </Typography>
+                : null
+            }
             <List className={classes.suggestionList}>
                 {props.items.map((item: Item) => {
                     return (
