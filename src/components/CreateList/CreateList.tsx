@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: '0 0 20px 0'
         },
         container: {
+            position: 'relative',
             height: '100vh',
             display: 'flex',
             flexDirection: 'column',
@@ -175,8 +176,8 @@ const CreateList = () => {
                     addItems={addFromSuggestions}
                     toggleVisible={handleSuggestionsVisible}
                 />
+                {!widescreen && saveButton}
             </Container>
-            {!widescreen && saveButton}
             <CommentDialog 
                 dialogOpen={commentDialogOpen}
                 dialogClose={handleCommentDialogClose}
