@@ -55,7 +55,7 @@ const Register = () => {
     
     return (
         <Container component='article' maxWidth='sm'>
-            <Typography variant='h1' className={classes.articleTitle} color='primary' align='center'>
+            <Typography variant='h1' component='h1' className={classes.articleTitle} color='primary' align='center'>
                 Sign Up
             </Typography>
             <form className={classes.signUpForm} onSubmit={submitForm}>
@@ -132,7 +132,7 @@ const Register = () => {
                     {resultMessage}
                 </Alert>
             </Snackbar>
-            {successRedirect ? <Redirect to="/login" /> : null}
+            {successRedirect ? <Redirect to='/login?registerRedirect=true' /> : null}
         </Container>
     )
 }

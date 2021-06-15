@@ -14,7 +14,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import Fade from '@material-ui/core/Fade'
-import { createStyles, DialogContentText, makeStyles, Theme } from '@material-ui/core'
+import { createStyles, DialogContentText, makeStyles, Theme, Typography } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import { isIterationStatement } from 'typescript'
 
@@ -44,6 +44,9 @@ import { isIterationStatement } from 'typescript'
             height: '1px',
             overflow: 'hidden'
         },
+        tabPlaceholder: {
+            marginTop: theme.spacing(3)
+        }
     })
 )
 
@@ -61,6 +64,12 @@ const TabPanel = (props: any) => {
             {props.value === props.index && (
                 <React.Fragment>
                     <h2 className={classes.hiddenTitle}>{props.name}</h2>
+                    {props.content.length > 0
+                        ? null
+                        : <Typography variant='h5' component='p' color='primary' className={classes.tabPlaceholder}>
+                            {`You have not saved any ${props.name} yet.`}
+                        </Typography>
+                    }
                     <List className={classes.itemsList}>
                         {props.content.map((element: any) => {
                             return (

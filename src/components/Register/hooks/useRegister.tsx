@@ -47,7 +47,7 @@ const useRegister = () => {
                 setIsError(false)
                 setAlertOpen(true)
                 setResultMessage(response.data.message)
-                // setSuccessRedirect(true)
+                setSuccessRedirect(true)
                 
             })
             .catch(err => {

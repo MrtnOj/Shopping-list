@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import useLogin from './hooks/useLogin'
 import Container from '@material-ui/core/Container'
@@ -38,19 +38,27 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 )
 
-const LogIn = () => {
+const LogIn = (props: any) => {
     const classes = useStyles()
     const { 
-        errorMessage,
+        message,
+        messageType,
         alertOpen,
         loginRedirect,
         handleAlertClose,
         handleUsernameChange,
         handlePasswordChange,
         submitForm,
-        
+        handleRegisterSuccessMessage
     } = useLogin()
 
+    useEffect(() => {
+        const query = new URLSearchParams(props.location.search)
+        const redirect = query.get('redirect')
+        if (redirect === 'true') {
+            handleRegisterSuccessMessage('User created! You can now log in.')
+        }
+    }, [props.location.search])
 
     return (
         <Container component='article' maxWidth='sm'>
@@ -108,8 +116,8 @@ const LogIn = () => {
                 </Button>
             </Box>
             <Snackbar open={alertOpen} autoHideDuration={9000} onClose={handleAlertClose}>
-                <Alert onClose={handleAlertClose} severity="error">
-                    {errorMessage}
+                <Alert onClose={handleAlertClose} severity={messageType === 'error' ? 'error' : 'success'}>
+                    {message}
                 </Alert>
             </Snackbar>
             {loginRedirect ? <Redirect to="/createlist" /> : null}

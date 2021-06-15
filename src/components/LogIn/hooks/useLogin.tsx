@@ -5,7 +5,8 @@ import axios from '../../../util/axiosAPI'
 const useLogin = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
+    const [message, setMessage] = useState('')
+    const [messageType, setMessageType] = useState('')
     const [alertOpen, setAlertOpen] = useState(false)
     const [loginRedirect, setLoginRedirect] = useState(false)
 
@@ -24,6 +25,12 @@ const useLogin = () => {
         setAlertOpen(false)
     }
 
+    const handleRegisterSuccessMessage = (message: string) => {
+        setMessage(message)
+        setMessageType('success')
+        setAlertOpen(true)
+    }
+
     const userLogin = (username: string, password: string): void => {
         axios.post('/auth/login', {
             username: username,
@@ -36,7 +43,8 @@ const useLogin = () => {
             setLoginRedirect(true)
         })
         .catch(err => {
-            setErrorMessage(err.response.data.error)
+            setMessage(err.response.data.error)
+            setMessageType('error')
             setAlertOpen(true)
         })
     }
@@ -49,10 +57,12 @@ const useLogin = () => {
     return {
         username: username,
         password: password,
-        errorMessage: errorMessage,
+        message: message,
+        messageType: messageType,
         alertOpen: alertOpen,
         loginRedirect: loginRedirect,
         handleAlertClose: handleAlertClose,
+        handleRegisterSuccessMessage: handleRegisterSuccessMessage,
         handleUsernameChange: handleUsernameChange,
         handlePasswordChange: handlePasswordChange,
         submitForm: submitForm
