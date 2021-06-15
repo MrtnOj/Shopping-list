@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
         container: {
             position: 'relative',
             height: '100vh',
+            minHeight: '600px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
