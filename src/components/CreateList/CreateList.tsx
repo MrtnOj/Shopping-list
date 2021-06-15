@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
         },
         saveButton: {
-            position: 'fixed',
+            position: 'absolute',
             bottom: theme.spacing(2),
             left: '50%',
             transform: 'translateX(-50%)'
