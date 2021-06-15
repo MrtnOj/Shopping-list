@@ -22,7 +22,7 @@ const EditElementDialog = (props: any) => {
     return (
         <Dialog open={props.dialogOpen} onClose={props.dialogClose} aria-labelledby="add-item-dialog-name">
                 <form onSubmit={props.confirmEdit}>
-                    <DialogTitle id="add-item-dialog-name">Edit item</DialogTitle>
+                    <DialogTitle id="add-item-dialog-name">{props.addOrEdit === 'add' ? 'Add Item' : 'Edit item'}</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus

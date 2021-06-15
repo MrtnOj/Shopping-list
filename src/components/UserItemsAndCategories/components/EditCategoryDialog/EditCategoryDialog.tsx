@@ -21,7 +21,7 @@ const EditCategoryDialog = (props: any) => {
     return (
         <Dialog open={props.dialogOpen} onClose={props.dialogClose} aria-labelledby="edit-category-dialog">
             <form onSubmit={props.confirmEdit}>
-                <DialogTitle id="edit-category-dialog">Edit item</DialogTitle>
+                <DialogTitle id="edit-category-dialog">{props.addOrEdit === 'add' ? 'Add Item' : 'Edit Item'}</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus

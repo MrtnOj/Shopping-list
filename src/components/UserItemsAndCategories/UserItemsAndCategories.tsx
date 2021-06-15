@@ -34,14 +34,15 @@ const UserItemsAndCategories = () => {
         items,
         categories,
         tabValue,
+        menuAnchorEl,
         editItemModalOpen,
         editCategoryModalOpen,
         deleteModalOpen,
         elementToDelete,
         editItemDialogValue,
         editCategoryDialogValue,
-        addItemButtonPressed,
-        addCategoryButtonPressed,
+        addOrEdit,
+        addButtonPressed,
         deleteButtonPressed,
         saveItemEdit,
         saveCategoryEdit,
@@ -57,7 +58,8 @@ const UserItemsAndCategories = () => {
         handleDeleteModalClose,
         handleTabChange,
         deleteElement,
-
+        handleDotsClick,
+        closeDotsMenu,
     } = useUserItemsAndCategories()
 
     return (
@@ -80,9 +82,12 @@ const UserItemsAndCategories = () => {
                 index={0}
                 isItem={true}
                 content={items}
+                menuAnchorEl={menuAnchorEl}
+                handleDotsClick={handleDotsClick}
+                closeDotsMenu={closeDotsMenu}
                 deleteElement={deleteElement}
                 editElement={editItemButtonPressed}
-                addButtonPressed={addItemButtonPressed}
+                addButtonPressed={addButtonPressed}
                 deleteButtonPressed={deleteButtonPressed}
                 deleteModalOpen={deleteModalOpen}
                 elementToDelete={elementToDelete}
@@ -94,9 +99,12 @@ const UserItemsAndCategories = () => {
                 index={1}
                 isItem={false}
                 content={categories}
+                menuAnchorEl={menuAnchorEl}
+                handleDotsClick={handleDotsClick}
+                closeDotsMenu={closeDotsMenu}
                 deleteElement={deleteElement}
                 editElement={editCategoryButtonPressed}
-                addButtonPressed={addCategoryButtonPressed}
+                addButtonPressed={addButtonPressed}
                 deleteButtonPressed={deleteButtonPressed}
                 deleteModalOpen={deleteModalOpen}
                 elementToDelete={elementToDelete}
@@ -113,8 +121,10 @@ const UserItemsAndCategories = () => {
                 filterOptions={filterAutocompleteOptions}
                 categoryOptions={categories}
                 getOptionLabel={getOptionLabel}
+                addOrEdit={addOrEdit}
             />
             <EditCategoryDialog 
+                addOrEdit={addOrEdit}
                 dialogOpen={editCategoryModalOpen}
                 dialogClose={handleCategoryEditModalClose}
                 dialogValue={editCategoryDialogValue}

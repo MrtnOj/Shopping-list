@@ -10,26 +10,13 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
-import DeleteIcon from '@material-ui/icons/Delete'
-import EditIcon from '@material-ui/icons/Edit'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import Fade from '@material-ui/core/Fade'
 import { createStyles, DialogContentText, makeStyles, Theme } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
-
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: any;
-    value: any;
-    name: string;
-    content: any;
-    deleteElement?: any;
-    isItem?: boolean;
-    editElement?: any;
-    addButtonPressed?: any;
-    deleteButtonPressed: any;
-    deleteModalOpen: any;
-    deleteModalClose: any;
-    elementToDelete: any;
-  }
+import { isIterationStatement } from 'typescript'
 
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,38 +47,22 @@ interface TabPanelProps {
     })
 )
 
-const TabPanel = (props: TabPanelProps) => {
+const TabPanel = (props: any) => {
     const classes = useStyles()
-    const { 
-        children,
-        value,
-        index,
-        content,
-        deleteElement,
-        isItem,
-        editElement,
-        addButtonPressed,
-        deleteButtonPressed,
-        elementToDelete,
-        deleteModalOpen,
-        deleteModalClose,
-        name,
-        ...other
-    } = props
 
     return (
         <section 
             role='tabpanel'
-            hidden={value !== index}
-            id={`${name} Tab`}
-            aria-labelledby={name}
-            {...other}
+            hidden={props.value !== props.index}
+            id={`${props.name} Tab`}
+            aria-labelledby={props.name}
+            {...props.other}
         >
-            {value === index && (
+            {props.value === props.index && (
                 <React.Fragment>
-                    <h2 className={classes.hiddenTitle}>{name}</h2>
+                    <h2 className={classes.hiddenTitle}>{props.name}</h2>
                     <List className={classes.itemsList}>
-                        {content.map((element: any) => {
+                        {props.content.map((element: any) => {
                             return (
                                 <ListItem
                                     key={element.id}
@@ -99,49 +70,52 @@ const TabPanel = (props: TabPanelProps) => {
                                     divider={true}
                                 >
                                     <ListItemText primary={element.name} />
+                                    <Menu
+                                        id="item-actions-menu"
+                                        anchorEl={props.menuAnchorEl}
+                                        keepMounted
+                                        open={Boolean(props.menuAnchorEl)}
+                                        onClose={props.closeDotsMenu}
+                                        TransitionComponent={Fade}
+                                    >
+                                        <MenuItem onClick={props.editElement}>Edit</MenuItem>
+                                        <MenuItem onClick={() => props.deleteButtonPressed(element)}>Delete</MenuItem>
+                                    </Menu>
                                     <ListItemSecondaryAction>
-                                        <IconButton
+                                        <IconButton 
+                                            aria-controls='item-actions-menu'
+                                            aria-haspopup='true'
                                             edge='end'
                                             size='small'
                                             color='inherit'
-                                            className={classes.iconButtons}
-                                            onClick={() => editElement(element)}
+                                            onClick={(event) => props.handleDotsClick(event, element)}
                                         >
-                                            <EditIcon />
-                                        </IconButton>
-                                        <IconButton
-                                            edge='end'
-                                            size='small'
-                                            color='inherit'
-                                            className={classes.iconButtons}
-                                            onClick={() => deleteButtonPressed(element)}
-                                        >
-                                            <DeleteIcon />
+                                            <MoreVertIcon />
                                         </IconButton>
                                     </ListItemSecondaryAction>
                                 </ListItem>
                             )
                         })}
                     </List>
-                    <Dialog open={deleteModalOpen} onClose={deleteModalClose}>
+                    <Dialog open={props.deleteModalOpen} onClose={props.deleteModalClose}>
                         <DialogTitle id="confirm-delete">
                             Delete item?
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                {`Are you sure you want to delete ${isItem ? 'item ' : 'category '} - ${elementToDelete ? elementToDelete.name : null} ?`}
+                                {`Are you sure you want to delete ${props.isItem ? 'item ' : 'category '} - ${props.elementToDelete ? props.elementToDelete.name : null} ?`}
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button color="primary" onClick={deleteModalClose}>
+                            <Button color="primary" onClick={props.deleteModalClose}>
                                 Cancel
                             </Button>
-                            <Button color="primary" onClick={() => deleteElement(isItem)}>
+                            <Button color="primary" onClick={() => props.deleteElement(props.isItem)}>
                                 Yes
                             </Button>
                         </DialogActions>
                     </Dialog>
-                    <Fab color='secondary' aria-label={`add-${isItem ? 'item' : 'category'}`} className={classes.addButton} onClick={addButtonPressed}>
+                    <Fab color='secondary' aria-label={`add-${props.isItem ? 'item' : 'category'}`} className={classes.addButton} onClick={() => props.addButtonPressed(props.isItem)}>
                         <AddIcon />
                     </Fab>
                 </React.Fragment>

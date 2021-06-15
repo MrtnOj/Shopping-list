@@ -7,6 +7,7 @@ import { createFilterOptions } from '@material-ui/lab/Autocomplete'
 const useUserItemsAndCategories = () => {
     const [tabValue, setTabValue] = useState<number>(0)
     const [items, setItems] = useState<Item[]>([])
+    const [addOrEdit, setAddOrEdit] = useState<string>('add')
     const [categories, setCategories] = useState<Category[]>([])
     const [editItemDialogValue, setEditItemDialogValue] = useState({ name: '', category: {}})
     const [editCategoryDialogValue, setEditCategoryDialogValue] = useState<string>('')
@@ -16,6 +17,7 @@ const useUserItemsAndCategories = () => {
     const [editingCategory, setEditingCategory] = useState<Category | null>(null)
     const [elementToDelete, setElementToDelete] = useState<any>(null)
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
+    const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
 
     const filter = createFilterOptions<Item | Category>()
 
@@ -53,25 +55,30 @@ const useUserItemsAndCategories = () => {
         })
     }
 
-    const addItemButtonPressed = () => {
+    const addButtonPressed = (isItem: boolean) => {
+        setEditingCategory(null)
+        setAddOrEdit('add')
+        setEditingItem(null)
+        if (isItem) {
+            setEditItemModalOpen(true)
+        } else {
+            setEditCategoryModalOpen(true)
+        }
+    }
+
+    const editItemButtonPressed = () => {
+        setAddOrEdit('edit')
+        const category = categories.find(cat => cat.id === editingItem!.userCategoryId)
+        setEditItemDialogValue({ name: editingItem!.name, category: (category as Category) })
         setEditItemModalOpen(true)
+        setMenuAnchorEl(null)
     }
 
-    const addCategoryButtonPressed = () => {
+    const editCategoryButtonPressed = () => {
+        setAddOrEdit('edit')
+        setEditCategoryDialogValue(editingCategory!.name)
         setEditCategoryModalOpen(true)
-    }
-
-    const editItemButtonPressed = (item: Item) => {
-        setEditingItem(item)
-        const category = categories.find(cat => cat.id === item.userCategoryId)
-        setEditItemDialogValue({ name: item.name, category: (category as Category) })
-        setEditItemModalOpen(true)
-    }
-
-    const editCategoryButtonPressed = (category: Category) => {
-        setEditingCategory(category)
-        setEditCategoryDialogValue(category.name)
-        setEditCategoryModalOpen(true)
+        setMenuAnchorEl(null)
     }
 
     const editDialogNameChange = (event: React.ChangeEvent<any>) => {
@@ -212,6 +219,7 @@ const useUserItemsAndCategories = () => {
     const deleteButtonPressed = (element: any) => {
         setDeleteModalOpen(true)
         setElementToDelete(element)
+        setMenuAnchorEl(null)
     }
 
     const deleteItemOrCategory = (isItem: boolean) => {
@@ -234,10 +242,25 @@ const useUserItemsAndCategories = () => {
         handleDeleteModalClose()
     }
 
+    const handleDotsClick = (event: React.MouseEvent<HTMLButtonElement>, element: Category | Item) => {
+        setMenuAnchorEl(event.currentTarget)
+        if (tabValue === 0) {
+            setEditingItem(element)
+        } else {
+            setEditingCategory(element)
+        }
+    }
+
+    const closeDotsMenu = () => {
+        setMenuAnchorEl(null)
+    }
+
     return {
         items: items,
         categories: categories,
         elementToDelete: elementToDelete,
+        menuAnchorEl: menuAnchorEl,
+        addOrEdit: addOrEdit,
         // input values
         tabValue: tabValue,
         editItemDialogValue: editItemDialogValue,
@@ -250,13 +273,14 @@ const useUserItemsAndCategories = () => {
         handleItemEditModalClose: handleItemEditModalClose,
         handleCategoryEditModalClose: handleCategoryEditModalClose,
         handleDeleteModalClose: handleDeleteModalClose,
+        closeDotsMenu: closeDotsMenu,
         //functions when buttons are pressed
-        addItemButtonPressed: addItemButtonPressed,
-        addCategoryButtonPressed: addCategoryButtonPressed,
+        addButtonPressed: addButtonPressed,
         deleteButtonPressed: deleteButtonPressed,
         editItemButtonPressed: editItemButtonPressed,
         editCategoryButtonPressed: editCategoryButtonPressed,
         handleTabChange: handleTabChange,
+        handleDotsClick: handleDotsClick,
         // input changes
         editDialogNameChange: editDialogNameChange,
         editItemDialogCategoryChange: editItemDialogCategoryChange,
